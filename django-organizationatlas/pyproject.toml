@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "django-organizationatlas"
-version = "0.1.0"
+version = "0.2.0"
 description = "Django integration for organization information lookup and enrichment"
 readme = "README.md"
 authors = [
@@ -17,10 +17,9 @@ classifiers = [
   "Development Status :: 3 - Alpha",
   "Environment :: Web Environment",
   "Framework :: Django",
-  "Framework :: Django :: 3.2",
-  "Framework :: Django :: 4.0",
-  "Framework :: Django :: 4.2",
   "Framework :: Django :: 5.0",
+  "Framework :: Django :: 5.1",
+  "Framework :: Django :: 5.2",
   "Intended Audience :: Developers",
   "License :: OSI Approved :: MIT License",
   "Operating System :: OS Independent",
@@ -31,10 +30,19 @@ classifiers = [
   "Programming Language :: Python :: 3.12",
 ]
 dependencies = [
-  "Django>=3.2",
-  "python-organizationatlas>=0.1.0",
-  "django-providerkit>=0.1.0",
-  "django-virtualqueryset>=0.1.0",
+  "Django>=5.0",
+  "python-organizationatlas>=0.2.0",
+  "django-providerkit>=1.1.1",
+  "django-virtualqueryset>=1.0.0",
+  "django-boosted>=1.0.4",
+  "django-geoaddress>=1.0.3",
+  "django-namedid>=1.2.0",
+]
+
+[project.optional-dependencies]
+test = [
+  "pytest>=8",
+  "pytest-django>=4.8",
 ]
 
 [project.urls]
@@ -56,7 +64,5 @@ django_organizationatlas = ["templates/**/*", "data_sources/*.csv"]
 
 [tool.pytest.ini_options]
 DJANGO_SETTINGS_MODULE = "tests.settings"
-python_files = ["test_*.py", "*_test.py"]
-python_classes = ["Test*"]
-python_functions = ["test_*"]
 testpaths = ["tests"]
+pythonpath = ["src"]

@@ -38,6 +38,7 @@ class TestFranceProviderValidation:
     def provider(self):
         class ConcreteProvider(OrganizationAtlasFranceProvider):
             name = "test"
+            display_name = "Test"
             abstract = False
         return ConcreteProvider()
 

@@ -7,6 +7,8 @@ For detailed information, refer to:
 - `purpose.md` - Project purpose and goals
 - `structure.md` - Project structure and module organization
 - `development.md` - Development guidelines and best practices
+- `migration-from-company.md` - Roadmap to absorb the legacy data model
+- `company-creation-comparison.md` - Field-by-field comparison of company creation with Octolo `company` (FR)
 
 ### Quick Reference
 

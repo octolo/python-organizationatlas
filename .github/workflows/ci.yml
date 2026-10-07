@@ -1,0 +1,166 @@
+name: Tests
+
+on:
+  push:
+    branches: ["main"]
+  pull_request:
+    branches: ["main"]
+  workflow_dispatch:
+
+jobs:
+  lint:
+    name: Lint
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python 3.12
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      # Pinned so a new ruff release cannot turn a green branch red on its own.
+      - name: Install ruff
+        run: python -m pip install ruff==0.15.18
+
+      - name: Check
+        run: ruff check python-organizationatlas/src django-organizationatlas/src
+
+  tests:
+    name: ${{ matrix.package_name }} tests py${{ matrix.python_version }} ${{ matrix.django_version }}
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    strategy:
+      fail-fast: false
+      matrix:
+        package_name: ["organizationatlas", "django-organizationatlas"]
+        python_version: ["3.10", "3.11", "3.12"]
+        django_version: ["", "5.0.*", "5.1.*", "5.2.*"]
+        exclude:
+          - package_name: organizationatlas
+            django_version: "5.0.*"
+          - package_name: organizationatlas
+            django_version: "5.1.*"
+          - package_name: organizationatlas
+            django_version: "5.2.*"
+          - package_name: django-organizationatlas
+            django_version: ""
+        include:
+          - package_name: organizationatlas
+            working_directory: python-organizationatlas
+            test_command: python -m pytest
+          - package_name: django-organizationatlas
+            working_directory: django-organizationatlas
+            test_command: python -m pytest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python ${{ matrix.python_version }}
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python_version }}
+
+      - name: Install dependencies
+        working-directory: ${{ matrix.working_directory }}
+        run: |
+          python -m pip install --upgrade pip
+          if [ "${{ matrix.package_name }}" = "django-organizationatlas" ]; then
+            # Install the local organizationatlas first so its (unreleased)
+            # version satisfies the django-organizationatlas constraint and
+            # pip never tries to fetch it from PyPI.
+            python -m pip install -e ../python-organizationatlas
+            python -m pip install -e ".[test]"
+          else
+            python -m pip install -e ".[test]"
+          fi
+
+      - name: Install Django
+        if: ${{ matrix.package_name == 'django-organizationatlas' }}
+        working-directory: ${{ matrix.working_directory }}
+        run: python -m pip install "Django==${{ matrix.django_version }}"
+
+      - name: Django system check
+        if: ${{ matrix.package_name == 'django-organizationatlas' }}
+        working-directory: ${{ matrix.working_directory }}
+        run: python manage.py check
+
+      - name: Run tests
+        working-directory: ${{ matrix.working_directory }}
+        run: ${{ matrix.test_command }}
+
+  organizationatlas-install:
+    name: organizationatlas non-editable import
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python 3.12
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install from the local sdist path, not editable
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install ./python-organizationatlas
+          python - <<'PY'
+          from organizationatlas.providers.europe.france.insee import InseeProvider
+          from organizationatlas.providers.europe.france.entdatagouv import EntdatagouvProvider
+          from organizationatlas.providers.europe.france.huwise import HuwiseProvider
+          from organizationatlas.providers.europe.france.inpi import InpiProvider
+
+          for cls in (
+              InseeProvider,
+              EntdatagouvProvider,
+              HuwiseProvider,
+              InpiProvider,
+          ):
+              cls()
+              print(cls.__name__)
+          PY
+
+  build:
+    name: Build ${{ matrix.package_name }}
+    needs: [tests, organizationatlas-install]
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - package_name: organizationatlas
+            working_directory: python-organizationatlas
+          - package_name: django-organizationatlas
+            working_directory: django-organizationatlas
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python 3.12
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Build distributions
+        working-directory: ${{ matrix.working_directory }}
+        run: |
+          python -m pip install --upgrade pip
+          if [ "${{ matrix.package_name }}" = "django-organizationatlas" ]; then
+            python -m pip install "Django==5.2.*"
+            python -m pip install -e ../python-organizationatlas
+          fi
+          python -m pip install build twine
+          python -m build
+          python -m twine check dist/*

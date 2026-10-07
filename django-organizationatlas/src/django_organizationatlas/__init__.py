@@ -1,6 +1,10 @@
 """Django OrganizationAtlas - Organization information management."""
 
-__all__ = []
+from importlib.metadata import PackageNotFoundError, version
 
-# Version
-__version__ = "0.1.0"
+try:
+    __version__ = version("django-organizationatlas")
+except PackageNotFoundError:
+    __version__ = "0.0.0.dev"
+
+__all__ = []
