@@ -30,8 +30,8 @@ class OrganizationAtlasAddress(TemporalValidityMixin, OrganizationAtlasSourceBas
     )
 
     class Meta:
-        verbose_name = _("Organization Address")
-        verbose_name_plural = _("Organization Addresses")
+        verbose_name = _("Address")
+        verbose_name_plural = _("Addresses")
         indexes = [
             models.Index(fields=["organization", "address"]),
             models.Index(fields=["organization", "is_headquarters"]),

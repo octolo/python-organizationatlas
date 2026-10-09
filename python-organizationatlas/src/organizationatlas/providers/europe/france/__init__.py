@@ -3,32 +3,35 @@ from typing import Any
 
 from .. import OrganizationAtlasEuropeProvider
 
+def _france_field(description: str, value_type: str = "str") -> dict[str, str]:
+    return {"description": description, "value_type": value_type}
+
+
 FRANCE_FIELDS_DESCRIPTIONS = {
-    "siren": "SIREN number (9 digits, French organization identifier)",
-    "rna": "RNA number (W + 8 digits, French association identifier)",
-    "siret": "SIRET number (14 digits, French establishment identifier)",
-    "is_association": "Whether this is an association",
-    "denomination": "Organization name or legal name",
-    "since": "Organization creation date",
-    "legalform": "Legal form code or description",
-    "ape": "APE code (French activity code, NAF)",
-    "category": "Organization category (e.g., PME, ETI, GE)",
-    "slice_effective": "Employee count range code",
-    "is_headquarter": "Whether this is the organization headquarters",
-    "address_line1": "Street number and name",
-    "address_line2": "Building, apartment, floor (optional)",
-    "address_line3": "Additional address info (optional)",
-    "city": "City name",
-    "postal_code": "Postal code",
-    "state": "Department code or name",
-    "region": "Region code or name",
-    "county": "County or administrative county",
-    "country": "Country name",
-    "country_code": "ISO country code (e.g., FR)",
-    "municipality": "Municipality or commune",
-    "neighbourhood": "Neighbourhood, quarter, or district",
-    "latitude": "Latitude coordinate (float)",
-    "longitude": "Longitude coordinate (float)",
+    "siren": _france_field("SIREN number (9 digits, French organization identifier)"),
+    "rna": _france_field("RNA number (W + 8 digits, French association identifier)"),
+    "siret": _france_field("SIRET number (14 digits, French establishment identifier)"),
+    "denomination": _france_field("Organization name or legal name"),
+    "since": _france_field("Organization creation date", "date"),
+    "legalform": _france_field("Legal form code or description"),
+    "ape": _france_field("APE code (French activity code, NAF)"),
+    "category": _france_field("Organization category (e.g., PME, ETI, GE)"),
+    "slice_effective": _france_field("Employee count range code"),
+    "is_headquarter": _france_field("Whether this is the organization headquarters", "bool"),
+    "address_line1": _france_field("Street number and name"),
+    "address_line2": _france_field("Building, apartment, floor (optional)"),
+    "address_line3": _france_field("Additional address info (optional)"),
+    "city": _france_field("City name"),
+    "postal_code": _france_field("Postal code"),
+    "state": _france_field("Department code or name"),
+    "region": _france_field("Region code or name"),
+    "county": _france_field("County or administrative county"),
+    "country": _france_field("Country name"),
+    "country_code": _france_field("ISO country code (e.g., FR)"),
+    "municipality": _france_field("Municipality or commune"),
+    "neighbourhood": _france_field("Neighbourhood, quarter, or district"),
+    "latitude": _france_field("Latitude coordinate", "float"),
+    "longitude": _france_field("Longitude coordinate", "float"),
 }
 
 # (pattern, max_length, uppercase)
@@ -148,7 +151,64 @@ class OrganizationAtlasFranceProvider(OrganizationAtlasEuropeProvider):
     # ------------------------------------------------------------------ #
 
     def get_normalize_source_field(self, data: dict[str, Any]) -> str | None:
+        reference = self._fr_value(data, "reference")
+        if reference not in (None, ""):
+            detected = self._detect_code_type(str(reference))
+            if detected:
+                return detected
         cache = self._service_results_cache.get("search_organization_by_reference", {})
         kwargs = cache.get("kwargs", {})
         code = kwargs.get("code", "")
         return self._detect_code_type(code)
+
+    def _fr_value(self, data: dict[str, Any], field: str) -> Any:
+        paths = getattr(self, "fields_associations", {}).get(field)
+        if not paths:
+            return None
+        value = self._get_nested_value(data, paths)
+        if value in (None, ""):
+            return None
+        return value
+
+    def _format_since(self, value: Any) -> str | None:
+        if value in (None, ""):
+            return None
+        text = str(value).strip()
+        match = re.match(r"^(\d{4}-\d{2}-\d{2})", text)
+        if match:
+            return match.group(1)
+        return text or None
+
+    def get_normalize_ape(self, data: dict[str, Any]) -> str | None:
+        value = self._fr_value(data, "ape")
+        if value is None:
+            return None
+        code = str(value).replace(".", "").strip()
+        return code or None
+
+    def get_normalize_ape_noun(self, data: dict[str, Any]) -> str | None:
+        value = self._fr_value(data, "ape_noun")
+        if value in (None, ""):
+            return None
+        return str(value).strip() or None
+
+    def get_normalize_legalform(self, data: dict[str, Any]) -> str | None:
+        value = self._fr_value(data, "legalform")
+        if value is None:
+            return None
+        return str(value).strip() or None
+
+    def get_normalize_since(self, data: dict[str, Any]) -> str | None:
+        return self._format_since(self._fr_value(data, "since"))
+
+    def get_normalize_registry_type(self, data: dict[str, Any]) -> str | None:
+        value = self._fr_value(data, "registry_type")
+        if not isinstance(value, str) or not value.strip():
+            return None
+        return value.strip()
+
+    def get_normalize_registry_authority(self, data: dict[str, Any]) -> str | None:
+        value = self._fr_value(data, "registry_authority")
+        if value is None:
+            return None
+        return str(value).strip() or None

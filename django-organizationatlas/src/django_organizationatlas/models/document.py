@@ -43,8 +43,8 @@ class OrganizationAtlasDocument(OrganizationAtlasSourceBase):
     )
 
     class Meta:
-        verbose_name = _("Organization Document")
-        verbose_name_plural = _("Organization Documents")
+        verbose_name = _("Document")
+        verbose_name_plural = _("Documents")
         indexes = [
             models.Index(fields=["organization", "country_code"]),
             models.Index(fields=["document_type"]),

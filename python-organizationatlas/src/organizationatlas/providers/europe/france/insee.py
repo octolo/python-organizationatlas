@@ -21,6 +21,13 @@ class InseeProvider(OrganizationAtlasFranceProvider):
     fields_associations = {
         "denomination": "uniteLegale.denominationUniteLegale",
         "reference": ("siren", "siret", "uniteLegale.identifiantAssociationUniteLegale"),
+        "siren": "siren",
+        "siret": "siret",
+        "rna": "uniteLegale.identifiantAssociationUniteLegale",
+        "ape": "uniteLegale.activitePrincipaleUniteLegale",
+        "ape_noun": "uniteLegale.nomenclatureActivitePrincipaleUniteLegale",
+        "legalform": "uniteLegale.categorieJuridiqueUniteLegale",
+        "since": "uniteLegale.dateCreationUniteLegale",
         "address": (
             "adresseEtablissement.numeroVoieEtablissement",
             "adresseEtablissement.typeVoieEtablissement",

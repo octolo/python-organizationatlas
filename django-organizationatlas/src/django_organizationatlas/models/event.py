@@ -39,8 +39,8 @@ class OrganizationAtlasEvent(OrganizationAtlasSourceBase):
 
 
     class Meta:
-        verbose_name = _("Organization Event")
-        verbose_name_plural = _("Organization Events")
+        verbose_name = _("Event")
+        verbose_name_plural = _("Events")
         indexes = [
             models.Index(fields=["organization", "country_code"]),
             models.Index(fields=["event_type"]),

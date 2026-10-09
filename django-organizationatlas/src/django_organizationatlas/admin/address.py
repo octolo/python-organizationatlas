@@ -2,29 +2,31 @@ from django.contrib import admin
 from django.utils.translation import gettext_lazy as _
 from django_boosted import AdminBoostModel
 
+from .history import with_history
+
 from ..models.address import OrganizationAtlasAddress
-from ..models.source import ORGANIZATIONATLAS_FIELDS_SOURCE
+from ..models.source import ORGANIZATIONATLAS_FIELDS_AUDIT, ORGANIZATIONATLAS_FIELDS_SOURCE
 
 
 class OrganizationAtlasAddressInline(admin.TabularInline):
     model = OrganizationAtlasAddress
     extra = 1
-    fields = ["address", "is_headquarters", "source", "country_code", ]
+    fields = ["address", "is_headquarters", "source_label"]
+    readonly_fields = ["source_label"]
 
 
 @admin.register(OrganizationAtlasAddress)
-class OrganizationAtlasAddressAdmin(AdminBoostModel):
+class OrganizationAtlasAddressAdmin(with_history(AdminBoostModel)):
     list_display = [
         "organization",
-        "source",
-        "country_code",
+        "source_label",
         "address_display",
         "is_headquarters",
         "created_at",
     ]
     list_filter = ["source", "country_code", "is_headquarters", "created_at"]
     search_fields = ["organization__denomination", "organization__to_organizationatlasdata__value"]
-    readonly_fields = ["created_at", "updated_at"]
+    readonly_fields = [*ORGANIZATIONATLAS_FIELDS_AUDIT, "source_label"]
     raw_id_fields = ["organization"]
 
     def change_fieldsets(self):

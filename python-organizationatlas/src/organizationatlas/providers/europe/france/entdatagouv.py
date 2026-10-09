@@ -23,7 +23,13 @@ class EntdatagouvProvider(OrganizationAtlasFranceProvider):
 
     fields_associations = {
         "denomination": ["nom_raison_sociale", "nom_complet"],
-        "reference": ["complements.identifiant_association", "siege.siret", "siege.siren", "siren"],
+        "reference": ["complements.identifiant_association", "siren", "siege.siren", "siege.siret"],
+        "siren": "siren",
+        "siret": "siege.siret",
+        "rna": ["complements.identifiant_association", "id_association"],
+        "ape": ["siege.activite_principale", "activite_principale"],
+        "legalform": "nature_juridique",
+        "since": ["date_creation", "date_creation_entreprise"],
         "address": (
             "siege.numero_voie",
             "siege.type_voie",

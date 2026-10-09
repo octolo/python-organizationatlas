@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import copy
+import json
 from typing import Any
 
 from providerkit import ProviderBase
@@ -77,9 +78,9 @@ class OrganizationAtlasProvider(ProviderBase):
         return self.geo_code
 
     def get_normalize_data_source(self, data: dict[str, Any]) -> str:
-        return str(data)
+        return json.dumps(data, ensure_ascii=False, default=str)
 
-    def get_insert_normalized_organizationatlas_id(self, data: Any, normalized: dict[str, Any], _config: dict[str, Any]) -> float | None:        
+    def get_insert_normalized_organizationatlas_id(self, data: Any, normalized: dict[str, Any], _config: dict[str, Any]) -> float | None:
         reference = normalized.get("reference")
         return f"{self.name}_{reference}"
 

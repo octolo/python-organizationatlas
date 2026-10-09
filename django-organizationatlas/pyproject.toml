@@ -37,6 +37,7 @@ dependencies = [
   "django-boosted>=1.0.4",
   "django-geoaddress>=1.0.3",
   "django-namedid>=1.2.0",
+  "django-simple-history>=3.7",
 ]
 
 [project.optional-dependencies]

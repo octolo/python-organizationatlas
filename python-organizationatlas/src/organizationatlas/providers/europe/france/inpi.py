@@ -41,6 +41,52 @@ class InpiProvider(OrganizationAtlasFranceProvider):
             "formality.content.personneMorale.etablissementPrincipal.descriptionEtablissement.siret",
             "formality.content.personneMorale.identite.entreprise.siren",
         ),
+        "siren": (
+            "siren",
+            "formality.siren",
+            "content.personneMorale.identite.entreprise.siren",
+            "formality.content.personneMorale.identite.entreprise.siren",
+        ),
+        "siret": (
+            "content.personneMorale.etablissementPrincipal.descriptionEtablissement.siret",
+            "formality.content.personneMorale.etablissementPrincipal.descriptionEtablissement.siret",
+            "content.personnePhysique.etablissementPrincipal.descriptionEtablissement.siret",
+            "formality.content.personnePhysique.etablissementPrincipal.descriptionEtablissement.siret",
+        ),
+        "ape": (
+            "content.personneMorale.identite.entreprise.codeApe",
+            "content.personneMorale.etablissementPrincipal.descriptionEtablissement.codeApe",
+            "content.personnePhysique.etablissementPrincipal.descriptionEtablissement.codeApe",
+            "formality.content.personneMorale.identite.entreprise.codeApe",
+            "formality.content.personneMorale.etablissementPrincipal.descriptionEtablissement.codeApe",
+            "formality.content.personnePhysique.etablissementPrincipal.descriptionEtablissement.codeApe",
+        ),
+        "legalform": (
+            "content.personneMorale.identite.entreprise.formeJuridique",
+            "content.natureCreation.formeJuridique",
+            "formality.content.personneMorale.identite.entreprise.formeJuridique",
+            "formality.content.natureCreation.formeJuridique",
+            "formality.formeJuridique",
+            "formeJuridique",
+        ),
+        "since": (
+            "content.natureCreation.dateCreation",
+            "formality.content.natureCreation.dateCreation",
+            "content.registreAnterieur.rncs.dateImmatriculation",
+            "formality.content.registreAnterieur.rncs.dateImmatriculation",
+        ),
+        "registry_type": (
+            "content.registreAnterieur.rncs.estPresent",
+            "formality.content.registreAnterieur.rncs.estPresent",
+        ),
+        "registry_authority": (
+            "content.personneMorale.observations.rcs.rcs.nomGreffe",
+            "formality.content.personneMorale.observations.rcs.rcs.nomGreffe",
+            "content.personnePhysique.observations.rcs.rcs.nomGreffe",
+            "formality.content.personnePhysique.observations.rcs.rcs.nomGreffe",
+            "greffe.nom",
+            "nomGreffe",
+        ),
         "denomination": (
             "content.personneMorale.identite.entreprise.denomination",
             "content.personnePhysique.identite.entreprise.denomination",
@@ -168,38 +214,73 @@ class InpiProvider(OrganizationAtlasFranceProvider):
                 return f"{person_name} ({trade_name})"
         return person_name
 
-    def get_normalize_address(self, data: dict[str, Any]) -> str | None:
-        establishment = self._principal_establishment(data)
-        if establishment:
-            addr = establishment.get("adresse")
-            if isinstance(addr, dict):
-                return self._build_address_str(
-                    addr.get("numVoie"),
-                    addr.get("typeVoie"),
-                    addr.get("voie"),
-                    addr.get("codePostal"),
-                    addr.get("commune"),
-                    complementLocalisation=addr.get("complementLocalisation"),
-                )
-        for prefix in self._address_prefixes:
-            addr = self._get_nested_value(data, prefix)
-            if addr:
-                return self._build_address_str(
-                    addr.get("numVoie"),
-                    addr.get("typeVoie"),
-                    addr.get("voie"),
-                    addr.get("codePostal"),
-                    addr.get("commune"),
-                    complementLocalisation=addr.get("complementLocalisation"),
-                )
+    def _usable_address(self, addr: Any) -> dict[str, Any] | None:
+        if not isinstance(addr, dict):
+            return None
+        if any(addr.get(key) for key in ("voie", "numVoie", "codePostal", "commune", "complementLocalisation")):
+            return addr
         return None
 
-    def _build_address_str(self, numero, type_voie, libelle, code_postal, commune, country=None, complementLocalisation=None):
-        line1 = [p for p in [numero, type_voie, libelle] if p]
-        line2_parts = [p for p in [str(code_postal) if code_postal else None, commune] if p]
-        ad1 = " ".join(str(p) for p in line1) if line1 else None
-        ad2 = " ".join(line2_parts) if line2_parts else None
-        parts = [f for f in [ad1, complementLocalisation, ad2] if f]
+    def _address_record(self, data: dict[str, Any]) -> dict[str, Any] | None:
+        establishment = self._principal_establishment(data)
+        if establishment:
+            addr = self._usable_address(establishment.get("adresse"))
+            if addr:
+                return addr
+        for prefix in self._address_prefixes:
+            addr = self._usable_address(self._get_nested_value(data, prefix))
+            if addr:
+                return addr
+        return None
+
+    def _street_line(self, addr: dict[str, Any]) -> str | None:
+        """Build the street line without repeating a number already present in ``voie``.
+
+        INPI sometimes returns ``voie`` as the full line (``295 Boulevard Saint-Denis``)
+        while ``numVoie`` and ``typeVoie`` are also set.
+        """
+        numero = str(addr.get("numVoie") or "").strip()
+        type_voie = str(addr.get("typeVoie") or "").strip()
+        voie = str(addr.get("voie") or "").strip()
+        if voie and numero and (voie == numero or voie.startswith(f"{numero} ")):
+            return voie
+        parts = [part for part in (numero, type_voie, voie) if part]
+        return " ".join(parts) or None
+
+    def _country_code(self, code: Any) -> str:
+        value = str(code or "").strip().upper()
+        if value in {"FRA", "FRANCE", ""}:
+            return self.geo_code
+        return value[:2]
+
+    def get_normalize_address_json(self, data: dict[str, Any]) -> dict[str, Any] | None:
+        addr = self._address_record(data)
+        if not addr:
+            return None
+        payload = {
+            "address_line1": self._street_line(addr),
+            "address_line2": str(addr.get("complementLocalisation") or "").strip() or None,
+            "postal_code": addr.get("codePostal") or None,
+            "city": addr.get("commune") or None,
+            "country": addr.get("pays") or self.geo_country,
+            "country_code": self._country_code(addr.get("codePays")),
+        }
+        payload = {key: value for key, value in payload.items() if value not in (None, "")}
+        if not any(payload.get(key) for key in ("address_line1", "postal_code", "city")):
+            return None
+        return payload
+
+    def get_normalize_address(self, data: dict[str, Any]) -> str | None:
+        payload = self.get_normalize_address_json(data)
+        if not payload:
+            return None
+        parts = [
+            payload.get("address_line1"),
+            payload.get("address_line2"),
+            payload.get("postal_code"),
+            payload.get("city"),
+        ]
+        parts = [str(part) for part in parts if part]
         return ", ".join(parts) if parts else None
 
     def get_normalize_description(self, data: dict[str, Any]) -> str | None:

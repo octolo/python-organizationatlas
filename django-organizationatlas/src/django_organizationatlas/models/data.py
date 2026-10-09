@@ -10,6 +10,50 @@ from .referentiel import OrganizationAtlasReferentiel
 from .source import OrganizationAtlasSourceBase
 from .temporal import TemporalValidityMixin
 
+VALUE_TYPE_CHOICES = [
+    ("str", _("String")),
+    ("int", _("Integer")),
+    ("float", _("Float")),
+    ("bool", _("Boolean")),
+    ("date", _("Date")),
+    ("json", _("JSON")),
+]
+
+
+class OrganizationAtlasDataType(models.Model):
+    """Shared definition of a data key and the type of its value."""
+
+    data_type = models.CharField(
+        max_length=100,
+        unique=True,
+        verbose_name=_("Data Type"),
+        help_text=_("Type of data (e.g., denomination, siren, capital, employees)"),
+    )
+    value_type = models.CharField(
+        max_length=10,
+        verbose_name=_("Value Type"),
+        choices=VALUE_TYPE_CHOICES,
+        default="str",
+        help_text=_("Type of the value (str, int, float, bool, date, json)"),
+    )
+
+    class Meta:
+        verbose_name = _("Data Type")
+        verbose_name_plural = _("Data Types")
+        ordering = ["data_type"]
+
+    def __str__(self):
+        return self.data_type
+
+    @classmethod
+    def for_key(cls, data_type: str, value_type: str = "str"):
+        """Return the shared type, creating it with value_type only the first time."""
+        obj, _created = cls.objects.get_or_create(
+            data_type=data_type,
+            defaults={"value_type": value_type},
+        )
+        return obj
+
 
 class OrganizationAtlasData(TemporalValidityMixin, OrganizationAtlasSourceBase):
     """Organization data from various backends."""
@@ -23,22 +67,12 @@ class OrganizationAtlasData(TemporalValidityMixin, OrganizationAtlasSourceBase):
         verbose_name=_("Organization"),
         help_text=_("Organization this data belongs to"),
     )
-    data_type = models.CharField(
-        max_length=100,
+    data_type = models.ForeignKey(
+        OrganizationAtlasDataType,
+        on_delete=models.PROTECT,
+        related_name="records",
         verbose_name=_("Data Type"),
-        help_text=_("Type of data (e.g., denomination, siren, capital, employees)"),
-    )
-    value_type = models.CharField(
-        max_length=10,
-        verbose_name=_("Value Type"),
-        choices=[
-            ("str", _("String")),
-            ("int", _("Integer")),
-            ("float", _("Float")),
-            ("json", _("JSON")),
-        ],
-        default="str",
-        help_text=_("Type of the value (str, int, float, json)"),
+        help_text=_("Shared data type. Its value type applies to every record."),
     )
     value = models.TextField(
         verbose_name=_("Value"),
@@ -53,11 +87,10 @@ class OrganizationAtlasData(TemporalValidityMixin, OrganizationAtlasSourceBase):
     )
 
     class Meta:
-        verbose_name = _("Organization Data")
-        verbose_name_plural = _("Organization Data")
+        verbose_name = _("Data")
+        verbose_name_plural = _("Data")
         indexes = [
             models.Index(fields=["organization", "country_code"]),
-            models.Index(fields=["data_type"]),
         ]
         constraints = [
             models.UniqueConstraint(
@@ -67,7 +100,7 @@ class OrganizationAtlasData(TemporalValidityMixin, OrganizationAtlasSourceBase):
                 name="unique_open_organizationatlasdata",
             ),
         ]
-        ordering = ["data_type", "-created_at"]
+        ordering = ["data_type__data_type", "-created_at"]
 
     def __str__(self):
         return (

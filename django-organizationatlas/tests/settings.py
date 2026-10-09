@@ -24,6 +24,7 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "django_geoaddress",
+    "simple_history",
     "django_organizationatlas",
 ]
 
@@ -33,6 +34,8 @@ MIDDLEWARE = [
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
+    "django_boosted.middleware.CurrentUserMiddleware",
+    "simple_history.middleware.HistoryRequestMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
@@ -90,10 +93,3 @@ STATIC_URL = "static/"
 
 # Default primary key field type
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
-
-# OrganizationAtlas configuration
-ORGANIZATIONATLAS = {
-    "API_KEY": os.environ.get("ORGANIZATIONATLAS_API_KEY"),
-    "AUTO_ENRICH": False,  # Don't auto-enrich in tests
-    "CACHE_TIMEOUT": 3600,
-}

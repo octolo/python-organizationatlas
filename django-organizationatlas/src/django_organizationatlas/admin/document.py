@@ -2,20 +2,22 @@ from django.contrib import admin
 from django.utils.translation import gettext_lazy as _
 
 from ..models.document import OrganizationAtlasDocument
+from .history import with_history
+from ..models.source import ORGANIZATIONATLAS_FIELDS_AUDIT
 
 
 class OrganizationDocumentInline(admin.TabularInline):
     model = OrganizationAtlasDocument
     extra = 1
-    fields = ["source", "country_code", "document_type", "title", "date", "url"]
+    fields = ["source_label", "document_type", "title", "date", "url"]
+    readonly_fields = ["source_label"]
 
 
 @admin.register(OrganizationAtlasDocument)
-class OrganizationDocumentAdmin(admin.ModelAdmin):
+class OrganizationDocumentAdmin(with_history(admin.ModelAdmin)):
     list_display = [
         "organization",
-        "source",
-        "country_code",
+        "source_label",
         "document_type",
         "title",
         "date",
@@ -23,7 +25,7 @@ class OrganizationDocumentAdmin(admin.ModelAdmin):
     ]
     list_filter = ["source", "country_code", "document_type", "date", "created_at"]
     search_fields = ["organization__denomination", "title", "document_type", "source"]
-    readonly_fields = ["created_at", "updated_at"]
+    readonly_fields = [*ORGANIZATIONATLAS_FIELDS_AUDIT, "source_label"]
 
     fieldsets = (
         (
@@ -31,8 +33,7 @@ class OrganizationDocumentAdmin(admin.ModelAdmin):
             {
                 "fields": (
                     "organization",
-                    "source",
-                    "country_code",
+                    "source_label",
                     "document_type",
                     "title",
                     "date",
@@ -43,7 +44,7 @@ class OrganizationDocumentAdmin(admin.ModelAdmin):
         (_("Content"), {"fields": ("content",)}),
         (
             _("Metadata"),
-            {"fields": ("metadata", "created_at", "updated_at"), "classes": ("collapse",)},
+            {"fields": ("metadata", *ORGANIZATIONATLAS_FIELDS_AUDIT), "classes": ("collapse",)},
         ),
     )
 

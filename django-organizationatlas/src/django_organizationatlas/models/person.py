@@ -62,8 +62,8 @@ class OrganizationAtlasPerson(OrganizationAtlasSourceBase):
     )
 
     class Meta:
-        verbose_name = _("Organization Person")
-        verbose_name_plural = _("Organization Persons")
+        verbose_name = _("Person")
+        verbose_name_plural = _("Persons")
         indexes = [
             models.Index(fields=["organization", "officer_or_owner"]),
         ]

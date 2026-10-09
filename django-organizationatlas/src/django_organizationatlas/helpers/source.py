@@ -3,7 +3,7 @@ from datetime import date
 from django.db import transaction
 
 from django_organizationatlas.models.organization import OrganizationAtlasOrganization
-from django_organizationatlas.models.data import OrganizationAtlasData
+from django_organizationatlas.models.data import OrganizationAtlasData, OrganizationAtlasDataType
 
 
 @transaction.atomic
@@ -25,12 +25,13 @@ def create_source(
     returned untouched.
     """
     effective_date = valid_from or date.today()
+    datatype = OrganizationAtlasDataType.for_key(data_type, value_type)
 
     open_record = OrganizationAtlasData.objects.filter(
         organization=organization,
         source=backend,
         country_code=country_code,
-        data_type=data_type,
+        data_type=datatype,
         valid_to__isnull=True,
     ).first()
 
@@ -44,8 +45,7 @@ def create_source(
         organization=organization,
         source=backend,
         country_code=country_code,
-        data_type=data_type,
-        value_type=value_type,
+        data_type=datatype,
         value=value,
         metadata=metadata or {},
         valid_from=effective_date,

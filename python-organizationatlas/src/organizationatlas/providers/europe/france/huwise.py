@@ -23,6 +23,13 @@ class HuwiseProvider(OrganizationAtlasFranceProvider):
     fields_associations = {
         "denomination": ("denominationunitelegale", "denominationusuelleetablissement"),
         "reference": ("identifiantassociationunitelegale", "siret", "siren"),
+        "siren": "siren",
+        "siret": "siret",
+        "rna": "identifiantassociationunitelegale",
+        "ape": "activiteprincipaleunitelegale",
+        "ape_noun": "nomenclatureactiviteprincipaleunitelegale",
+        "legalform": "categoriejuridiqueunitelegale",
+        "since": "datecreationunitelegale",
         "address": (
             "numerovoieetablissement",
             "typevoieetablissement",

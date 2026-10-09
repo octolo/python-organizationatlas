@@ -45,8 +45,8 @@ class OrganizationAtlasOrganizationRelation(TemporalValidityMixin, OrganizationA
     )
 
     class Meta:
-        verbose_name = _("Organization Relation")
-        verbose_name_plural = _("Organization Relations")
+        verbose_name = _("Relation")
+        verbose_name_plural = _("Relations")
         ordering = ["-created_at"]
         indexes = [
             models.Index(fields=["from_organization", "to_organization"]),

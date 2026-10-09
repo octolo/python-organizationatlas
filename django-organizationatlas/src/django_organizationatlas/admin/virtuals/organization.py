@@ -89,6 +89,6 @@ class OrganizationAtlasVirtualOrganizationAdmin(ReadOnlyVirtualAdmin, AdminBoost
     def organization_count_exists(self, obj: OrganizationAtlasVirtualOrganization | None) -> bool:
         from django_organizationatlas.models.organization import OrganizationAtlasOrganization
         return OrganizationAtlasOrganization.objects.filter(
-            to_organizationatlasdata__data_type=obj.source_field,
+            to_organizationatlasdata__data_type__data_type=obj.source_field,
             to_organizationatlasdata__value=obj.reference,
         ).count()
