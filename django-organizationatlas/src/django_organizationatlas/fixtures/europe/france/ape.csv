@@ -1,0 +1,734 @@
+category;code;description;country_code;source
+ape;01.11Z;Culture de céréales (à l'exception du riz), de légumineuses et de graines oléagineuses;FR;insee
+ape;01.12Z;Culture du riz;FR;insee
+ape;01.13Z;Culture de légumes, de melons, de racines et de tubercules;FR;insee
+ape;01.14Z;Culture de la canne à sucre;FR;insee
+ape;01.15Z;Culture du tabac;FR;insee
+ape;01.16Z;Culture de plantes à fibres;FR;insee
+ape;01.19Z;Autres cultures non permanentes;FR;insee
+ape;01.21Z;Culture de la vigne;FR;insee
+ape;01.22Z;Culture de fruits tropicaux et subtropicaux;FR;insee
+ape;01.23Z;Culture d'agrumes;FR;insee
+ape;01.24Z;Culture de fruits à pépins et à noyau;FR;insee
+ape;01.25Z;Culture d'autres fruits d'arbres ou d'arbustes et de fruits à coque;FR;insee
+ape;01.26Z;Culture de fruits oléagineux;FR;insee
+ape;01.27Z;Culture de plantes à boissons;FR;insee
+ape;01.28Z;Culture de plantes à épices, aromatiques, médicinales et pharmaceutiques;FR;insee
+ape;01.29Z;Autres cultures permanentes;FR;insee
+ape;01.30Z;Reproduction de plantes;FR;insee
+ape;01.41Z;Élevage de vaches laitières;FR;insee
+ape;01.42Z;Élevage d'autres bovins et de buffles;FR;insee
+ape;01.43Z;Élevage de chevaux et d'autres équidés;FR;insee
+ape;01.44Z;Élevage de chameaux et d'autres camélidés;FR;insee
+ape;01.45Z;Élevage d'ovins et de caprins;FR;insee
+ape;01.46Z;Élevage de porcins;FR;insee
+ape;01.47Z;Élevage de volailles;FR;insee
+ape;01.49Z;Élevage d'autres animaux;FR;insee
+ape;01.50Z;Culture et élevage associés;FR;insee
+ape;01.61Z;Activités de soutien aux cultures;FR;insee
+ape;01.62Z;Activités de soutien à la production animale;FR;insee
+ape;01.63Z;Traitement primaire des récoltes;FR;insee
+ape;01.64Z;Traitement des semences;FR;insee
+ape;01.70Z;Chasse, piégeage et services annexes;FR;insee
+ape;02.10Z;Sylviculture et autres activités forestières;FR;insee
+ape;02.20Z;Exploitation forestière;FR;insee
+ape;02.30Z;Récolte de produits forestiers non ligneux poussant à l'état sauvage;FR;insee
+ape;02.40Z;Services de soutien à l'exploitation forestière;FR;insee
+ape;03.11Z;Pêche en mer;FR;insee
+ape;03.12Z;Pêche en eau douce;FR;insee
+ape;03.21Z;Aquaculture en mer;FR;insee
+ape;03.22Z;Aquaculture en eau douce;FR;insee
+ape;05.10Z;Extraction de houille;FR;insee
+ape;05.20Z;Extraction de lignite;FR;insee
+ape;06.10Z;Extraction de pétrole brut;FR;insee
+ape;06.20Z;Extraction de gaz naturel;FR;insee
+ape;07.10Z;Extraction de minerais de fer;FR;insee
+ape;07.21Z;Extraction de minerais d'uranium et de thorium;FR;insee
+ape;07.29Z;Extraction d'autres minerais de métaux non ferreux;FR;insee
+ape;08.11Z;Extraction de pierres ornementales et de construction, de calcaire industriel, de gypse, de craie et d'ardoise;FR;insee
+ape;08.12Z;Exploitation de gravières et sablières, extraction d’argiles et de kaolin;FR;insee
+ape;08.91Z;Extraction des minéraux chimiques et d'engrais minéraux;FR;insee
+ape;08.92Z;Extraction de tourbe;FR;insee
+ape;08.93Z;Production de sel;FR;insee
+ape;08.99Z;Autres activités extractives n.c.a.;FR;insee
+ape;09.10Z;Activités de soutien à l'extraction d'hydrocarbures;FR;insee
+ape;09.90Z;Activités de soutien aux autres industries extractives;FR;insee
+ape;10.11Z;Transformation et conservation de la viande de boucherie;FR;insee
+ape;10.12Z;Transformation et conservation de la viande de volaille;FR;insee
+ape;10.13A;Préparation industrielle de produits à base de viande;FR;insee
+ape;10.13B;Charcuterie;FR;insee
+ape;10.20Z;Transformation et conservation de poisson, de crustacés et de mollusques;FR;insee
+ape;10.31Z;Transformation et conservation de pommes de terre;FR;insee
+ape;10.32Z;Préparation de jus de fruits et légumes;FR;insee
+ape;10.39A;Autre transformation et conservation de légumes;FR;insee
+ape;10.39B;Transformation et conservation de fruits;FR;insee
+ape;10.41A;Fabrication d'huiles et graisses brutes;FR;insee
+ape;10.41B;Fabrication d'huiles et graisses raffinées;FR;insee
+ape;10.42Z;Fabrication de margarine et graisses comestibles similaires;FR;insee
+ape;10.51A;Fabrication de lait liquide et de produits frais;FR;insee
+ape;10.51B;Fabrication de beurre;FR;insee
+ape;10.51C;Fabrication de fromage;FR;insee
+ape;10.51D;Fabrication d'autres produits laitiers;FR;insee
+ape;10.52Z;Fabrication de glaces et sorbets;FR;insee
+ape;10.61A;Meunerie;FR;insee
+ape;10.61B;Autres activités du travail des grains;FR;insee
+ape;10.62Z;Fabrication de produits amylacés;FR;insee
+ape;10.71A;Fabrication industrielle de pain et de pâtisserie fraîche;FR;insee
+ape;10.71B;Cuisson de produits de boulangerie;FR;insee
+ape;10.71C;Boulangerie et boulangerie-pâtisserie;FR;insee
+ape;10.71D;Pâtisserie;FR;insee
+ape;10.72Z;Fabrication de biscuits, biscottes et pâtisseries de conservation;FR;insee
+ape;10.73Z;Fabrication de pâtes alimentaires;FR;insee
+ape;10.81Z;Fabrication de sucre;FR;insee
+ape;10.82Z;Fabrication de cacao, chocolat et de produits de confiserie;FR;insee
+ape;10.83Z;Transformation du thé et du café;FR;insee
+ape;10.84Z;Fabrication de condiments et assaisonnements;FR;insee
+ape;10.85Z;Fabrication de plats préparés;FR;insee
+ape;10.86Z;Fabrication d'aliments homogénéisés et diététiques;FR;insee
+ape;10.89Z;Fabrication d'autres produits alimentaires n.c.a.;FR;insee
+ape;10.91Z;Fabrication d'aliments pour animaux de ferme;FR;insee
+ape;10.92Z;Fabrication d'aliments pour animaux de compagnie;FR;insee
+ape;11.01Z;Production de boissons alcooliques distillées;FR;insee
+ape;11.02A;Fabrication de vins effervescents;FR;insee
+ape;11.02B;Vinification;FR;insee
+ape;11.03Z;Fabrication de cidre et de vins de fruits;FR;insee
+ape;11.04Z;Production d'autres boissons fermentées non distillées;FR;insee
+ape;11.05Z;Fabrication de bière;FR;insee
+ape;11.06Z;Fabrication de malt;FR;insee
+ape;11.07A;Industrie des eaux de table;FR;insee
+ape;11.07B;Production de boissons rafraîchissantes;FR;insee
+ape;12.00Z;Fabrication de produits à base de tabac;FR;insee
+ape;13.10Z;Préparation de fibres textiles et filature;FR;insee
+ape;13.20Z;Tissage;FR;insee
+ape;13.30Z;Ennoblissement textile;FR;insee
+ape;13.91Z;Fabrication d'étoffes à mailles;FR;insee
+ape;13.92Z;Fabrication d'articles textiles, sauf habillement;FR;insee
+ape;13.93Z;Fabrication de tapis et moquettes;FR;insee
+ape;13.94Z;Fabrication de ficelles, cordes et filets;FR;insee
+ape;13.95Z;Fabrication de non-tissés, sauf habillement;FR;insee
+ape;13.96Z;Fabrication d'autres textiles techniques et industriels;FR;insee
+ape;13.99Z;Fabrication d'autres textiles n.c.a.;FR;insee
+ape;14.11Z;Fabrication de vêtements en cuir;FR;insee
+ape;14.12Z;Fabrication de vêtements de travail;FR;insee
+ape;14.13Z;Fabrication de vêtements de dessus;FR;insee
+ape;14.14Z;Fabrication de vêtements de dessous;FR;insee
+ape;14.19Z;Fabrication d'autres vêtements et accessoires;FR;insee
+ape;14.20Z;Fabrication d'articles en fourrure;FR;insee
+ape;14.31Z;Fabrication d'articles chaussants à mailles;FR;insee
+ape;14.39Z;Fabrication d'autres articles à mailles;FR;insee
+ape;15.11Z;"Apprêt et tannage des cuirs ; préparation et teinture des fourrures";FR;insee
+ape;15.12Z;Fabrication d'articles de voyage, de maroquinerie et de sellerie;FR;insee
+ape;15.20Z;Fabrication de chaussures;FR;insee
+ape;16.10A;Sciage et rabotage du bois, hors imprégnation;FR;insee
+ape;16.10B;Imprégnation du bois;FR;insee
+ape;16.21Z;Fabrication de placage et de panneaux de bois;FR;insee
+ape;16.22Z;Fabrication de parquets assemblés;FR;insee
+ape;16.23Z;Fabrication de charpentes et d'autres menuiseries;FR;insee
+ape;16.24Z;Fabrication d'emballages en bois;FR;insee
+ape;16.29Z;"Fabrication d'objets divers en bois ; fabrication d'objets en liège, vannerie et sparterie";FR;insee
+ape;17.11Z;Fabrication de pâte à papier;FR;insee
+ape;17.12Z;Fabrication de papier et de carton;FR;insee
+ape;17.21A;Fabrication de carton ondulé;FR;insee
+ape;17.21B;Fabrication de cartonnages;FR;insee
+ape;17.21C;Fabrication d'emballages en papier;FR;insee
+ape;17.22Z;Fabrication d'articles en papier à usage sanitaire ou domestique;FR;insee
+ape;17.23Z;Fabrication d'articles de papeterie;FR;insee
+ape;17.24Z;Fabrication de papiers peints;FR;insee
+ape;17.29Z;Fabrication d'autres articles en papier ou en carton;FR;insee
+ape;18.11Z;Imprimerie de journaux;FR;insee
+ape;18.12Z;Autre imprimerie (labeur);FR;insee
+ape;18.13Z;Activités de pré-presse;FR;insee
+ape;18.14Z;Reliure et activités connexes;FR;insee
+ape;18.20Z;Reproduction d'enregistrements;FR;insee
+ape;19.10Z;Cokéfaction;FR;insee
+ape;19.20Z;Raffinage du pétrole;FR;insee
+ape;20.11Z;Fabrication de gaz industriels;FR;insee
+ape;20.12Z;Fabrication de colorants et de pigments;FR;insee
+ape;20.13A;Enrichissement et  retraitement de matières nucléaires;FR;insee
+ape;20.13B;Fabrication d'autres produits chimiques inorganiques de base n.c.a.;FR;insee
+ape;20.14Z;Fabrication d'autres produits chimiques organiques de base;FR;insee
+ape;20.15Z;Fabrication de produits azotés et d'engrais;FR;insee
+ape;20.16Z;Fabrication de matières plastiques de base;FR;insee
+ape;20.17Z;Fabrication de caoutchouc synthétique;FR;insee
+ape;20.20Z;Fabrication de pesticides et d’autres produits agrochimiques;FR;insee
+ape;20.30Z;Fabrication de peintures, vernis, encres et mastics;FR;insee
+ape;20.41Z;Fabrication de savons, détergents et produits d'entretien;FR;insee
+ape;20.42Z;Fabrication de parfums et de produits pour la toilette;FR;insee
+ape;20.51Z;Fabrication de produits explosifs;FR;insee
+ape;20.52Z;Fabrication de colles;FR;insee
+ape;20.53Z;Fabrication d'huiles essentielles;FR;insee
+ape;20.59Z;Fabrication d'autres produits chimiques n.c.a.;FR;insee
+ape;20.60Z;Fabrication de fibres artificielles ou synthétiques;FR;insee
+ape;21.10Z;Fabrication de produits pharmaceutiques de base;FR;insee
+ape;21.20Z;Fabrication de préparations pharmaceutiques;FR;insee
+ape;22.11Z;Fabrication et rechapage de pneumatiques;FR;insee
+ape;22.19Z;Fabrication d'autres articles en caoutchouc;FR;insee
+ape;22.21Z;Fabrication de plaques, feuilles, tubes et profilés en matières plastiques;FR;insee
+ape;22.22Z;Fabrication d'emballages en matières plastiques;FR;insee
+ape;22.23Z;Fabrication d'éléments en matières plastiques pour la construction;FR;insee
+ape;22.29A;Fabrication de pièces techniques à base de matières plastiques;FR;insee
+ape;22.29B;Fabrication de produits de consommation courante en matières plastiques;FR;insee
+ape;23.11Z;Fabrication de verre plat;FR;insee
+ape;23.12Z;Façonnage et transformation du verre plat;FR;insee
+ape;23.13Z;Fabrication de verre creux;FR;insee
+ape;23.14Z;Fabrication de fibres de verre;FR;insee
+ape;23.19Z;Fabrication et façonnage d'autres articles en verre, y compris verre technique;FR;insee
+ape;23.20Z;Fabrication de produits réfractaires;FR;insee
+ape;23.31Z;Fabrication de carreaux en céramique;FR;insee
+ape;23.32Z;Fabrication de briques, tuiles et produits de construction, en terre cuite;FR;insee
+ape;23.41Z;Fabrication d'articles céramiques à usage domestique ou ornemental;FR;insee
+ape;23.42Z;Fabrication d'appareils sanitaires en céramique;FR;insee
+ape;23.43Z;Fabrication d'isolateurs et pièces isolantes en céramique;FR;insee
+ape;23.44Z;Fabrication d'autres produits céramiques à usage technique;FR;insee
+ape;23.49Z;Fabrication d'autres produits céramiques;FR;insee
+ape;23.51Z;Fabrication de ciment;FR;insee
+ape;23.52Z;Fabrication de chaux et plâtre;FR;insee
+ape;23.61Z;Fabrication d'éléments en béton pour la construction;FR;insee
+ape;23.62Z;Fabrication d'éléments en plâtre pour la construction;FR;insee
+ape;23.63Z;Fabrication de béton prêt à l'emploi;FR;insee
+ape;23.64Z;Fabrication de mortiers et bétons secs;FR;insee
+ape;23.65Z;Fabrication d'ouvrages en fibre-ciment;FR;insee
+ape;23.69Z;Fabrication d'autres ouvrages en béton, en ciment ou en plâtre;FR;insee
+ape;23.70Z;Taille, façonnage et finissage de pierres;FR;insee
+ape;23.91Z;Fabrication de produits abrasifs;FR;insee
+ape;23.99Z;Fabrication d'autres produits minéraux non métalliques n.c.a.;FR;insee
+ape;24.10Z;Sidérurgie;FR;insee
+ape;24.20Z;Fabrication de tubes, tuyaux, profilés creux et accessoires correspondants en acier;FR;insee
+ape;24.31Z;Étirage à froid de barres;FR;insee
+ape;24.32Z;Laminage à froid de feuillards;FR;insee
+ape;24.33Z;Profilage à froid par formage ou pliage;FR;insee
+ape;24.34Z;Tréfilage à froid;FR;insee
+ape;24.41Z;Production de métaux précieux;FR;insee
+ape;24.42Z;Métallurgie de l'aluminium;FR;insee
+ape;24.43Z;Métallurgie du plomb, du zinc ou de l'étain;FR;insee
+ape;24.44Z;Métallurgie du cuivre;FR;insee
+ape;24.45Z;Métallurgie des autres métaux non ferreux;FR;insee
+ape;24.46Z;Élaboration et transformation de matières nucléaires;FR;insee
+ape;24.51Z;Fonderie de fonte;FR;insee
+ape;24.52Z;Fonderie d'acier;FR;insee
+ape;24.53Z;Fonderie de métaux légers;FR;insee
+ape;24.54Z;Fonderie d'autres métaux non ferreux;FR;insee
+ape;25.11Z;Fabrication de structures métalliques et de parties de structures;FR;insee
+ape;25.12Z;Fabrication de portes et fenêtres en métal;FR;insee
+ape;25.21Z;Fabrication de radiateurs et de chaudières pour le chauffage central;FR;insee
+ape;25.29Z;Fabrication d'autres réservoirs, citernes et conteneurs métalliques;FR;insee
+ape;25.30Z;Fabrication de générateurs de vapeur, à l'exception des chaudières pour le chauffage central;FR;insee
+ape;25.40Z;Fabrication d'armes et de munitions;FR;insee
+ape;25.50A;"Forge, estampage, matriçage ; métallurgie des poudres";FR;insee
+ape;25.50B;Découpage, emboutissage;FR;insee
+ape;25.61Z;Traitement et revêtement des métaux;FR;insee
+ape;25.62A;Décolletage;FR;insee
+ape;25.62B;Mécanique industrielle;FR;insee
+ape;25.71Z;Fabrication de coutellerie;FR;insee
+ape;25.72Z;Fabrication de serrures et de ferrures;FR;insee
+ape;25.73A;Fabrication de moules et modèles;FR;insee
+ape;25.73B;Fabrication d'autres outillages;FR;insee
+ape;25.91Z;Fabrication de fûts et emballages métalliques similaires;FR;insee
+ape;25.92Z;Fabrication d'emballages métalliques légers;FR;insee
+ape;25.93Z;Fabrication d'articles en fils métalliques, de chaînes et de ressorts;FR;insee
+ape;25.94Z;Fabrication de vis et de boulons;FR;insee
+ape;25.99A;Fabrication d'articles métalliques ménagers;FR;insee
+ape;25.99B;Fabrication d'autres articles métalliques;FR;insee
+ape;26.11Z;Fabrication de composants électroniques;FR;insee
+ape;26.12Z;Fabrication de cartes électroniques assemblées;FR;insee
+ape;26.20Z;Fabrication d'ordinateurs et d'équipements périphériques;FR;insee
+ape;26.30Z;Fabrication d'équipements de communication;FR;insee
+ape;26.40Z;Fabrication de produits électroniques grand public;FR;insee
+ape;26.51A;Fabrication d'équipements d'aide à la navigation;FR;insee
+ape;26.51B;Fabrication d'instrumentation scientifique et technique;FR;insee
+ape;26.52Z;Horlogerie;FR;insee
+ape;26.60Z;Fabrication d'équipements d'irradiation médicale, d'équipements électromédicaux et électrothérapeutiques;FR;insee
+ape;26.70Z;Fabrication de matériels optique et photographique;FR;insee
+ape;26.80Z;Fabrication de supports magnétiques et optiques;FR;insee
+ape;27.11Z;Fabrication de moteurs, génératrices et transformateurs électriques;FR;insee
+ape;27.12Z;Fabrication de matériel de distribution et de commande électrique;FR;insee
+ape;27.20Z;Fabrication de piles et d'accumulateurs électriques;FR;insee
+ape;27.31Z;Fabrication de câbles de fibres optiques;FR;insee
+ape;27.32Z;Fabrication d'autres fils et câbles électroniques ou électriques;FR;insee
+ape;27.33Z;Fabrication de matériel d'installation électrique;FR;insee
+ape;27.40Z;Fabrication d'appareils d'éclairage électrique;FR;insee
+ape;27.51Z;Fabrication d'appareils électroménagers;FR;insee
+ape;27.52Z;Fabrication d'appareils ménagers non électriques;FR;insee
+ape;27.90Z;Fabrication d'autres matériels électriques;FR;insee
+ape;28.11Z;Fabrication de moteurs et turbines, à l'exception des moteurs d’avions et de véhicules;FR;insee
+ape;28.12Z;Fabrication d'équipements hydrauliques et pneumatiques;FR;insee
+ape;28.13Z;Fabrication d'autres pompes et compresseurs;FR;insee
+ape;28.14Z;Fabrication d'autres articles de robinetterie;FR;insee
+ape;28.15Z;Fabrication d'engrenages et d'organes mécaniques de transmission;FR;insee
+ape;28.21Z;Fabrication de fours et brûleurs;FR;insee
+ape;28.22Z;Fabrication de matériel de levage et de manutention;FR;insee
+ape;28.23Z;Fabrication de machines et d'équipements de bureau (à l'exception des ordinateurs et équipements périphériques);FR;insee
+ape;28.24Z;Fabrication d'outillage portatif à moteur incorporé;FR;insee
+ape;28.25Z;Fabrication d'équipements aérauliques et frigorifiques industriels;FR;insee
+ape;28.29A;Fabrication d'équipements d'emballage, de conditionnement et de pesage;FR;insee
+ape;28.29B;Fabrication d'autres machines d'usage général;FR;insee
+ape;28.30Z;Fabrication de machines agricoles et forestières;FR;insee
+ape;28.41Z;Fabrication de machines-outils pour le travail des métaux;FR;insee
+ape;28.49Z;Fabrication d'autres machines-outils;FR;insee
+ape;28.91Z;Fabrication de machines pour la métallurgie;FR;insee
+ape;28.92Z;Fabrication de machines pour l'extraction ou la construction;FR;insee
+ape;28.93Z;Fabrication de machines pour l'industrie agro-alimentaire;FR;insee
+ape;28.94Z;Fabrication de machines pour les industries textiles;FR;insee
+ape;28.95Z;Fabrication de machines pour les industries du papier et du carton;FR;insee
+ape;28.96Z;Fabrication de machines pour le travail du caoutchouc ou des plastiques;FR;insee
+ape;28.99A;Fabrication de machines d'imprimerie;FR;insee
+ape;28.99B;Fabrication d'autres machines spécialisées;FR;insee
+ape;29.10Z;Construction de véhicules automobiles;FR;insee
+ape;29.20Z;Fabrication de carrosseries et remorques;FR;insee
+ape;29.31Z;Fabrication d'équipements électriques et électroniques automobiles;FR;insee
+ape;29.32Z;Fabrication d'autres équipements automobiles;FR;insee
+ape;30.11Z;Construction de navires et de structures flottantes;FR;insee
+ape;30.12Z;Construction de bateaux de plaisance;FR;insee
+ape;30.20Z;Construction de locomotives et d'autre matériel ferroviaire roulant;FR;insee
+ape;30.30Z;Construction aéronautique et spatiale;FR;insee
+ape;30.40Z;Construction de véhicules militaires de combat;FR;insee
+ape;30.91Z;Fabrication de motocycles;FR;insee
+ape;30.92Z;Fabrication de bicyclettes et de véhicules pour invalides;FR;insee
+ape;30.99Z;Fabrication d’autres équipements de transport n.c.a.;FR;insee
+ape;31.01Z;Fabrication de meubles de bureau et de magasin;FR;insee
+ape;31.02Z;Fabrication de meubles de cuisine;FR;insee
+ape;31.03Z;Fabrication de matelas;FR;insee
+ape;31.09A;Fabrication de sièges d'ameublement d'intérieur;FR;insee
+ape;31.09B;Fabrication d’autres meubles et industries connexes de l’ameublement;FR;insee
+ape;32.11Z;Frappe de monnaie;FR;insee
+ape;32.12Z;Fabrication d’articles de joaillerie et bijouterie;FR;insee
+ape;32.13Z;Fabrication d’articles de bijouterie fantaisie et articles similaires;FR;insee
+ape;32.20Z;Fabrication d'instruments de musique;FR;insee
+ape;32.30Z;Fabrication d'articles de sport;FR;insee
+ape;32.40Z;Fabrication de jeux et jouets;FR;insee
+ape;32.50A;Fabrication de matériel médico-chirurgical et dentaire;FR;insee
+ape;32.50B;Fabrication de lunettes;FR;insee
+ape;32.91Z;Fabrication d’articles de brosserie;FR;insee
+ape;32.99Z;Autres activités manufacturières n.c.a.;FR;insee
+ape;33.11Z;Réparation d'ouvrages en métaux;FR;insee
+ape;33.12Z;Réparation de machines et équipements mécaniques;FR;insee
+ape;33.13Z;Réparation de matériels électroniques et optiques;FR;insee
+ape;33.14Z;Réparation d'équipements électriques;FR;insee
+ape;33.15Z;Réparation et maintenance navale;FR;insee
+ape;33.16Z;Réparation et maintenance d'aéronefs et d'engins spatiaux;FR;insee
+ape;33.17Z;Réparation et maintenance d'autres équipements de transport;FR;insee
+ape;33.19Z;Réparation d'autres équipements;FR;insee
+ape;33.20A;Installation de structures métalliques, chaudronnées et de tuyauterie;FR;insee
+ape;33.20B;Installation de machines et équipements mécaniques;FR;insee
+ape;33.20C;Conception d'ensemble et assemblage sur site industriel d'équipements de contrôle des processus industriels;FR;insee
+ape;33.20D;Installation d'équipements électriques, de matériels électroniques et optiques ou d'autres matériels;FR;insee
+ape;35.11Z;Production d'électricité;FR;insee
+ape;35.12Z;Transport d'électricité;FR;insee
+ape;35.13Z;Distribution d'électricité;FR;insee
+ape;35.14Z;Commerce d'électricité;FR;insee
+ape;35.21Z;Production de combustibles gazeux;FR;insee
+ape;35.22Z;Distribution de combustibles gazeux par conduites;FR;insee
+ape;35.23Z;Commerce de combustibles gazeux par conduites;FR;insee
+ape;35.30Z;Production et distribution de vapeur et d'air conditionné;FR;insee
+ape;36.00Z;Captage, traitement et distribution d'eau;FR;insee
+ape;37.00Z;Collecte et traitement des eaux usées;FR;insee
+ape;38.11Z;Collecte des déchets non dangereux;FR;insee
+ape;38.12Z;Collecte des déchets dangereux;FR;insee
+ape;38.21Z;Traitement et élimination des déchets non dangereux;FR;insee
+ape;38.22Z;Traitement et élimination des déchets dangereux;FR;insee
+ape;38.31Z;Démantèlement d'épaves;FR;insee
+ape;38.32Z;Récupération de déchets triés;FR;insee
+ape;39.00Z;Dépollution et autres services de gestion des déchets;FR;insee
+ape;41.10A;Promotion immobilière de logements;FR;insee
+ape;41.10B;Promotion immobilière de bureaux;FR;insee
+ape;41.10C;Promotion immobilière d'autres bâtiments;FR;insee
+ape;41.10D;Supports juridiques de programmes;FR;insee
+ape;41.20A;Construction de maisons individuelles;FR;insee
+ape;41.20B;Construction d'autres bâtiments;FR;insee
+ape;42.11Z;Construction de routes et autoroutes;FR;insee
+ape;42.12Z;Construction de voies ferrées de surface et souterraines;FR;insee
+ape;42.13A;Construction d'ouvrages d'art;FR;insee
+ape;42.13B;Construction et entretien de tunnels;FR;insee
+ape;42.21Z;Construction de réseaux pour fluides;FR;insee
+ape;42.22Z;Construction de réseaux électriques et de télécommunications;FR;insee
+ape;42.91Z;Construction d'ouvrages maritimes et fluviaux;FR;insee
+ape;42.99Z;Construction d'autres ouvrages de génie civil n.c.a.;FR;insee
+ape;43.11Z;Travaux de démolition;FR;insee
+ape;43.12A;Travaux de terrassement courants et travaux préparatoires;FR;insee
+ape;43.12B;Travaux de terrassement spécialisés ou de grande masse;FR;insee
+ape;43.13Z;Forages et sondages;FR;insee
+ape;43.21A;Travaux d'installation électrique dans tous locaux;FR;insee
+ape;43.21B;Travaux d'installation électrique sur la voie publique;FR;insee
+ape;43.22A;Travaux d'installation d'eau et de gaz en tous locaux;FR;insee
+ape;43.22B;Travaux d'installation d'équipements thermiques et de climatisation;FR;insee
+ape;43.29A;Travaux d'isolation;FR;insee
+ape;43.29B;Autres travaux d'installation n.c.a.;FR;insee
+ape;43.31Z;Travaux de plâtrerie;FR;insee
+ape;43.32A;Travaux de menuiserie bois et PVC;FR;insee
+ape;43.32B;Travaux de menuiserie métallique et serrurerie;FR;insee
+ape;43.32C;Agencement de lieux de vente;FR;insee
+ape;43.33Z;Travaux de revêtement des sols et des murs;FR;insee
+ape;43.34Z;Travaux de peinture et vitrerie;FR;insee
+ape;43.39Z;Autres travaux de finition;FR;insee
+ape;43.91A;Travaux de charpente;FR;insee
+ape;43.91B;Travaux de couverture par éléments;FR;insee
+ape;43.99A;Travaux d'étanchéification;FR;insee
+ape;43.99B;Travaux de montage de structures métalliques;FR;insee
+ape;43.99C;Travaux de maçonnerie générale et gros œuvre de bâtiment;FR;insee
+ape;43.99D;Autres travaux spécialisés de construction;FR;insee
+ape;43.99E;Location avec opérateur de matériel de construction;FR;insee
+ape;45.11Z;Commerce de voitures et de véhicules automobiles légers;FR;insee
+ape;45.19Z;Commerce d'autres véhicules automobiles;FR;insee
+ape;45.20A;Entretien et réparation de véhicules automobiles légers;FR;insee
+ape;45.20B;Entretien et réparation d'autres véhicules automobiles;FR;insee
+ape;45.31Z;Commerce de gros d'équipements automobiles;FR;insee
+ape;45.32Z;Commerce de détail d'équipements automobiles;FR;insee
+ape;45.40Z;Commerce et réparation de motocycles;FR;insee
+ape;46.11Z;Intermédiaires du commerce en matières premières agricoles, animaux vivants, matières premières textiles et produits semi-finis;FR;insee
+ape;46.12A;Centrales d'achat de carburant;FR;insee
+ape;46.12B;Autres intermédiaires du commerce en combustibles, métaux, minéraux et produits chimiques;FR;insee
+ape;46.13Z;Intermédiaires du commerce en bois et matériaux de construction;FR;insee
+ape;46.14Z;Intermédiaires du commerce en machines, équipements industriels, navires et avions;FR;insee
+ape;46.15Z;Intermédiaires du commerce en meubles, articles de ménage et quincaillerie;FR;insee
+ape;46.16Z;Intermédiaires du commerce en textiles, habillement, fourrures, chaussures et articles en cuir;FR;insee
+ape;46.17A;Centrales d'achat alimentaires;FR;insee
+ape;46.17B;Autres intermédiaires du commerce en denrées, boissons et tabac;FR;insee
+ape;46.18Z;Intermédiaires spécialisés dans le commerce d'autres produits spécifiques;FR;insee
+ape;46.19A;Centrales d'achat non alimentaires;FR;insee
+ape;46.19B;Autres intermédiaires du commerce en produits divers;FR;insee
+ape;46.21Z;Commerce de gros (commerce interentreprises) de céréales, de tabac non manufacturé, de semences et d'aliments pour le bétail;FR;insee
+ape;46.22Z;Commerce de gros (commerce interentreprises) de fleurs et plantes;FR;insee
+ape;46.23Z;Commerce de gros (commerce interentreprises) d'animaux vivants;FR;insee
+ape;46.24Z;Commerce de gros (commerce interentreprises) de cuirs et peaux;FR;insee
+ape;46.31Z;Commerce de gros (commerce interentreprises) de fruits et légumes;FR;insee
+ape;46.32A;Commerce de gros (commerce interentreprises) de viandes de boucherie;FR;insee
+ape;46.32B;Commerce de gros (commerce interentreprises) de produits à base de viande;FR;insee
+ape;46.32C;Commerce de gros (commerce interentreprises) de volailles et gibier;FR;insee
+ape;46.33Z;Commerce de gros (commerce interentreprises) de produits laitiers, œufs, huiles et matières grasses comestibles;FR;insee
+ape;46.34Z;Commerce de gros (commerce interentreprises) de boissons;FR;insee
+ape;46.35Z;Commerce de gros (commerce interentreprises) de produits à base de tabac;FR;insee
+ape;46.36Z;Commerce de gros (commerce interentreprises) de sucre, chocolat et confiserie;FR;insee
+ape;46.37Z;Commerce de gros (commerce interentreprises) de café, thé, cacao et épices;FR;insee
+ape;46.38A;Commerce de gros (commerce interentreprises) de poissons, crustacés et mollusques;FR;insee
+ape;46.38B;Commerce de gros (commerce interentreprises) alimentaire spécialisé divers;FR;insee
+ape;46.39A;Commerce de gros (commerce interentreprises) de produits surgelés;FR;insee
+ape;46.39B;Commerce de gros (commerce interentreprises) alimentaire non spécialisé;FR;insee
+ape;46.41Z;Commerce de gros (commerce interentreprises) de textiles;FR;insee
+ape;46.42Z;Commerce de gros (commerce interentreprises) d'habillement et de chaussures;FR;insee
+ape;46.43Z;Commerce de gros (commerce interentreprises) d'appareils électroménagers;FR;insee
+ape;46.44Z;Commerce de gros (commerce interentreprises) de vaisselle, verrerie et produits d'entretien;FR;insee
+ape;46.45Z;Commerce de gros (commerce interentreprises) de parfumerie et de produits de beauté;FR;insee
+ape;46.46Z;Commerce de gros (commerce interentreprises) de produits pharmaceutiques;FR;insee
+ape;46.47Z;Commerce de gros (commerce interentreprises) de meubles, de tapis et d'appareils d'éclairage;FR;insee
+ape;46.48Z;Commerce de gros (commerce interentreprises) d'articles d'horlogerie et de bijouterie;FR;insee
+ape;46.49Z;Commerce de gros (commerce interentreprises) d'autres biens domestiques;FR;insee
+ape;46.51Z;Commerce de gros (commerce interentreprises) d'ordinateurs, d'équipements informatiques périphériques et de logiciels;FR;insee
+ape;46.52Z;Commerce de gros (commerce interentreprises) de composants et d'équipements électroniques et de télécommunication;FR;insee
+ape;46.61Z;Commerce de gros (commerce interentreprises) de matériel agricole;FR;insee
+ape;46.62Z;Commerce de gros (commerce interentreprises) de machines-outils;FR;insee
+ape;46.63Z;Commerce de gros (commerce interentreprises) de machines pour l'extraction, la construction et le génie civil;FR;insee
+ape;46.64Z;Commerce de gros (commerce interentreprises) de machines pour l'industrie textile et l'habillement;FR;insee
+ape;46.65Z;Commerce de gros (commerce interentreprises) de mobilier de bureau;FR;insee
+ape;46.66Z;Commerce de gros (commerce interentreprises) d'autres machines et équipements de bureau;FR;insee
+ape;46.69A;Commerce de gros (commerce interentreprises) de matériel électrique;FR;insee
+ape;46.69B;Commerce de gros (commerce interentreprises) de fournitures et équipements industriels divers;FR;insee
+ape;46.69C;Commerce de gros (commerce interentreprises) de fournitures et équipements divers pour le commerce et les services;FR;insee
+ape;46.71Z;Commerce de gros (commerce interentreprises) de combustibles et de produits annexes;FR;insee
+ape;46.72Z;Commerce de gros (commerce interentreprises) de minerais et métaux;FR;insee
+ape;46.73A;Commerce de gros (commerce interentreprises) de bois et de matériaux de construction;FR;insee
+ape;46.73B;Commerce de gros (commerce interentreprises) d'appareils sanitaires et de produits de décoration;FR;insee
+ape;46.74A;Commerce de gros (commerce interentreprises) de quincaillerie;FR;insee
+ape;46.74B;Commerce de gros (commerce interentreprises) de fournitures pour la plomberie et le chauffage;FR;insee
+ape;46.75Z;Commerce de gros (commerce interentreprises) de produits chimiques;FR;insee
+ape;46.76Z;Commerce de gros (commerce interentreprises) d'autres produits intermédiaires;FR;insee
+ape;46.77Z;Commerce de gros (commerce interentreprises) de déchets et débris;FR;insee
+ape;46.90Z;Commerce de gros (commerce interentreprises) non spécialisé;FR;insee
+ape;47.11A;Commerce de détail de produits surgelés;FR;insee
+ape;47.11B;Commerce d'alimentation générale;FR;insee
+ape;47.11C;Supérettes;FR;insee
+ape;47.11D;Supermarchés;FR;insee
+ape;47.11E;Magasins multi-commerces;FR;insee
+ape;47.11F;Hypermarchés;FR;insee
+ape;47.19A;Grands magasins;FR;insee
+ape;47.19B;Autres commerces de détail en magasin non spécialisé;FR;insee
+ape;47.21Z;Commerce de détail de fruits et légumes en magasin spécialisé;FR;insee
+ape;47.22Z;Commerce de détail de viandes et de produits à base de viande en magasin spécialisé;FR;insee
+ape;47.23Z;Commerce de détail de poissons, crustacés et mollusques en magasin spécialisé;FR;insee
+ape;47.24Z;Commerce de détail de pain, pâtisserie et confiserie en magasin spécialisé;FR;insee
+ape;47.25Z;Commerce de détail de boissons en magasin spécialisé;FR;insee
+ape;47.26Z;Commerce de détail de produits à base de tabac en magasin spécialisé;FR;insee
+ape;47.29Z;Autres commerces de détail alimentaires en magasin spécialisé;FR;insee
+ape;47.30Z;Commerce de détail de carburants en magasin spécialisé;FR;insee
+ape;47.41Z;Commerce de détail d'ordinateurs, d'unités périphériques et de logiciels en magasin spécialisé;FR;insee
+ape;47.42Z;Commerce de détail de matériels de télécommunication en magasin spécialisé;FR;insee
+ape;47.43Z;Commerce de détail de matériels audio et vidéo en magasin spécialisé;FR;insee
+ape;47.51Z;Commerce de détail de textiles en magasin spécialisé;FR;insee
+ape;47.52A;Commerce de détail de quincaillerie, peintures et verres en petites surfaces (moins de 400 m2);FR;insee
+ape;47.52B;Commerce de détail de quincaillerie, peintures et verres en grandes surfaces (400 m2et plus);FR;insee
+ape;47.53Z;Commerce de détail de tapis, moquettes et revêtements de murs et de sols en magasin spécialisé;FR;insee
+ape;47.54Z;Commerce de détail d'appareils électroménagers en magasin spécialisé;FR;insee
+ape;47.59A;Commerce de détail de meubles;FR;insee
+ape;47.59B;Commerce de détail d'autres équipements du foyer;FR;insee
+ape;47.61Z;Commerce de détail de livres en magasin spécialisé;FR;insee
+ape;47.62Z;Commerce de détail de journaux et papeterie en magasin spécialisé;FR;insee
+ape;47.63Z;Commerce de détail d'enregistrements musicaux et vidéo en magasin spécialisé;FR;insee
+ape;47.64Z;Commerce de détail d'articles de sport en magasin spécialisé;FR;insee
+ape;47.65Z;Commerce de détail de jeux et jouets en magasin spécialisé;FR;insee
+ape;47.71Z;Commerce de détail d'habillement en magasin spécialisé;FR;insee
+ape;47.72A;Commerce de détail de la chaussure;FR;insee
+ape;47.72B;Commerce de détail de maroquinerie et d'articles de voyage;FR;insee
+ape;47.73Z;Commerce de détail de produits pharmaceutiques en magasin spécialisé;FR;insee
+ape;47.74Z;Commerce de détail d'articles médicaux et orthopédiques en magasin spécialisé;FR;insee
+ape;47.75Z;Commerce de détail de parfumerie et de produits de beauté en magasin spécialisé;FR;insee
+ape;47.76Z;Commerce de détail de fleurs, plantes, graines, engrais, animaux de compagnie et aliments pour ces animaux en magasin spécialisé;FR;insee
+ape;47.77Z;Commerce de détail d'articles d'horlogerie et de bijouterie en magasin spécialisé;FR;insee
+ape;47.78A;Commerces de détail d'optique;FR;insee
+ape;47.78B;Commerces de détail de charbons et combustibles;FR;insee
+ape;47.78C;Autres commerces de détail spécialisés divers;FR;insee
+ape;47.79Z;Commerce de détail de biens d'occasion en magasin;FR;insee
+ape;47.81Z;Commerce de détail alimentaire sur éventaires et marchés;FR;insee
+ape;47.82Z;Commerce de détail de textiles, d'habillement et de chaussures sur éventaires et marchés;FR;insee
+ape;47.89Z;Autres commerces de détail sur éventaires et marchés;FR;insee
+ape;47.91A;Vente à distance sur catalogue général;FR;insee
+ape;47.91B;Vente à distance sur catalogue spécialisé;FR;insee
+ape;47.99A;Vente à domicile;FR;insee
+ape;47.99B;Vente par automates et autres commerces de détail hors magasin, éventaires ou marchés n.c.a.;FR;insee
+ape;49.10Z;Transport ferroviaire interurbain de voyageurs;FR;insee
+ape;49.20Z;Transports ferroviaires de fret;FR;insee
+ape;49.31Z;Transports urbains et suburbains de voyageurs;FR;insee
+ape;49.32Z;Transports de voyageurs par taxis;FR;insee
+ape;49.39A;Transports routiers réguliers de voyageurs;FR;insee
+ape;49.39B;Autres transports routiers de voyageurs;FR;insee
+ape;49.39C;Téléphériques et remontées mécaniques;FR;insee
+ape;49.41A;Transports routiers de fret interurbains;FR;insee
+ape;49.41B;Transports routiers de fret de proximité;FR;insee
+ape;49.41C;Location de camions avec chauffeur;FR;insee
+ape;49.42Z;Services de déménagement;FR;insee
+ape;49.50Z;Transports par conduites;FR;insee
+ape;50.10Z;Transports maritimes et côtiers de passagers;FR;insee
+ape;50.20Z;Transports maritimes et côtiers de fret;FR;insee
+ape;50.30Z;Transports fluviaux de passagers;FR;insee
+ape;50.40Z;Transports fluviaux de fret;FR;insee
+ape;51.10Z;Transports aériens de passagers;FR;insee
+ape;51.21Z;Transports aériens de fret;FR;insee
+ape;51.22Z;Transports spatiaux;FR;insee
+ape;52.10A;Entreposage et stockage frigorifique;FR;insee
+ape;52.10B;Entreposage et stockage non frigorifique;FR;insee
+ape;52.21Z;Services auxiliaires des transports terrestres;FR;insee
+ape;52.22Z;Services auxiliaires des transports par eau;FR;insee
+ape;52.23Z;Services auxiliaires des transports aériens;FR;insee
+ape;52.24A;Manutention portuaire;FR;insee
+ape;52.24B;Manutention non portuaire;FR;insee
+ape;52.29A;Messagerie, fret express;FR;insee
+ape;52.29B;Affrètement et organisation des transports;FR;insee
+ape;53.10Z;Activités de poste dans le cadre d'une obligation de service universel;FR;insee
+ape;53.20Z;Autres activités de poste et de courrier;FR;insee
+ape;55.10Z;Hôtels et hébergement similaire;FR;insee
+ape;55.20Z;Hébergement touristique et autre hébergement de courte durée;FR;insee
+ape;55.30Z;Terrains de camping et parcs pour caravanes ou véhicules de loisirs;FR;insee
+ape;55.90Z;Autres hébergements;FR;insee
+ape;56.10A;Restauration traditionnelle;FR;insee
+ape;56.10B;Cafétérias et autres libres-services;FR;insee
+ape;56.10C;Restauration de type rapide;FR;insee
+ape;56.21Z;Services des traiteurs;FR;insee
+ape;56.29A;Restauration collective sous contrat;FR;insee
+ape;56.29B;Autres services de restauration n.c.a.;FR;insee
+ape;56.30Z;Débits de boissons;FR;insee
+ape;58.11Z;Édition de livres;FR;insee
+ape;58.12Z;Édition de répertoires et de fichiers d'adresses;FR;insee
+ape;58.13Z;Édition de journaux;FR;insee
+ape;58.14Z;Édition de revues et périodiques;FR;insee
+ape;58.19Z;Autres activités d'édition;FR;insee
+ape;58.21Z;Édition de jeux électroniques;FR;insee
+ape;58.29A;Édition de logiciels système et de réseau;FR;insee
+ape;58.29B;Edition de logiciels outils de développement et de langages;FR;insee
+ape;58.29C;Edition de logiciels applicatifs;FR;insee
+ape;59.11A;Production de films et de programmes pour la télévision;FR;insee
+ape;59.11B;Production de films institutionnels et publicitaires;FR;insee
+ape;59.11C;Production de films pour le cinéma;FR;insee
+ape;59.12Z;Post-production de films cinématographiques, de vidéo et de programmes de télévision;FR;insee
+ape;59.13A;Distribution de films cinématographiques;FR;insee
+ape;59.13B;Edition et distribution vidéo;FR;insee
+ape;59.14Z;Projection de films cinématographiques;FR;insee
+ape;59.20Z;Enregistrement sonore et édition musicale;FR;insee
+ape;60.10Z;Édition et diffusion de programmes radio;FR;insee
+ape;60.20A;Edition de chaînes généralistes;FR;insee
+ape;60.20B;Edition de chaînes thématiques;FR;insee
+ape;61.10Z;Télécommunications filaires;FR;insee
+ape;61.20Z;Télécommunications sans fil;FR;insee
+ape;61.30Z;Télécommunications par satellite;FR;insee
+ape;61.90Z;Autres activités de télécommunication;FR;insee
+ape;62.01Z;Programmation informatique;FR;insee
+ape;62.02A;Conseil en systèmes et logiciels informatiques;FR;insee
+ape;62.02B;Tierce maintenance de systèmes et d’applications informatiques;FR;insee
+ape;62.03Z;Gestion d'installations informatiques;FR;insee
+ape;62.09Z;Autres activités informatiques;FR;insee
+ape;63.11Z;Traitement de données, hébergement et activités connexes;FR;insee
+ape;63.12Z;Portails Internet;FR;insee
+ape;63.91Z;Activités des agences de presse;FR;insee
+ape;63.99Z;Autres services d'information n.c.a.;FR;insee
+ape;64.11Z;Activités de banque centrale;FR;insee
+ape;64.19Z;Autres intermédiations monétaires;FR;insee
+ape;64.20Z;Activités des sociétés holding;FR;insee
+ape;64.30Z;Fonds de placement et entités financières similaires;FR;insee
+ape;64.91Z;Crédit-bail;FR;insee
+ape;64.92Z;Autre distribution de crédit;FR;insee
+ape;64.99Z;Autres activités des services financiers, hors assurance et caisses de retraite, n.c.a.;FR;insee
+ape;65.11Z;Assurance vie;FR;insee
+ape;65.12Z;Autres assurances;FR;insee
+ape;65.20Z;Réassurance;FR;insee
+ape;65.30Z;Caisses de retraite;FR;insee
+ape;66.11Z;Administration de marchés financiers;FR;insee
+ape;66.12Z;Courtage de valeurs mobilières et de marchandises;FR;insee
+ape;66.19A;Supports juridiques de gestion de patrimoine mobilier;FR;insee
+ape;66.19B;Autres activités auxiliaires de services financiers, hors assurance et caisses de retraite, n.c.a.;FR;insee
+ape;66.21Z;Évaluation des risques et dommages;FR;insee
+ape;66.22Z;Activités des agents et courtiers d'assurances;FR;insee
+ape;66.29Z;Autres activités auxiliaires d'assurance et de caisses de retraite;FR;insee
+ape;66.30Z;Gestion de fonds;FR;insee
+ape;68.10Z;Activités des marchands de biens immobiliers;FR;insee
+ape;68.20A;Location de logements;FR;insee
+ape;68.20B;Location de terrains et d'autres biens immobiliers;FR;insee
+ape;68.31Z;Agences immobilières;FR;insee
+ape;68.32A;Administration d'immeubles et autres biens immobiliers;FR;insee
+ape;68.32B;Supports juridiques de gestion de patrimoine immobilier;FR;insee
+ape;69.10Z;Activités juridiques;FR;insee
+ape;69.20Z;Activités comptables;FR;insee
+ape;70.10Z;Activités des sièges sociaux;FR;insee
+ape;70.21Z;Conseil en relations publiques et communication;FR;insee
+ape;70.22Z;Conseil pour les affaires et autres conseils de gestion;FR;insee
+ape;71.11Z;Activités d'architecture;FR;insee
+ape;71.12A;Activité des géomètres;FR;insee
+ape;71.12B;Ingénierie, études techniques;FR;insee
+ape;71.20A;Contrôle technique automobile;FR;insee
+ape;71.20B;Analyses, essais et inspections techniques;FR;insee
+ape;72.11Z;Recherche-développement en biotechnologie;FR;insee
+ape;72.19Z;Recherche-développement en autres sciences physiques et naturelles;FR;insee
+ape;72.20Z;Recherche-développement en sciences humaines et sociales;FR;insee
+ape;73.11Z;Activités des agences de publicité;FR;insee
+ape;73.12Z;Régie publicitaire de médias;FR;insee
+ape;73.20Z;Études de marché et sondages;FR;insee
+ape;74.10Z;Activités spécialisées de design;FR;insee
+ape;74.20Z;Activités photographiques;FR;insee
+ape;74.30Z;Traduction et interprétation;FR;insee
+ape;74.90A;Activité des économistes de la construction;FR;insee
+ape;74.90B;Activités spécialisées, scientifiques et techniques diverses;FR;insee
+ape;75.00Z;Activités vétérinaires;FR;insee
+ape;77.11A;Location de courte durée de voitures et de véhicules automobiles légers;FR;insee
+ape;77.11B;Location de longue durée de voitures et de véhicules automobiles légers;FR;insee
+ape;77.12Z;Location et location-bail de camions;FR;insee
+ape;77.21Z;Location et location-bail d'articles de loisirs et de sport;FR;insee
+ape;77.22Z;Location de vidéocassettes et disques vidéo;FR;insee
+ape;77.29Z;Location et location-bail d'autres biens personnels et domestiques;FR;insee
+ape;77.31Z;Location et location-bail de machines et équipements agricoles;FR;insee
+ape;77.32Z;Location et location-bail de machines et équipements pour la construction;FR;insee
+ape;77.33Z;Location et location-bail de machines de bureau et de matériel informatique;FR;insee
+ape;77.34Z;Location et location-bail de matériels de transport par eau;FR;insee
+ape;77.35Z;Location et location-bail de matériels de transport aérien;FR;insee
+ape;77.39Z;Location et location-bail d'autres machines, équipements et biens matériels n.c.a.;FR;insee
+ape;77.40Z;Location-bail de propriété intellectuelle et de produits similaires, à l'exception des œuvres soumises à copyright;FR;insee
+ape;78.10Z;Activités des agences de placement de main-d'œuvre;FR;insee
+ape;78.20Z;Activités des agences de travail temporaire;FR;insee
+ape;78.30Z;Autre mise à disposition de ressources humaines;FR;insee
+ape;79.11Z;Activités des agences de voyage;FR;insee
+ape;79.12Z;Activités des voyagistes;FR;insee
+ape;79.90Z;Autres services de réservation et activités connexes;FR;insee
+ape;80.10Z;Activités de sécurité privée;FR;insee
+ape;80.20Z;Activités liées aux systèmes de sécurité;FR;insee
+ape;80.30Z;Activités d'enquête;FR;insee
+ape;81.10Z;Activités combinées de soutien lié aux bâtiments;FR;insee
+ape;81.21Z;Nettoyage courant des bâtiments;FR;insee
+ape;81.22Z;Autres activités de nettoyage des bâtiments et nettoyage industriel;FR;insee
+ape;81.29A;Désinfection, désinsectisation, dératisation;FR;insee
+ape;81.29B;Autres activités de nettoyage n.c.a.;FR;insee
+ape;81.30Z;Services d'aménagement paysager;FR;insee
+ape;82.11Z;Services administratifs combinés de bureau;FR;insee
+ape;82.19Z;Photocopie, préparation de documents et autres activités spécialisées de soutien de bureau;FR;insee
+ape;82.20Z;Activités de centres d'appels;FR;insee
+ape;82.30Z;Organisation de foires, salons professionnels et congrès;FR;insee
+ape;82.91Z;Activités des agences de recouvrement de factures et des sociétés d'information financière sur la clientèle;FR;insee
+ape;82.92Z;Activités de conditionnement;FR;insee
+ape;82.99Z;Autres activités de soutien aux entreprises n.c.a.;FR;insee
+ape;84.11Z;Administration publique générale;FR;insee
+ape;84.12Z;Administration publique (tutelle) de la santé, de la formation, de la culture et des services sociaux, autre que sécurité sociale;FR;insee
+ape;84.13Z;Administration publique (tutelle) des activités économiques;FR;insee
+ape;84.21Z;Affaires étrangères;FR;insee
+ape;84.22Z;Défense;FR;insee
+ape;84.23Z;Justice;FR;insee
+ape;84.24Z;Activités d’ordre public et de sécurité;FR;insee
+ape;84.25Z;Services du feu et de secours;FR;insee
+ape;84.30A;Activités générales de sécurité sociale;FR;insee
+ape;84.30B;Gestion des retraites complémentaires;FR;insee
+ape;84.30C;Distribution sociale de revenus;FR;insee
+ape;85.10Z;Enseignement pré-primaire;FR;insee
+ape;85.20Z;Enseignement primaire;FR;insee
+ape;85.31Z;Enseignement secondaire général;FR;insee
+ape;85.32Z;Enseignement secondaire technique ou professionnel;FR;insee
+ape;85.41Z;Enseignement post-secondaire non supérieur;FR;insee
+ape;85.42Z;Enseignement supérieur;FR;insee
+ape;85.51Z;Enseignement de disciplines sportives et d'activités de loisirs;FR;insee
+ape;85.52Z;Enseignement culturel;FR;insee
+ape;85.53Z;Enseignement de la conduite;FR;insee
+ape;85.59A;Formation continue d'adultes;FR;insee
+ape;85.59B;Autres enseignements;FR;insee
+ape;85.60Z;Activités de soutien à l'enseignement;FR;insee
+ape;86.10Z;Activités hospitalières;FR;insee
+ape;86.21Z;Activité des médecins généralistes;FR;insee
+ape;86.22A;Activités de radiodiagnostic et de radiothérapie;FR;insee
+ape;86.22B;Activités chirurgicales;FR;insee
+ape;86.22C;Autres activités des médecins spécialistes;FR;insee
+ape;86.23Z;Pratique dentaire;FR;insee
+ape;86.90A;Ambulances;FR;insee
+ape;86.90B;Laboratoires d'analyses médicales;FR;insee
+ape;86.90C;Centres de collecte et banques d'organes;FR;insee
+ape;86.90D;Activités des infirmiers et des sages-femmes;FR;insee
+ape;86.90E;Activités des professionnels de la rééducation, de l’appareillage et des pédicures-podologues;FR;insee
+ape;86.90F;Activités de santé humaine non classées ailleurs;FR;insee
+ape;87.10A;Hébergement médicalisé pour personnes âgées;FR;insee
+ape;87.10B;Hébergement médicalisé pour enfants handicapés;FR;insee
+ape;87.10C;Hébergement médicalisé pour adultes handicapés et autre hébergement médicalisé;FR;insee
+ape;87.20A;Hébergement social pour handicapés mentaux et malades mentaux;FR;insee
+ape;87.20B;Hébergement social pour toxicomanes;FR;insee
+ape;87.30A;Hébergement social pour personnes âgées;FR;insee
+ape;87.30B;Hébergement social pour handicapés  physiques;FR;insee
+ape;87.90A;Hébergement social pour enfants en difficultés;FR;insee
+ape;87.90B;Hébergement social pour adultes et familles en difficultés et autre hébergement social;FR;insee
+ape;88.10A;Aide à domicile;FR;insee
+ape;88.10B;Accueil ou accompagnement sans hébergement d’adultes handicapés ou de  personnes âgées;FR;insee
+ape;88.10C;Aide par le travail;FR;insee
+ape;88.91A;Accueil de jeunes enfants;FR;insee
+ape;88.91B;Accueil ou accompagnement sans hébergement d’enfants handicapés;FR;insee
+ape;88.99A;"Autre accueil ou accompagnement sans hébergement d’enfants
+ et d’adolescents";FR;insee
+ape;88.99B;Action sociale sans hébergement n.c.a.;FR;insee
+ape;90.01Z;Arts du spectacle vivant;FR;insee
+ape;90.02Z;Activités de soutien au spectacle vivant;FR;insee
+ape;90.03A;Création artistique relevant des arts plastiques;FR;insee
+ape;90.03B;Autre création artistique;FR;insee
+ape;90.04Z;Gestion de salles de spectacles;FR;insee
+ape;91.01Z;Gestion des bibliothèques et des archives;FR;insee
+ape;91.02Z;Gestion des musées;FR;insee
+ape;91.03Z;Gestion des sites et monuments historiques et des attractions touristiques similaires;FR;insee
+ape;91.04Z;Gestion des jardins botaniques et zoologiques et des réserves naturelles;FR;insee
+ape;92.00Z;Organisation de jeux de hasard et d'argent;FR;insee
+ape;93.11Z;Gestion d'installations sportives;FR;insee
+ape;93.12Z;Activités de clubs de sports;FR;insee
+ape;93.13Z;Activités des centres de culture physique;FR;insee
+ape;93.19Z;Autres activités liées au sport;FR;insee
+ape;93.21Z;Activités des parcs d'attractions et parcs à thèmes;FR;insee
+ape;93.29Z;Autres activités récréatives et de loisirs;FR;insee
+ape;94.11Z;Activités des organisations patronales et consulaires;FR;insee
+ape;94.12Z;Activités des organisations professionnelles;FR;insee
+ape;94.20Z;Activités des syndicats de salariés;FR;insee
+ape;94.91Z;Activités des organisations religieuses;FR;insee
+ape;94.92Z;Activités des organisations politiques;FR;insee
+ape;94.99Z;Autres organisations fonctionnant par adhésion volontaire;FR;insee
+ape;95.11Z;Réparation d'ordinateurs et d'équipements périphériques;FR;insee
+ape;95.12Z;Réparation d'équipements de communication;FR;insee
+ape;95.21Z;Réparation de produits électroniques grand public;FR;insee
+ape;95.22Z;Réparation d'appareils électroménagers et d'équipements pour la maison et le jardin;FR;insee
+ape;95.23Z;Réparation de chaussures et d'articles en cuir;FR;insee
+ape;95.24Z;Réparation de meubles et d'équipements du foyer;FR;insee
+ape;95.25Z;Réparation d'articles d'horlogerie et de bijouterie;FR;insee
+ape;95.29Z;Réparation d'autres biens personnels et domestiques;FR;insee
+ape;96.01A;Blanchisserie-teinturerie de gros;FR;insee
+ape;96.01B;Blanchisserie-teinturerie de détail;FR;insee
+ape;96.02A;Coiffure;FR;insee
+ape;96.02B;Soins de beauté;FR;insee
+ape;96.03Z;Services funéraires;FR;insee
+ape;96.04Z;Entretien corporel;FR;insee
+ape;96.09Z;Autres services personnels n.c.a.;FR;insee
+ape;97.00Z;Activités des ménages en tant qu'employeurs de personnel domestique;FR;insee
+ape;98.10Z;Activités indifférenciées des ménages en tant que producteurs de biens pour usage propre;FR;insee
+ape;98.20Z;Activités indifférenciées des ménages en tant que producteurs de services pour usage propre;FR;insee
+ape;99.00Z;Activités des organisations et organismes extraterritoriaux;FR;insee

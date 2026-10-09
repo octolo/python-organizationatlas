@@ -5,8 +5,9 @@ from django.db import models
 from django.db.models import Q
 from django.utils.translation import gettext_lazy as _
 
+from ..managers.data import OrganizationAtlasDataManager
 from .organization import OrganizationAtlasOrganization
-from .referentiel import OrganizationAtlasReferentiel
+from .reference import OrganizationAtlasReference
 from .source import OrganizationAtlasSourceBase
 from .temporal import TemporalValidityMixin
 
@@ -78,10 +79,10 @@ class OrganizationAtlasData(TemporalValidityMixin, OrganizationAtlasSourceBase):
         verbose_name=_("Value"),
         help_text=_("Data value"),
     )
-    referentiel = models.ManyToManyField(
-        OrganizationAtlasReferentiel,
-        verbose_name=_("Referentiel"),
-        help_text=_("Referentiel this data belongs to"),
+    reference = models.ManyToManyField(
+        OrganizationAtlasReference,
+        verbose_name=_("Reference"),
+        help_text=_("Reference this data belongs to"),
         related_name="to_organizationatlasdata",
         blank=True,
     )
@@ -102,15 +103,35 @@ class OrganizationAtlasData(TemporalValidityMixin, OrganizationAtlasSourceBase):
         ]
         ordering = ["data_type__data_type", "-created_at"]
 
+    objects = OrganizationAtlasDataManager()
+
     def __str__(self):
         return (
             f"{self.organization.denomination} - {self.source} - "
             f"{self.country_code} - {self.data_type}"
         )
 
+    def data_reference(self):
+        if hasattr(self, "sql_data_reference"):
+            return self.sql_data_reference or ""
+        if not self.data_type_id:
+            return ""
+        description = (
+            OrganizationAtlasReference.objects.filter(
+                category__name=self.data_type.data_type,
+                code=self.value,
+            )
+            .order_by("-priority")
+            .values_list("description", flat=True)
+            .first()
+        )
+        return description or ""
+    data_reference.short_description = _("Reference")
+    data_reference = property(data_reference)
+
     @property
-    def referentiel_description(self):
-        if hasattr(self, "sql_referentiel_description"):
-            return self.sql_referentiel_description
-        first = self.referentiel.values_list("description", flat=True).first()
+    def reference_description(self):
+        if hasattr(self, "sql_reference_description"):
+            return self.sql_reference_description
+        first = self.reference.values_list("description", flat=True).first()
         return first or ""

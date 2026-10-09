@@ -27,12 +27,12 @@ class OrganizationAtlasOrganizationRelation(TemporalValidityMixin, OrganizationA
         help_text=_("Organization targeted by this relation"),
     )
     relation_type = models.ForeignKey(
-        "django_organizationatlas.OrganizationAtlasReferentiel",
+        "django_organizationatlas.OrganizationAtlasReference",
         null=True,
         blank=True,
         on_delete=models.SET_NULL,
         related_name="organization_relations",
-        limit_choices_to={"category": "organization_relation"},
+        limit_choices_to={"category__name": "organization_relation"},
         verbose_name=_("Relation Type"),
         help_text=_("Type of relationship between the two organizations"),
     )
@@ -61,9 +61,9 @@ class OrganizationAtlasOrganizationRelation(TemporalValidityMixin, OrganizationA
 
     def clean(self):
         super().clean()
-        if self.relation_type_id and self.relation_type.category != "organization_relation":
+        if self.relation_type_id and self.relation_type.category.name != "organization_relation":
             raise ValidationError(
-                {"relation_type": _("Referentiel must belong to the 'organization_relation' category.")}
+                {"relation_type": _("Reference must belong to the 'organization_relation' category.")}
             )
 
     def __str__(self):

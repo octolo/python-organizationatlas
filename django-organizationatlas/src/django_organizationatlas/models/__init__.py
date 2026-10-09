@@ -6,7 +6,7 @@ from .data import OrganizationAtlasData, OrganizationAtlasDataType
 from .document import OrganizationAtlasDocument
 from .event import OrganizationAtlasEvent
 from .person import OrganizationAtlasPerson
-from .referentiel import OrganizationAtlasReferentiel
+from .reference import OrganizationAtlasReference, OrganizationAtlasReferenceCategory
 from .related_object import OrganizationAtlasRelatedObject
 from .relation import OrganizationAtlasOrganizationRelation
 from .stakeholder import OrganizationAtlasStakeholderRelation
@@ -25,7 +25,8 @@ __all__ = [
     "OrganizationAtlasEvent",
     "OrganizationAtlasAddress",
     "OrganizationAtlasPerson",
-    "OrganizationAtlasReferentiel",
+    "OrganizationAtlasReference",
+    "OrganizationAtlasReferenceCategory",
     "OrganizationAtlasRelatedObject",
     "OrganizationAtlasOrganizationRelation",
     "OrganizationAtlasStakeholderRelation",

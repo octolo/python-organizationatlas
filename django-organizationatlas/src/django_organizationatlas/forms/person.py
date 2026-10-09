@@ -2,7 +2,7 @@ from django import forms
 from django.utils.translation import gettext_lazy as _
 
 from ..models.person import GENDER_CATEGORIES, OrganizationAtlasPerson
-from ..models.referentiel import OrganizationAtlasReferentiel
+from ..models.reference import OrganizationAtlasReference
 
 
 class OrganizationAtlasPersonForm(forms.ModelForm):
@@ -14,9 +14,9 @@ class OrganizationAtlasPersonForm(forms.ModelForm):
         label=_("Person Type"),
     )
     gender = forms.ModelChoiceField(
-        queryset=OrganizationAtlasReferentiel.objects.filter(
-            category__in=GENDER_CATEGORIES,
-        ).order_by("category", "-priority"),
+        queryset=OrganizationAtlasReference.objects.filter(
+            category__name__in=GENDER_CATEGORIES,
+        ).order_by("category__name", "-priority"),
         widget=forms.RadioSelect,
         label=_("Gender"),
         required=False,

@@ -17,7 +17,7 @@ def test_insee_company_fields():
             "dateCreationUniteLegale": "2022-07-01",
         },
     })
-    assert normalized["ape"] == "6201Z"
+    assert normalized["ape"] == "62.01Z"
     assert normalized["ape_noun"] == "NAFRev2"
     assert normalized["legalform"] == "5710"
     assert normalized["since"] == "2022-07-01"
@@ -49,7 +49,7 @@ def test_entdatagouv_uses_siren_not_siret_as_reference():
     assert normalized["reference"] == "917432254"
     assert normalized["source_field"] == "siren"
     assert normalized["denomination"] == "OCTOLO"
-    assert normalized["ape"] == "6201Z"
+    assert normalized["ape"] == "62.01Z"
     assert normalized["legalform"] == "5710"
     assert normalized["since"] == "2022-07-01"
     assert normalized["address"] == "295 BOULEVARD SAINT-DENIS, 92400, COURBEVOIE"
@@ -62,7 +62,7 @@ def test_entdatagouv_company_fields():
         "date_creation": "2022-07-01",
         "siege": {"activite_principale": "62.01Z"},
     })
-    assert normalized["ape"] == "6201Z"
+    assert normalized["ape"] == "62.01Z"
     assert normalized["ape_noun"] is None
     assert normalized["legalform"] == "5710"
     assert normalized["since"] == "2022-07-01"

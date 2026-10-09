@@ -34,12 +34,12 @@ class OrganizationAtlasOrganization(OrganizationAtlasSourceBase):
         help_text=_("Named ID"),
     )
     organization_type = models.ForeignKey(
-        "django_organizationatlas.OrganizationAtlasReferentiel",
+        "django_organizationatlas.OrganizationAtlasReference",
         null=True,
         blank=True,
         on_delete=models.SET_NULL,
         related_name="organizations",
-        limit_choices_to={"category": "organization_type"},
+        limit_choices_to={"category__name": "organization_type"},
         verbose_name=_("Organization Type"),
         help_text=_("Functional classification of the legal entity"),
     )
@@ -62,9 +62,9 @@ class OrganizationAtlasOrganization(OrganizationAtlasSourceBase):
         return self.to_organizationatlasaddress.filter(is_headquarters=True).first()
 
     def clean(self):
-        if self.organization_type_id and self.organization_type.category != "organization_type":
+        if self.organization_type_id and self.organization_type.category.name != "organization_type":
             raise ValidationError(
-                {"organization_type": _("Referentiel must belong to the 'organization_type' category.")}
+                {"organization_type": _("Reference must belong to the 'organization_type' category.")}
             )
 
     def enrich(self, force: bool = False) -> bool:

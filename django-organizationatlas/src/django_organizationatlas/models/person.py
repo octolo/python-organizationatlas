@@ -51,12 +51,12 @@ class OrganizationAtlasPerson(OrganizationAtlasSourceBase):
         help_text=_("Birth date of the person"),
     )
     gender = models.ForeignKey(
-        "django_organizationatlas.OrganizationAtlasReferentiel",
+        "django_organizationatlas.OrganizationAtlasReference",
         null=True,
         blank=True,
         on_delete=models.SET_NULL,
         related_name="persons",
-        limit_choices_to=Q(category__in=GENDER_CATEGORIES),
+        limit_choices_to=Q(category__name__in=GENDER_CATEGORIES),
         verbose_name=_("Gender"),
         help_text=_("Gender or holding status of the person"),
     )
@@ -70,9 +70,9 @@ class OrganizationAtlasPerson(OrganizationAtlasSourceBase):
         ordering = ["officer_or_owner", "-created_at"]
 
     def clean(self):
-        if self.gender_id and self.gender.category not in GENDER_CATEGORIES:
+        if self.gender_id and self.gender.category.name not in GENDER_CATEGORIES:
             raise ValidationError(
-                {"gender": _("Referentiel must belong to a gender category.")}
+                {"gender": _("Reference must belong to a gender category.")}
             )
 
     @property

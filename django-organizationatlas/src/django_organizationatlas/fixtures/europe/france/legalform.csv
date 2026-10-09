@@ -1,0 +1,310 @@
+category;code;description;country_code;source
+legalform;0;Entrepreneur;FR;INSEE
+legalform;1;Entrepreneur individuel;FR;INSEE
+legalform;2;Groupement de droit privé non doté de la personnalité morale;FR;INSEE
+legalform;3;Personne morale de droit étranger;FR;INSEE
+legalform;4;Personne morale de droit public soumise au droit commercial;FR;INSEE
+legalform;5;Société commerciale;FR;INSEE
+legalform;6;Autre personne morale immatriculée au RCS;FR;INSEE
+legalform;7;Personne morale et organisme soumis au droit administratif;FR;INSEE
+legalform;8;Organisme privé spécialisé;FR;INSEE
+legalform;9;Groupement de droit privé;FR;INSEE
+legalform;00;Organisme de placement collectif en valeurs mobilières sans personnalité morale;FR;INSEE
+legalform;10;Entrepreneur individuel;FR;INSEE
+legalform;21;Indivision;FR;INSEE
+legalform;22;Société créée de fait;FR;INSEE
+legalform;23;Société en participation;FR;INSEE
+legalform;24;Fiducie;FR;INSEE
+legalform;27;Paroisse hors zone concordataire;FR;INSEE
+legalform;28;Assujetti unique à la TVA;FR;INSEE
+legalform;29;Autre groupement de droit privé non doté de la personnalité morale;FR;INSEE
+legalform;31;Personne morale de droit étranger, immatriculée au RCS (registre du commerce et des sociétés);FR;INSEE
+legalform;32;Personne morale de droit étranger, non immatriculée au RCS;FR;INSEE
+legalform;41;Etablissement public ou régie à caractère industriel ou commercial;FR;INSEE
+legalform;51;Société coopérative commerciale particulière;FR;INSEE
+legalform;52;Société en nom collectif;FR;INSEE
+legalform;53;Société en commandite;FR;INSEE
+legalform;54;Société à responsabilité limitée (SARL);FR;INSEE
+legalform;55;Société anonyme à conseil d'administration;FR;INSEE
+legalform;56;Société anonyme à directoire;FR;INSEE
+legalform;57;Société par actions simplifiée;FR;INSEE
+legalform;58;Société européenne;FR;INSEE
+legalform;61;Caisse d'épargne et de prévoyance;FR;INSEE
+legalform;62;Groupement d'intérêt économique;FR;INSEE
+legalform;63;Société coopérative agricole;FR;INSEE
+legalform;64;Société d'assurance mutuelle;FR;INSEE
+legalform;65;Société civile;FR;INSEE
+legalform;69;Autre personne morale de droit privé inscrite au registre du commerce et des sociétés;FR;INSEE
+legalform;71;Administration de l'état;FR;INSEE
+legalform;72;Collectivité territoriale;FR;INSEE
+legalform;73;Etablissement public administratif;FR;INSEE
+legalform;74;Autre personne morale de droit public administratif;FR;INSEE
+legalform;81;Organisme gérant un régime de protection sociale à adhésion obligatoire;FR;INSEE
+legalform;82;Organisme mutualiste;FR;INSEE
+legalform;83;Comité d'entreprise;FR;INSEE
+legalform;84;Organisme professionnel;FR;INSEE
+legalform;85;Organisme de retraite à adhésion non obligatoire;FR;INSEE
+legalform;91;Syndicat de propriétaires;FR;INSEE
+legalform;92;Association loi 1901 ou assimilé;FR;INSEE
+legalform;93;Fondation;FR;INSEE
+legalform;99;Autre personne morale de droit privé;FR;INSEE
+legalform;0000;Organisme de placement collectif en valeurs mobilières sans personnalité morale;FR;INSEE
+legalform;1000;Entrepreneur individuel;FR;INSEE
+legalform;2110;Indivision entre personnes physiques;FR;INSEE
+legalform;2120;Indivision avec personne morale;FR;INSEE
+legalform;2210;Société créée de fait entre personnes physiques;FR;INSEE
+legalform;2220;Société créée de fait avec personne morale;FR;INSEE
+legalform;2310;Société en participation entre personnes physiques;FR;INSEE
+legalform;2320;Société en participation avec personne morale;FR;INSEE
+legalform;2385;Société en participation de professions libérales;FR;INSEE
+legalform;2400;Fiducie;FR;INSEE
+legalform;2700;Paroisse hors zone concordataire;FR;INSEE
+legalform;2800;Assujetti unique à la TVA;FR;INSEE
+legalform;2900;Autre groupement de droit privé non doté de la personnalité morale;FR;INSEE
+legalform;3110;Représentation ou agence commerciale d'état ou organisme public étranger immatriculé au RCS;FR;INSEE
+legalform;3120;Société commerciale étrangère immatriculée au RCS;FR;INSEE
+legalform;3205;Organisation internationale;FR;INSEE
+legalform;3210;État, collectivité ou établissement public étranger;FR;INSEE
+legalform;3220;Société étrangère non immatriculée au RCS;FR;INSEE
+legalform;3290;Autre personne morale de droit étranger;FR;INSEE
+legalform;4110;Établissement public national à caractère industriel ou commercial doté d'un comptable public;FR;INSEE
+legalform;4120;Établissement public national à caractère industriel ou commercial non doté d'un comptable public;FR;INSEE
+legalform;4130;Exploitant public;FR;INSEE
+legalform;4140;Établissement public local à caractère industriel ou commercial;FR;INSEE
+legalform;4150;Régie d'une collectivité locale à caractère industriel ou commercial;FR;INSEE
+legalform;4160;Institution Banque de France;FR;INSEE
+legalform;5191;Société de caution mutuelle;FR;INSEE
+legalform;5192;Société coopérative de banque populaire;FR;INSEE
+legalform;5193;Caisse de crédit maritime mutuel;FR;INSEE
+legalform;5194;Caisse (fédérale) de crédit mutuel;FR;INSEE
+legalform;5195;Association coopérative inscrite (droit local Alsace Moselle);FR;INSEE
+legalform;5196;Caisse d'épargne et de prévoyance à forme coopérative;FR;INSEE
+legalform;5202;Société en nom collectif;FR;INSEE
+legalform;5203;Société en nom collectif coopérative;FR;INSEE
+legalform;5306;Société en commandite simple;FR;INSEE
+legalform;5307;Société en commandite simple coopérative;FR;INSEE
+legalform;5308;Société en commandite par actions;FR;INSEE
+legalform;5309;Société en commandite par actions coopérative;FR;INSEE
+legalform;5310;Société en libre partenariat (SLP);FR;INSEE
+legalform;5370;Société de Participations Financières de Profession Libérale Société en commandite par actions (SPFPL SCA);FR;INSEE
+legalform;5385;Société d'exercice libéral en commandite par actions;FR;INSEE
+legalform;5410;SARL nationale;FR;INSEE
+legalform;5415;SARL d'économie mixte;FR;INSEE
+legalform;5422;SARL immobilière pour le commerce et l'industrie (SICOMI);FR;INSEE
+legalform;5426;SARL immobilière de gestion;FR;INSEE
+legalform;5430;SARL d'aménagement foncier et d'équipement rural (SAFER);FR;INSEE
+legalform;5431;SARL mixte d'intérêt agricole (SMIA);FR;INSEE
+legalform;5432;SARL d'intérêt collectif agricole (SICA);FR;INSEE
+legalform;5442;SARL d'attribution;FR;INSEE
+legalform;5443;SARL coopérative de construction;FR;INSEE
+legalform;5451;SARL coopérative de consommation;FR;INSEE
+legalform;5453;SARL coopérative artisanale;FR;INSEE
+legalform;5454;SARL coopérative d'intérêt maritime;FR;INSEE
+legalform;5455;SARL coopérative de transport;FR;INSEE
+legalform;5458;SARL coopérative de production (SCOP);FR;INSEE
+legalform;5459;SARL union de sociétés coopératives;FR;INSEE
+legalform;5460;Autre SARL coopérative;FR;INSEE
+legalform;5470;Société de Participations Financières de Profession Libérale Société à responsabilité limitée (SPFPL SARL);FR;INSEE
+legalform;5485;Société d'exercice libéral à responsabilité limitée;FR;INSEE
+legalform;5499;Société à responsabilité limitée (sans autre indication);FR;INSEE
+legalform;5505;SA à participation ouvrière à conseil d'administration;FR;INSEE
+legalform;5510;SA nationale à conseil d'administration;FR;INSEE
+legalform;5515;SA d'économie mixte à conseil d'administration;FR;INSEE
+legalform;5520;Fonds à forme sociétale à conseil d'administration;FR;INSEE
+legalform;5522;SA immobilière pour le commerce et l'industrie (SICOMI) à conseil d'administration;FR;INSEE
+legalform;5525;SA immobilière d'investissement à conseil d'administration;FR;INSEE
+legalform;5530;SA d'aménagement foncier et d'équipement rural (SAFER) à conseil d'administration;FR;INSEE
+legalform;5531;Société anonyme mixte d'intérêt agricole (SMIA) à conseil d'administration;FR;INSEE
+legalform;5532;SA d'intérêt collectif agricole (SICA) à conseil d'administration;FR;INSEE
+legalform;5542;SA d'attribution à conseil d'administration;FR;INSEE
+legalform;5543;SA coopérative de construction à conseil d'administration;FR;INSEE
+legalform;5546;SA de HLM à conseil d'administration;FR;INSEE
+legalform;5547;SA coopérative de production de HLM à conseil d'administration;FR;INSEE
+legalform;5548;SA de crédit immobilier à conseil d'administration;FR;INSEE
+legalform;5551;SA coopérative de consommation à conseil d'administration;FR;INSEE
+legalform;5552;SA coopérative de commerçants-détaillants à conseil d'administration;FR;INSEE
+legalform;5553;SA coopérative artisanale à conseil d'administration;FR;INSEE
+legalform;5554;SA coopérative (d'intérêt) maritime à conseil d'administration;FR;INSEE
+legalform;5555;SA coopérative de transport à conseil d'administration;FR;INSEE
+legalform;5558;SA coopérative de production  (SCOP) à conseil d'administration;FR;INSEE
+legalform;5559;SA union de sociétés coopératives à conseil d'administration;FR;INSEE
+legalform;5560;Autre SA coopérative à conseil d'administration;FR;INSEE
+legalform;5570;Société de Participations Financières de Profession Libérale Société anonyme à conseil d'administration (SPFPL SA à conseil d'administration);FR;INSEE
+legalform;5585;Société d'exercice libéral à forme anonyme à conseil d'administration;FR;INSEE
+legalform;5599;SA à conseil d'administration (s.a.i.);FR;INSEE
+legalform;5605;SA à participation ouvrière à directoire;FR;INSEE
+legalform;5610;SA nationale à directoire;FR;INSEE
+legalform;5615;SA d'économie mixte à directoire;FR;INSEE
+legalform;5620;Fonds à forme sociétale à directoire;FR;INSEE
+legalform;5622;SA immobilière pour le commerce et l'industrie (SICOMI) à directoire;FR;INSEE
+legalform;5625;SA immobilière d'investissement à directoire;FR;INSEE
+legalform;5630;Safer anonyme à directoire;FR;INSEE
+legalform;5631;SA mixte d'intérêt agricole (SMIA);FR;INSEE
+legalform;5632;SA d'intérêt collectif agricole (SICA);FR;INSEE
+legalform;5642;SA d'attribution à directoire;FR;INSEE
+legalform;5643;SA coopérative de construction à directoire;FR;INSEE
+legalform;5646;SA de HLM à directoire;FR;INSEE
+legalform;5647;Société coopérative de production de HLM anonyme à directoire;FR;INSEE
+legalform;5648;SA de crédit immobilier à directoire;FR;INSEE
+legalform;5651;SA coopérative de consommation à directoire;FR;INSEE
+legalform;5652;SA coopérative de commerçants-détaillants à directoire;FR;INSEE
+legalform;5653;SA coopérative artisanale à directoire;FR;INSEE
+legalform;5654;SA coopérative d'intérêt maritime à directoire;FR;INSEE
+legalform;5655;SA coopérative de transport à directoire;FR;INSEE
+legalform;5658;SA coopérative de production (SCOP) à directoire;FR;INSEE
+legalform;5659;SA union de sociétés coopératives à directoire;FR;INSEE
+legalform;5660;Autre SA coopérative à directoire;FR;INSEE
+legalform;5670;Société de Participations Financières de Profession Libérale Société anonyme à Directoire (SPFPL SA à directoire);FR;INSEE
+legalform;5685;Société d'exercice libéral à forme anonyme à directoire;FR;INSEE
+legalform;5699;SA à directoire (s.a.i.);FR;INSEE
+legalform;5710;SAS, société par actions simplifiée;FR;INSEE
+legalform;5770;Société de Participations Financières de Profession Libérale Société par actions simplifiée (SPFPL SAS);FR;INSEE
+legalform;5785;Société d'exercice libéral par action simplifiée;FR;INSEE
+legalform;5800;Société européenne;FR;INSEE
+legalform;6100;Caisse d'Épargne et de Prévoyance;FR;INSEE
+legalform;6210;Groupement européen d'intérêt économique (GEIE);FR;INSEE
+legalform;6220;Groupement d'intérêt économique (GIE);FR;INSEE
+legalform;6316;Coopérative d'utilisation de matériel agricole en commun (CUMA);FR;INSEE
+legalform;6317;Société coopérative agricole;FR;INSEE
+legalform;6318;Union de sociétés coopératives agricoles;FR;INSEE
+legalform;6411;Société d'assurance à forme mutuelle;FR;INSEE
+legalform;6511;Sociétés Interprofessionnelles de Soins Ambulatoires;FR;INSEE
+legalform;6521;Société civile de placement collectif immobilier (SCPI);FR;INSEE
+legalform;6532;Société civile d'intérêt collectif agricole (SICA);FR;INSEE
+legalform;6533;Groupement agricole d'exploitation en commun (GAEC);FR;INSEE
+legalform;6534;Groupement foncier agricole;FR;INSEE
+legalform;6535;Groupement agricole foncier;FR;INSEE
+legalform;6536;Groupement forestier;FR;INSEE
+legalform;6537;Groupement pastoral;FR;INSEE
+legalform;6538;Groupement foncier et rural;FR;INSEE
+legalform;6539;Société civile foncière;FR;INSEE
+legalform;6540;Société civile immobilière;FR;INSEE
+legalform;6541;Société civile immobilière de construction-vente;FR;INSEE
+legalform;6542;Société civile d'attribution;FR;INSEE
+legalform;6543;Société civile coopérative de construction;FR;INSEE
+legalform;6544;Société civile immobilière d' accession progressive à la propriété;FR;INSEE
+legalform;6551;Société civile coopérative de consommation;FR;INSEE
+legalform;6554;Société civile coopérative d'intérêt maritime;FR;INSEE
+legalform;6558;Société civile coopérative entre médecins;FR;INSEE
+legalform;6560;Autre société civile coopérative;FR;INSEE
+legalform;6561;SCP d'avocats;FR;INSEE
+legalform;6562;SCP d'avocats aux conseils;FR;INSEE
+legalform;6563;SCP d'avoués d'appel;FR;INSEE
+legalform;6564;SCP d'huissiers;FR;INSEE
+legalform;6565;SCP de notaires;FR;INSEE
+legalform;6566;SCP de commissaires-priseurs;FR;INSEE
+legalform;6567;SCP de greffiers de tribunal de commerce;FR;INSEE
+legalform;6568;SCP de conseils juridiques;FR;INSEE
+legalform;6569;SCP de commissaires aux comptes;FR;INSEE
+legalform;6571;SCP de médecins;FR;INSEE
+legalform;6572;SCP de dentistes;FR;INSEE
+legalform;6573;SCP d'infirmiers;FR;INSEE
+legalform;6574;SCP de masseurs-kinésithérapeutes;FR;INSEE
+legalform;6575;SCP de directeurs de laboratoire d'analyse médicale;FR;INSEE
+legalform;6576;SCP de vétérinaires;FR;INSEE
+legalform;6577;SCP de géomètres experts;FR;INSEE
+legalform;6578;SCP d'architectes;FR;INSEE
+legalform;6585;Autre société civile professionnelle;FR;INSEE
+legalform;6589;Société civile de moyens;FR;INSEE
+legalform;6595;Caisse locale de crédit mutuel;FR;INSEE
+legalform;6596;Caisse de crédit agricole mutuel;FR;INSEE
+legalform;6597;Société civile d'exploitation agricole;FR;INSEE
+legalform;6598;Exploitation agricole à responsabilité limitée;FR;INSEE
+legalform;6599;Autre société civile;FR;INSEE
+legalform;6901;Autre personne de droit privé inscrite au registre du commerce et des sociétés;FR;INSEE
+legalform;7111;Autorité constitutionnelle;FR;INSEE
+legalform;7112;Autorité administrative ou publique indépendante;FR;INSEE
+legalform;7113;Ministère;FR;INSEE
+legalform;7120;Service central d'un ministère;FR;INSEE
+legalform;7150;Service du ministère de la Défense;FR;INSEE
+legalform;7160;Service déconcentré à compétence nationale d'un ministère (hors Défense);FR;INSEE
+legalform;7171;Service déconcentré de l'État à compétence (inter) régionale;FR;INSEE
+legalform;7172;Service déconcentré de l'État à compétence (inter) départementale;FR;INSEE
+legalform;7179;(Autre) Service déconcentré de l'État à compétence territoriale;FR;INSEE
+legalform;7190;Ecole nationale non dotée de la personnalité morale;FR;INSEE
+legalform;7210;Commune et commune nouvelle;FR;INSEE
+legalform;7220;Département;FR;INSEE
+legalform;7225;Collectivité et territoire d'Outre Mer;FR;INSEE
+legalform;7229;(Autre) Collectivité territoriale;FR;INSEE
+legalform;7230;Région;FR;INSEE
+legalform;7312;Commune associée et commune déléguée;FR;INSEE
+legalform;7313;Section de commune;FR;INSEE
+legalform;7314;Ensemble urbain;FR;INSEE
+legalform;7321;Association syndicale autorisée;FR;INSEE
+legalform;7322;Association foncière urbaine;FR;INSEE
+legalform;7323;Association foncière de remembrement;FR;INSEE
+legalform;7331;Établissement public local d'enseignement;FR;INSEE
+legalform;7340;Pôle métropolitain;FR;INSEE
+legalform;7341;Secteur de commune;FR;INSEE
+legalform;7342;District urbain;FR;INSEE
+legalform;7343;Communauté urbaine;FR;INSEE
+legalform;7344;Métropole;FR;INSEE
+legalform;7345;Syndicat intercommunal à vocation multiple (SIVOM);FR;INSEE
+legalform;7346;Communauté de communes;FR;INSEE
+legalform;7347;Communauté de villes;FR;INSEE
+legalform;7348;Communauté d'agglomération;FR;INSEE
+legalform;7349;Autre établissement public local de coopération non spécialisé ou entente;FR;INSEE
+legalform;7351;Institution interdépartementale ou entente;FR;INSEE
+legalform;7352;Institution interrégionale ou entente;FR;INSEE
+legalform;7353;Syndicat intercommunal à vocation unique (SIVU);FR;INSEE
+legalform;7354;Syndicat mixte fermé;FR;INSEE
+legalform;7355;Syndicat mixte ouvert;FR;INSEE
+legalform;7356;Commission syndicale pour la gestion des biens indivis des communes;FR;INSEE
+legalform;7357;Pôle d'équilibre territorial et rural (PETR);FR;INSEE
+legalform;7361;Centre communal d'action sociale;FR;INSEE
+legalform;7362;Caisse des écoles;FR;INSEE
+legalform;7363;Caisse de crédit municipal;FR;INSEE
+legalform;7364;Établissement d'hospitalisation;FR;INSEE
+legalform;7365;Syndicat inter hospitalier;FR;INSEE
+legalform;7366;Établissement public local social et médico-social;FR;INSEE
+legalform;7367;Centre Intercommunal d'action sociale (CIAS);FR;INSEE
+legalform;7371;Office public d'habitation à loyer modéré (OPHLM);FR;INSEE
+legalform;7372;Service départemental d'incendie et de secours (SDIS);FR;INSEE
+legalform;7373;Établissement public local culturel;FR;INSEE
+legalform;7378;Régie d'une collectivité locale à caractère administratif;FR;INSEE
+legalform;7379;(Autre) Établissement public administratif local;FR;INSEE
+legalform;7381;Organisme consulaire;FR;INSEE
+legalform;7382;Établissement public national ayant fonction d'administration centrale;FR;INSEE
+legalform;7383;Établissement public national à caractère scientifique culturel et professionnel;FR;INSEE
+legalform;7384;Autre établissement public national d'enseignement;FR;INSEE
+legalform;7385;Autre établissement public national administratif à compétence territoriale limitée;FR;INSEE
+legalform;7389;Établissement public national à caractère administratif;FR;INSEE
+legalform;7410;Groupement d'intérêt public (GIP);FR;INSEE
+legalform;7430;Établissement public des cultes d'Alsace-Lorraine;FR;INSEE
+legalform;7450;Etablissement public administratif, cercle et foyer dans les armées;FR;INSEE
+legalform;7470;Groupement de coopération sanitaire à gestion publique;FR;INSEE
+legalform;7490;Autre personne morale de droit administratif;FR;INSEE
+legalform;8110;Régime général de la Sécurité Sociale;FR;INSEE
+legalform;8120;Régime spécial de Sécurité Sociale;FR;INSEE
+legalform;8130;Institution de retraite complémentaire;FR;INSEE
+legalform;8140;Mutualité sociale agricole;FR;INSEE
+legalform;8150;Régime maladie des non-salariés non agricoles;FR;INSEE
+legalform;8160;Régime vieillesse ne dépendant pas du régime général de la Sécurité Sociale;FR;INSEE
+legalform;8170;Régime d'assurance chômage;FR;INSEE
+legalform;8190;Autre régime de prévoyance sociale;FR;INSEE
+legalform;8210;Mutuelle;FR;INSEE
+legalform;8250;Assurance mutuelle agricole;FR;INSEE
+legalform;8290;Autre organisme mutualiste;FR;INSEE
+legalform;8310;Comité social économique d’entreprise;FR;INSEE
+legalform;8311;Comité social économique d'établissement;FR;INSEE
+legalform;8410;Syndicat de salariés;FR;INSEE
+legalform;8420;Syndicat patronal;FR;INSEE
+legalform;8450;Ordre professionnel ou assimilé;FR;INSEE
+legalform;8470;Centre technique industriel ou comité professionnel du développement économique;FR;INSEE
+legalform;8490;Autre organisme professionnel;FR;INSEE
+legalform;8510;Institution de prévoyance;FR;INSEE
+legalform;8520;Institution de retraite supplémentaire;FR;INSEE
+legalform;9110;Syndicat de copropriété;FR;INSEE
+legalform;9150;Association syndicale libre;FR;INSEE
+legalform;9210;Association non déclarée;FR;INSEE
+legalform;9220;Association déclarée;FR;INSEE
+legalform;9221;Association déclarée d'insertion par l'économique;FR;INSEE
+legalform;9222;Association intermédiaire;FR;INSEE
+legalform;9223;Groupement d'employeurs;FR;INSEE
+legalform;9224;Association d'avocats à responsabilité professionnelle individuelle;FR;INSEE
+legalform;9230;Association déclarée, reconnue d'utilité publique;FR;INSEE
+legalform;9240;Congrégation;FR;INSEE
+legalform;9260;Association de droit local (Bas-Rhin, Haut-Rhin et Moselle);FR;INSEE
+legalform;9300;Fondation;FR;INSEE
+legalform;9900;Autre personne morale de droit privé;FR;INSEE
+legalform;9970;Groupement de coopération sanitaire à gestion privée;FR;INSEE

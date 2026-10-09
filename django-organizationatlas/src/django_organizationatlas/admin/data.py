@@ -10,10 +10,10 @@ from ..models.source import ORGANIZATIONATLAS_FIELDS_AUDIT, ORGANIZATIONATLAS_FI
 
 @admin.register(OrganizationAtlasData)
 class OrganizationAtlasDataAdmin(with_history(AdminBoostModel)):
-    list_display = ["organization", "data_type", "value", "created_at"]
+    list_display = ["organization", "data_type", "value", "data_reference", "created_at"]
     list_filter = ["data_type", "created_at"]
     search_fields = ["organization__denomination", "data_type__data_type", "value"]
-    readonly_fields = [*ORGANIZATIONATLAS_FIELDS_AUDIT, "source_label", "value_type"]
+    readonly_fields = [*ORGANIZATIONATLAS_FIELDS_AUDIT, "source_label", "value_type", "data_reference"]
     raw_id_fields = ["organization"]
 
     @admin.display(description=_("Value type"))
@@ -22,8 +22,11 @@ class OrganizationAtlasDataAdmin(with_history(AdminBoostModel)):
             return ""
         return obj.data_type.value_type
 
+    def get_queryset(self, request):
+        return super().get_queryset(request).with_data_reference()
+
     def change_fieldsets(self):
-        self.add_to_fieldset(None, ('organization', 'data_type', 'value_type', 'value', ))
+        self.add_to_fieldset(None, ("organization", "data_type", "value_type", "value", "data_reference"))
         self.add_to_fieldset(_("Source"), ORGANIZATIONATLAS_FIELDS_SOURCE)
 
 
@@ -40,5 +43,8 @@ class OrganizationAtlasDataTypeAdmin(with_history(AdminBoostModel)):
 class OrganizationAtlasDataInline(admin.TabularInline):
     model = OrganizationAtlasData
     extra = 1
-    fields = ["data_type", "value", "source_label"]
-    readonly_fields = ["source_label"]
+    fields = ["data_type", "value", "data_reference", "source_label"]
+    readonly_fields = ["data_reference", "source_label"]
+
+    def get_queryset(self, request):
+        return super().get_queryset(request).with_data_reference()

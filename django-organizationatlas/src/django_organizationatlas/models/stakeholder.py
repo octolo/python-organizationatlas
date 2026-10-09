@@ -42,12 +42,12 @@ class OrganizationAtlasStakeholderRelation(TemporalValidityMixin, OrganizationAt
     )
 
     relation_type = models.ForeignKey(
-        "django_organizationatlas.OrganizationAtlasReferentiel",
+        "django_organizationatlas.OrganizationAtlasReference",
         null=True,
         blank=True,
         on_delete=models.SET_NULL,
         related_name="stakeholder_relations",
-        limit_choices_to={"category": "stakeholder_relation"},
+        limit_choices_to={"category__name": "stakeholder_relation"},
         verbose_name=_("Relation Type"),
         help_text=_("Nature of the stakeholder relationship"),
     )
@@ -91,9 +91,9 @@ class OrganizationAtlasStakeholderRelation(TemporalValidityMixin, OrganizationAt
             raise ValidationError(
                 _("Exactly one of 'From Person' or 'From Organization' must be set.")
             )
-        if self.relation_type_id and self.relation_type.category != "stakeholder_relation":
+        if self.relation_type_id and self.relation_type.category.name != "stakeholder_relation":
             raise ValidationError(
-                {"relation_type": _("Referentiel must belong to the 'stakeholder_relation' category.")}
+                {"relation_type": _("Reference must belong to the 'stakeholder_relation' category.")}
             )
 
     @property

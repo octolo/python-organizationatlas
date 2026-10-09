@@ -183,8 +183,7 @@ class OrganizationAtlasFranceProvider(OrganizationAtlasEuropeProvider):
         value = self._fr_value(data, "ape")
         if value is None:
             return None
-        code = str(value).replace(".", "").strip()
-        return code or None
+        return str(value).strip() or None
 
     def get_normalize_ape_noun(self, data: dict[str, Any]) -> str | None:
         value = self._fr_value(data, "ape_noun")
