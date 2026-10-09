@@ -1,0 +1,26 @@
+category;code;description;country_code;source;characteristics
+qualite_detenteur;actionnaire;Actionnaire;FR;organizationatlas;SA, SAS, société européenne (SE) et autres sociétés par actions — détenteur d’actions
+qualite_detenteur;actionnaire_unique;Actionnaire unique;FR;organizationatlas;"Société par actions unipersonnelle lorsque cette qualification est adaptée au contexte ; vérifier la forme juridique"
+qualite_detenteur;associe;Associé;FR;organizationatlas;Terme général pour les détenteurs de parts sociales ou les membres associés d’une société
+qualite_detenteur;associe_unique;Associé unique;FR;organizationatlas;EURL ou SASU — personne détenant seule les parts ou actions de la société
+qualite_detenteur;associe_en_nom;Associé en nom;FR;organizationatlas;SNC — associé ayant la qualité de commerçant et une responsabilité indéfinie et solidaire
+qualite_detenteur;associe_commandite;Associé commandité;FR;organizationatlas;SCS ou SCA — associé commandité, responsable indéfiniment selon le régime applicable
+qualite_detenteur;associe_commanditaire;Associé commanditaire;FR;organizationatlas;SCS — associé commanditaire
+qualite_detenteur;actionnaire_commanditaire;Actionnaire commanditaire;FR;organizationatlas;SCA — actionnaire commanditaire
+qualite_detenteur;associe_civil;Associé civil;FR;organizationatlas;SCI, SCP, SCM, SCEA et autres sociétés civiles — associé
+qualite_detenteur;associe_salarie;Associé salarié;FR;organizationatlas;SCOP — salarié qui détient une participation et a la qualité d’associé
+qualite_detenteur;associe_non_cooperateur;Associé non coopérateur;FR;organizationatlas;Certaines coopératives, notamment SCOP — associé investisseur non salarié lorsque cette catégorie est permise
+qualite_detenteur;associe_cooperateur;Associé coopérateur;FR;organizationatlas;Coopérative agricole ou autre coopérative — associé coopérateur selon le régime applicable
+qualite_detenteur;associe_scic;Associé SCIC;FR;organizationatlas;SCIC — associé appartenant à une catégorie de sociétaires prévue par le régime coopératif
+qualite_detenteur;associe_cooperatif_hlm;Associé coopératif HLM;FR;organizationatlas;Coopérative HLM — associé selon la forme juridique et les règles propres au statut HLM
+qualite_detenteur;actionnaire_hlm;Actionnaire HLM;FR;organizationatlas;SA d’HLM — actionnaire, avec catégorie réglementaire éventuelle à renseigner séparément
+qualite_detenteur;actionnaire_public;Actionnaire public;FR;organizationatlas;SEM ou autre société à participation publique — actionnaire public
+qualite_detenteur;actionnaire_prive;Actionnaire privé;FR;organizationatlas;SEM ou autre société à participation publique — actionnaire privé
+qualite_detenteur;membre;Membre;FR;organizationatlas;GIE, association ou autre structure dont les membres ne sont pas nécessairement détenteurs d’un capital social
+qualite_detenteur;adherent;Adhérent;FR;organizationatlas;Association ou organisme d’adhésion — adhérent, sans présumer d’une détention du capital
+qualite_detenteur;membre_participant;Membre participant;FR;organizationatlas;Mutuelle régie par le Code de la mutualité — membre participant
+qualite_detenteur;membre_honoraire;Membre honoraire;FR;organizationatlas;Mutuelle ou association — membre honoraire si cette catégorie existe dans les textes ou statuts applicables
+qualite_detenteur;souscripteur;Souscripteur;FR;organizationatlas;"Organisme ou contrat dans lequel la qualité de souscripteur est pertinente ; ne vaut pas automatiquement qualité d’actionnaire"
+qualite_detenteur;titulaire_de_parts;Titulaire de parts;FR;organizationatlas;Terme descriptif générique à utiliser si la forme de titre est connue mais que le rôle doit être précisé
+qualite_detenteur;beneficiaire_effectif;Bénéficiaire effectif;FR;organizationatlas;Personne physique qui détient ou contrôle ultimement l’entité — qualité distincte de celle d’actionnaire ou d’associé direct
+qualite_detenteur;autre;Autre;FR;organizationatlas;Autre qualité de détenteur à préciser selon la forme juridique et le régime applicable

@@ -10,3 +10,15 @@ profil_capitalisation;variable;Capital variable — entrées et sorties de capit
 profil_capitalisation;financier;Établissement financier ou assureur — règles sectorielles;FR;organizationatlas
 profil_capitalisation;sans_capital;Aucun capital social — membres, adhérents ou financeurs;FR;organizationatlas
 profil_capitalisation;sur_mesure;Règles spécifiques à définir;FR;organizationatlas
+profil_capitalisation;actions_preference;Actions de préférence et droits particuliers;FR;organizationatlas
+profil_capitalisation;droits_vote_differencies;Droits de vote différents de la détention du capital;FR;organizationatlas
+profil_capitalisation;instruments_dilutifs;Instruments donnant accès au capital : BSA, BSPCE, obligations convertibles, etc.;FR;organizationatlas
+profil_capitalisation;demembrement_titres;Démembrement des titres : usufruit et nue-propriété;FR;organizationatlas
+profil_capitalisation;detention_indirecte;Détention indirecte et chaîne de participations;FR;organizationatlas
+profil_capitalisation;controle_groupe;Contrôle et détention à l’échelle d’un groupe;FR;organizationatlas
+profil_capitalisation;seuils_reglementaires;Contrôle des seuils réglementaires de détention;FR;organizationatlas
+profil_capitalisation;agrement_actionnaires;Vérification des conditions d’agrément des actionnaires;FR;organizationatlas
+profil_capitalisation;capital_minimum;Vérification d’un éventuel capital minimum légal;FR;organizationatlas
+profil_capitalisation;capital_variable;Capital variable et suivi des entrées et sorties;FR;organizationatlas
+profil_capitalisation;historique_capital;Historisation des mouvements et de la répartition du capital;FR;organizationatlas
+profil_capitalisation;multi_profils;Combinaison de plusieurs profils de règles;FR;organizationatlas

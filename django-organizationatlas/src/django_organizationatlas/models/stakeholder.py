@@ -1,3 +1,4 @@
+import django
 from django.core.exceptions import ValidationError
 from django.db import models
 from django.db.models import Q
@@ -5,6 +6,18 @@ from django.utils.translation import gettext_lazy as _
 
 from .source import OrganizationAtlasSourceBase
 from .temporal import TemporalValidityMixin
+
+
+def _exactly_one_from_constraint():
+    """One stakeholder side, either a person or an organization."""
+    rule = (
+        models.Q(from_person__isnull=False, from_organization__isnull=True)
+        | models.Q(from_person__isnull=True, from_organization__isnull=False)
+    )
+    # Django 5.0 names the argument check. Django 5.1 renamed it to condition.
+    if django.VERSION < (5, 1):
+        return models.CheckConstraint(check=rule, name="stakeholder_relation_exactly_one_from")
+    return models.CheckConstraint(condition=rule, name="stakeholder_relation_exactly_one_from")
 
 
 class OrganizationAtlasStakeholderRelation(TemporalValidityMixin, OrganizationAtlasSourceBase):
@@ -69,13 +82,7 @@ class OrganizationAtlasStakeholderRelation(TemporalValidityMixin, OrganizationAt
             models.Index(fields=["from_organization", "to_organization"]),
         ]
         constraints = [
-            models.CheckConstraint(
-                condition=(
-                    models.Q(from_person__isnull=False, from_organization__isnull=True)
-                    | models.Q(from_person__isnull=True, from_organization__isnull=False)
-                ),
-                name="stakeholder_relation_exactly_one_from",
-            ),
+            _exactly_one_from_constraint(),
             models.UniqueConstraint(
                 fields=["from_person", "from_organization", "to_organization", "relation_type"],
                 condition=Q(valid_to__isnull=True),

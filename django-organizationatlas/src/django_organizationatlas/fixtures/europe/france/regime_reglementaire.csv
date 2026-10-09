@@ -17,3 +17,12 @@ regime_reglementaire;capital_variable;Société à capital variable;FR;organizat
 regime_reglementaire;autre_special;Autre régime sectoriel ou spécial;FR;organizationatlas
 regime_reglementaire;aucun_identifie;Aucun régime spécial identifié;FR;organizationatlas
 regime_reglementaire;sans_capital;Association ou fondation — pas de capital social classique;FR;organizationatlas
+regime_reglementaire;organisme_foncier_solidaire;Organisme de foncier solidaire (OFS);FR;organizationatlas
+regime_reglementaire;organisme_logement_social_autre;Autre organisme du logement social réglementé;FR;organizationatlas
+regime_reglementaire;societe_assurance_mutuelle;Société d’assurance mutuelle;FR;organizationatlas
+regime_reglementaire;mutuelle;Mutuelle régie par le Code de la mutualité;FR;organizationatlas
+regime_reglementaire;institution_prevoyance;Institution de prévoyance;FR;organizationatlas
+regime_reglementaire;societe_financement;Société de financement réglementée;FR;organizationatlas
+regime_reglementaire;societe_investissement;Société d’investissement réglementée;FR;organizationatlas
+regime_reglementaire;fonciere_solidaire;Foncière solidaire ou organisme foncier à mission spécifique;FR;organizationatlas
+regime_reglementaire;aucun_a_confirmer;Régime réglementaire à déterminer;FR;organizationatlas

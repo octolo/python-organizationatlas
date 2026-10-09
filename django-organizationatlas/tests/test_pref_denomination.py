@@ -1,3 +1,5 @@
+from namedid.generators import generate_namedid
+
 from django_organizationatlas.models import OrganizationAtlasOrganization
 
 
@@ -29,7 +31,9 @@ def test_named_id_uses_pref_denomination():
         short_denomination="Octolo",
         code="917432254",
     )
-    assert field._generate_base_value(organization) == "octolo-917432254"
+    base = generate_namedid(organization, field.source_fields, field.separator)
+    assert base == "octolo-917432254"
 
     organization.short_denomination = None
-    assert field._generate_base_value(organization) == "octolo-sas-917432254"
+    base = generate_namedid(organization, field.source_fields, field.separator)
+    assert base == "octolo-sas-917432254"
