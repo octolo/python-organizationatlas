@@ -154,8 +154,16 @@ def test_reference_import_loads_french_files():
         category__name="legalform",
         category__country_code="FR",
     ).count() == 309
-    assert OrganizationAtlasReferenceCategory.objects.filter(name="ape", country_code="FR").exists()
+    ape = OrganizationAtlasReferenceCategory.objects.with_reference_count().get(name="ape", country_code="FR")
+    assert ape.sql_reference_count == 732
     assert OrganizationAtlasReferenceCategory.objects.filter(name="legalform", country_code="FR").exists()
+    gender = OrganizationAtlasReference.objects.get(category__name="gender", code="male")
+    assert gender.description == "Male person"
+    assert gender.priority == 10
+    assert gender.source == "organizationatlas"
+    assert gender.country_code == ""
+    assert str(gender.category) == "gender"
+    assert gender.source_label() == "organizationatlas"
 
 
 @pytest.mark.django_db

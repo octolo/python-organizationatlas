@@ -1,7 +1,10 @@
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
-from ..managers.reference import OrganizationAtlasReferenceManager
+from ..managers.reference import (
+    OrganizationAtlasReferenceCategoryManager,
+    OrganizationAtlasReferenceManager,
+)
 from .source import OrganizationAtlasSourceBase
 
 
@@ -19,6 +22,8 @@ class OrganizationAtlasReferenceCategory(models.Model):
         help_text=_("ISO country code this category belongs to"),
     )
 
+    objects = OrganizationAtlasReferenceCategoryManager()
+
     class Meta:
         verbose_name = _("Reference category")
         verbose_name_plural = _("Reference categories")
@@ -31,6 +36,8 @@ class OrganizationAtlasReferenceCategory(models.Model):
         ]
 
     def __str__(self):
+        if not self.country_code:
+            return self.name
         return f"{self.country_code}/{self.name}"
 
     @classmethod
@@ -74,17 +81,6 @@ class OrganizationAtlasReference(OrganizationAtlasSourceBase):
         help_text=_("Reference priority"),
         default=0,
     )
-    usage_type = models.CharField(
-        max_length=100,
-        verbose_name=_("Usage Type"),
-        help_text=_("Usage type"),
-        choices=[
-            ("description", _("Description")),
-            ("configuration", _("Configuration")),
-            ("characteristics", _("Characteristics")),
-        ],
-        default="description",
-    )
 
     objects = OrganizationAtlasReferenceManager()
 
@@ -100,7 +96,7 @@ class OrganizationAtlasReference(OrganizationAtlasSourceBase):
         ]
 
     def __str__(self):
-        return f"{self.category} {self.code}"
+        return f"{self.code} - {self.description}"
 
     @property
     def used_count(self):

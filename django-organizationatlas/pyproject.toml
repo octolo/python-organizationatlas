@@ -61,7 +61,7 @@ include = ["django_organizationatlas*"]
 exclude = ["tests*", "docs*"]
 
 [tool.setuptools.package-data]
-django_organizationatlas = ["templates/**/*", "data_sources/*.csv", "fixtures/europe/france/*.csv"]
+django_organizationatlas = ["templates/**/*", "fixtures/**/*.csv"]
 
 [tool.pytest.ini_options]
 DJANGO_SETTINGS_MODULE = "tests.settings"

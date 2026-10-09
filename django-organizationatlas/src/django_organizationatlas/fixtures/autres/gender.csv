@@ -1,0 +1,10 @@
+category;code;description;country_code;source;characteristics;priority
+gender;male;Male person;;organizationatlas;;10
+gender;female;Female person;;organizationatlas;;9
+gender;non_binary;Person who does not identify exclusively as male or female;;organizationatlas;;8
+gender;other;Gender identity not listed in predefined options;;organizationatlas;;7
+gender_response;prefer_not_to_say;User declines to disclose gender;;organizationatlas;;3
+gender_response;undisclosed;Gender not provided;;organizationatlas;;2
+gender_response;unknown;Gender not known or not collected;;organizationatlas;;1
+gender_response;not_applicable;Gender field does not apply to this entity;;organizationatlas;;0
+gender_structure;indivision;Multiple persons jointly owning an asset or account;;organizationatlas;;5

@@ -101,15 +101,20 @@ def read_csv_file(csv_file):
         if not row.get("code"):
             continue
 
-        rows.append(
-            {
-                "category": row["category"].strip(),
-                "code": row["code"].strip(),
-                "description": row["description"].strip(),
-                "country_code": row["country_code"].strip(),
-                "source": row["source"].strip(),
-            }
-        )
+        item = {
+            "category": row["category"].strip(),
+            "code": row["code"].strip(),
+            "description": row["description"].strip(),
+            "country_code": row["country_code"].strip(),
+            "source": row["source"].strip(),
+        }
+        characteristics = (row.get("characteristics") or "").strip()
+        if characteristics:
+            item["characteristics"] = characteristics
+        priority = (row.get("priority") or "").strip()
+        if priority:
+            item["priority"] = int(priority)
+        rows.append(item)
 
     return rows
 
@@ -123,14 +128,19 @@ def import_reference_rows(rows):
             row["category"],
             row["country_code"],
         )
+        defaults = {
+            "description": row["description"],
+            "source": row["source"],
+            "country_code": row["country_code"],
+        }
+        if "characteristics" in row:
+            defaults["characteristics"] = row["characteristics"]
+        if "priority" in row:
+            defaults["priority"] = row["priority"]
         _, created = OrganizationAtlasReference.objects.update_or_create(
             category=category,
             code=row["code"],
-            defaults={
-                "description": row["description"],
-                "source": row["source"],
-                "country_code": row["country_code"],
-            },
+            defaults=defaults,
         )
 
         if created:
@@ -141,20 +151,35 @@ def import_reference_rows(rows):
     return created_count, updated_count
 
 
+def has_reference_columns(path) -> bool:
+    csv_path = Path(path)
+    with csv_path.open(encoding="utf-8", newline="") as csv_file:
+        fieldnames = set(csv.DictReader(csv_file, delimiter=";").fieldnames or [])
+    return REQUIRED_COLUMNS <= fieldnames
+
+
 def import_reference_from_path(path):
     total_created = 0
     total_updated = 0
     csv_paths = get_csv_paths(path)
+    importing_tree = Path(path).is_dir() or any(char in str(path) for char in "*?[")
 
     if not csv_paths:
         raise CommandError(f"No CSV files found in: {path}")
 
+    imported_files = 0
     for csv_path in csv_paths:
+        if importing_tree and not has_reference_columns(csv_path):
+            continue
         created_count, updated_count = import_reference_rows(read_csv(csv_path))
         total_created += created_count
         total_updated += updated_count
+        imported_files += 1
 
-    return total_created, total_updated, len(csv_paths)
+    if imported_files == 0:
+        raise CommandError(f"No reference CSV files found in: {path}")
+
+    return total_created, total_updated, imported_files
 
 
 def export_reference_to_path(path):

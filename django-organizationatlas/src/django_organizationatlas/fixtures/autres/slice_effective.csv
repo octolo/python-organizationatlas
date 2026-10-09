@@ -1,0 +1,16 @@
+category;code;description;country_code;source;characteristics;priority
+slice_effective;00;0 employees (no headcount on 31 December, but employed staff during the reference year);;organizationatlas;;
+slice_effective;01;1 or 2 employees;;organizationatlas;;
+slice_effective;02;3 to 5 employees;;organizationatlas;;
+slice_effective;03;6 to 9 employees;;organizationatlas;;
+slice_effective;11;10 to 19 employees;;organizationatlas;;
+slice_effective;12;20 to 49 employees;;organizationatlas;;
+slice_effective;21;50 to 99 employees;;organizationatlas;;
+slice_effective;22;100 to 199 employees;;organizationatlas;;
+slice_effective;31;200 to 249 employees;;organizationatlas;;
+slice_effective;32;250 to 499 employees;;organizationatlas;;
+slice_effective;41;500 to 999 employees;;organizationatlas;;
+slice_effective;42;1,000 to 1,999 employees;;organizationatlas;;
+slice_effective;51;2,000 to 4,999 employees;;organizationatlas;;
+slice_effective;52;5,000 to 9,999 employees;;organizationatlas;;
+slice_effective;53;10,000 employees or more;;organizationatlas;;

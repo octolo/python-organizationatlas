@@ -8,8 +8,8 @@ except PackageNotFoundError:
     __version__ = "0.0.0.dev"
 
 
-def _f(label: str, fmt: str = "str") -> dict:
-    return {"label": label, "description": label, "format": fmt}
+def _f(label: str, fmt: str = "str", description: str | None = None) -> dict:
+    return {"label": label, "description": description or label, "format": fmt}
 
 
 _ID_FIELD = _f("Organizationatlas ID")
@@ -23,18 +23,9 @@ ORGANIZATIONATLAS_SEARCH_COMPANY_FIELDS = {
     "denomination": _f("Denomination"),
     "reference": _f("Reference"),
     "source_field": _f("Source field"),
-    "siren": _f("SIREN"),
-    "siret": _f("SIRET"),
-    "rna": _f("RNA"),
     "country_code": _f("Country code"),
     "address": _f("Address"),
     "address_json": _f("Address JSON", "json"),
-    "ape": _f("Core business"),
-    "ape_noun": _f("Ape noun"),
-    "legalform": _f("Legal form"),
-    "registry_type": _f("Registry type"),
-    "registry_authority": _f("Registry authority"),
-    "since": _f("Since"),
     "organizationatlas_id": _ID_FIELD,
     "data_source": _f("Data source"),
     "backend": _f("Backend display name"),
@@ -54,7 +45,6 @@ ORGANIZATIONATLAS_GET_REFERENTIEL_FIELDS = {
     "description": _f("Description"),
     "characteristics": _f("Characteristics"),
     "priority": _f("Priority", "int"),
-    "usage_type": _f("Usage Type"),
 }
 
 __all__ = [

@@ -3,7 +3,8 @@
 import json
 
 from django.db import IntegrityError, transaction
-from organizationatlas.providers.europe.france import FRANCE_FIELDS_DESCRIPTIONS
+from organizationatlas import ORGANIZATIONATLAS_SEARCH_COMPANY_FIELDS
+from organizationatlas.providers import get_search_organization_fields
 
 from .models import (
     OrganizationAtlasAddress,
@@ -12,19 +13,11 @@ from .models import (
     OrganizationAtlasOrganization,
 )
 
-# Fields on the virtual organization object that should not be persisted as OrganizationAtlasData.
-# Everything else (siren, siret, ape, legalform, …) will be persisted if non-empty.
-_SKIP_FIELDS = frozenset({
-    "organizationatlas_id",
-    "reference",       # persisted via source_field key
-    "address",         # persisted as OrganizationAtlasAddress
-    "address_json",
-    "data_source",
-    "backend",
-    "backend_name",
-    "country_code",    # stored on the record itself, not as data
-    "source_field",    # used as key, not value
-})
+_SEARCH_FIELDS = get_search_organization_fields()
+
+# World-level fields are stored on the organization, its addresses or used as keys;
+# only country-level fields (plus denomination, for history) become OrganizationAtlasData.
+_SKIP_FIELDS = frozenset(ORGANIZATIONATLAS_SEARCH_COMPANY_FIELDS) - {"denomination"}
 
 
 _BASE_FIELDS = (
@@ -46,8 +39,7 @@ def _text(value) -> str:
 def _data_type(key: str, value_type: str | None = None) -> OrganizationAtlasDataType:
     """Shared data type for this key, created the first time it is used."""
     if value_type is None:
-        described = FRANCE_FIELDS_DESCRIPTIONS.get(key) or {}
-        value_type = described.get("value_type", "str")
+        value_type = _SEARCH_FIELDS.get(key, {}).get("format", "str")
     return OrganizationAtlasDataType.for_key(key, value_type)
 
 
@@ -229,10 +221,7 @@ def fetch_organization_for_refresh(code: str, provider_name: str):
 @transaction.atomic
 def create_organization(obj):
     organization = OrganizationAtlasOrganization.objects.create(
-        denomination=obj.denomination,
-        code=obj.reference,
-        source=obj.backend,
-        country_code=obj.country_code,
+        **{model_field: getattr(obj, incoming_field, None) for model_field, incoming_field in _BASE_FIELDS}
     )
     source = obj.backend
     country = obj.country_code or ""

@@ -17,6 +17,7 @@ from ..models.source import ORGANIZATIONATLAS_FIELDS_AUDIT, ORGANIZATIONATLAS_FI
 from .address import OrganizationAtlasAddressInline
 from .data import OrganizationAtlasDataInline
 from .related_object import OrganizationAtlasRelatedObjectInline
+from .relation import OrganizationAtlasOrganizationRelationInline
 
 
 @admin.register(OrganizationAtlasOrganization)
@@ -28,6 +29,7 @@ class OrganizationAtlasOrganizationAdmin(with_history(AdminBoostModel)):
     inlines = [
         OrganizationAtlasDataInline,
         OrganizationAtlasAddressInline,
+        OrganizationAtlasOrganizationRelationInline,
         OrganizationAtlasRelatedObjectInline,
     ]
     changeform_actions = {

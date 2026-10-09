@@ -27,6 +27,7 @@ class InseeProvider(OrganizationAtlasFranceProvider):
         "ape": "uniteLegale.activitePrincipaleUniteLegale",
         "ape_noun": "uniteLegale.nomenclatureActivitePrincipaleUniteLegale",
         "legalform": "uniteLegale.categorieJuridiqueUniteLegale",
+        "slice_effective": "uniteLegale.trancheEffectifsUniteLegale",
         "since": "uniteLegale.dateCreationUniteLegale",
         "address": (
             "adresseEtablissement.numeroVoieEtablissement",

@@ -1,0 +1,10 @@
+category;code;description;country_code;source;characteristics;priority
+organization_relation;parent_organization;One organization controls another through majority ownership or decisive influence;;organizationatlas;Includes direct and indirect control relationships;10
+organization_relation;branch_of;Establishment that is a branch of a parent organization;;organizationatlas;No separate legal personality — same legal entity as parent;9
+organization_relation;agency_of;Establishment acting as a commercial or operational agency of another entity;;organizationatlas;May have limited autonomy but acts on behalf of the principal;8
+organization_relation;member_of;Organization that is a member of a network federation or group;;organizationatlas;Common in cooperatives professional bodies and trade associations;7
+organization_relation;franchise_of;Entity operating under a franchise agreement with a franchisor;;organizationatlas;Uses brand and systems of the franchisor in exchange for fees;6
+organization_relation;partner_of;Organization engaged in a formal partnership or collaboration with another;;organizationatlas;Can be strategic commercial or operational;5
+organization_relation;managed_by;Organization whose management is delegated to or exercised by another entity;;organizationatlas;Common in fund management or outsourced governance structures;4
+organization_relation;represents;Organization that acts as representative or agent for another;;organizationatlas;Includes commercial agents distributors and authorized representatives;3
+organization_relation;other;Relationship type not covered by other categories;;organizationatlas;;0

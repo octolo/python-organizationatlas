@@ -10,7 +10,7 @@ from organizationatlas import (
     ORGANIZATIONATLAS_GET_REFERENTIEL_FIELDS,
     ORGANIZATIONATLAS_SEARCH_COMPANY_FIELDS,
 )
-from organizationatlas.providers import OrganizationAtlasProvider
+from organizationatlas.providers import OrganizationAtlasProvider, get_search_organization_fields
 from organizationatlas.providers.europe.france import OrganizationAtlasFranceProvider
 
 
@@ -18,6 +18,12 @@ class TestFieldSchemas:
     def test_search_organization_fields_has_required_keys(self):
         required = {"denomination", "reference", "organizationatlas_id", "backend_name"}
         assert required.issubset(ORGANIZATIONATLAS_SEARCH_COMPANY_FIELDS)
+
+    def test_country_fields_declared_on_country_provider(self):
+        france_fields = OrganizationAtlasFranceProvider.services_cfg["search_organization"]["fields"]
+        assert "siren" not in ORGANIZATIONATLAS_SEARCH_COMPANY_FIELDS
+        assert {"siren", "denomination"}.issubset(france_fields)
+        assert {"siren", "denomination"}.issubset(get_search_organization_fields())
 
     def test_list_response_fields_have_organizationatlas_id(self):
         for schema in [
@@ -29,7 +35,7 @@ class TestFieldSchemas:
             assert "organizationatlas_id" in schema
 
     def test_referentiel_fields(self):
-        expected = {"category", "code", "description", "characteristics", "priority", "usage_type"}
+        expected = {"category", "code", "description", "characteristics", "priority"}
         assert expected == set(ORGANIZATIONATLAS_GET_REFERENTIEL_FIELDS)
 
 

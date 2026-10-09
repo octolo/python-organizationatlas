@@ -1,37 +1,23 @@
 import re
 from typing import Any
 
+from .... import _f
 from .. import OrganizationAtlasEuropeProvider
 
-def _france_field(description: str, value_type: str = "str") -> dict[str, str]:
-    return {"description": description, "value_type": value_type}
-
-
-FRANCE_FIELDS_DESCRIPTIONS = {
-    "siren": _france_field("SIREN number (9 digits, French organization identifier)"),
-    "rna": _france_field("RNA number (W + 8 digits, French association identifier)"),
-    "siret": _france_field("SIRET number (14 digits, French establishment identifier)"),
-    "denomination": _france_field("Organization name or legal name"),
-    "since": _france_field("Organization creation date", "date"),
-    "legalform": _france_field("Legal form code or description"),
-    "ape": _france_field("APE code (French activity code, NAF)"),
-    "category": _france_field("Organization category (e.g., PME, ETI, GE)"),
-    "slice_effective": _france_field("Employee count range code"),
-    "is_headquarter": _france_field("Whether this is the organization headquarters", "bool"),
-    "address_line1": _france_field("Street number and name"),
-    "address_line2": _france_field("Building, apartment, floor (optional)"),
-    "address_line3": _france_field("Additional address info (optional)"),
-    "city": _france_field("City name"),
-    "postal_code": _france_field("Postal code"),
-    "state": _france_field("Department code or name"),
-    "region": _france_field("Region code or name"),
-    "county": _france_field("County or administrative county"),
-    "country": _france_field("Country name"),
-    "country_code": _france_field("ISO country code (e.g., FR)"),
-    "municipality": _france_field("Municipality or commune"),
-    "neighbourhood": _france_field("Neighbourhood, quarter, or district"),
-    "latitude": _france_field("Latitude coordinate", "float"),
-    "longitude": _france_field("Longitude coordinate", "float"),
+FRANCE_SEARCH_FIELDS = {
+    "siren": _f("SIREN", description="SIREN number (9 digits, French organization identifier)"),
+    "siret": _f("SIRET", description="SIRET number (14 digits, French establishment identifier)"),
+    "rna": _f("RNA", description="RNA number (W + 8 digits, French association identifier)"),
+    "ape": _f("Core business", description="APE code (French activity code, NAF)"),
+    "ape_noun": _f("Ape noun", description="APE nomenclature (e.g., NAFRev2)"),
+    "legalform": _f("Legal form", description="Legal form code or description"),
+    "slice_effective": _f(
+        "Headcount bracket",
+        description="Employee headcount bracket code (INSEE tranche d'effectifs)",
+    ),
+    "registry_type": _f("Registry type"),
+    "registry_authority": _f("Registry authority"),
+    "since": _f("Since", "date", "Organization creation date"),
 }
 
 # (pattern, max_length, uppercase)
@@ -46,7 +32,10 @@ class OrganizationAtlasFranceProvider(OrganizationAtlasEuropeProvider):
     geo_code = "FR"
     geo_country = "france"
     abstract = True
-    france_fields = list(FRANCE_FIELDS_DESCRIPTIONS.keys())
+    services_fields = {
+        "search_organization": FRANCE_SEARCH_FIELDS,
+        "search_organization_by_reference": FRANCE_SEARCH_FIELDS,
+    }
 
     # ------------------------------------------------------------------ #
     # Code validation & formatting                                         #
@@ -193,6 +182,12 @@ class OrganizationAtlasFranceProvider(OrganizationAtlasEuropeProvider):
 
     def get_normalize_legalform(self, data: dict[str, Any]) -> str | None:
         value = self._fr_value(data, "legalform")
+        if value is None:
+            return None
+        return str(value).strip() or None
+
+    def get_normalize_slice_effective(self, data: dict[str, Any]) -> str | None:
+        value = self._fr_value(data, "slice_effective")
         if value is None:
             return None
         return str(value).strip() or None

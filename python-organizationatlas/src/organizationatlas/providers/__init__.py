@@ -101,4 +101,17 @@ class OrganizationAtlasProvider(ProviderBase):
         return super().response(*args, **kwargs)
 
 
-__all__ = ['OrganizationAtlasProvider']
+def get_search_organization_fields() -> dict[str, dict[str, Any]]:
+    """World search fields merged with the fields of every geographic level."""
+    from .europe import france  # noqa: F401  geo levels must be imported to be discovered
+
+    fields: dict[str, dict[str, Any]] = {}
+    pending: list[type[OrganizationAtlasProvider]] = [OrganizationAtlasProvider]
+    while pending:
+        cls = pending.pop(0)
+        fields.update(cls.services_cfg["search_organization"]["fields"])
+        pending.extend(cls.__subclasses__())
+    return fields
+
+
+__all__ = ['OrganizationAtlasProvider', 'get_search_organization_fields']

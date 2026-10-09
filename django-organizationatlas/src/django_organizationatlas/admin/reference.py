@@ -22,7 +22,6 @@ from ..services.reference import (
 
 base_fields = [
     "category",
-    "usage_type",
     "code",
     "description",
     "characteristics",
@@ -33,18 +32,26 @@ base_fields = [
 
 @admin.register(OrganizationAtlasReferenceCategory)
 class OrganizationAtlasReferenceCategoryAdmin(with_history(AdminBoostModel)):
-    list_display = ["name", "country_code"]
+    list_display = ["name", "country_code", "reference_count"]
     list_filter = ["country_code"]
     search_fields = ["name", "country_code"]
+    readonly_fields = ["reference_count"]
+
+    def get_queryset(self, request):
+        return super().get_queryset(request).with_reference_count()
+
+    @admin.display(description=_("References"), ordering="sql_reference_count")
+    def reference_count(self, obj):
+        return getattr(obj, "sql_reference_count", "—")
 
     def change_fieldsets(self):
-        self.add_to_fieldset(None, ["name", "country_code"])
+        self.add_to_fieldset(None, ["name", "country_code", "reference_count"])
 
 
 @admin.register(OrganizationAtlasReference)
 class OrganizationAtlasReferenceAdmin(with_history(AdminBoostModel)):
-    list_display = base_fields
-    list_filter = ["category__country_code", "category", "usage_type"]
+    list_display = ["code_label", "description", "characteristics", "priority", "used_count"]
+    list_filter = ["category__country_code", "category"]
     search_fields = [
         "category__name",
         "category__country_code",
@@ -53,9 +60,17 @@ class OrganizationAtlasReferenceAdmin(with_history(AdminBoostModel)):
         "characteristics",
     ]
     readonly_fields = [*ORGANIZATIONATLAS_FIELDS_AUDIT, "source_label", "used_count"]
+    raw_id_fields = ["category"]
 
     def get_queryset(self, request):
         return super().get_queryset(request).select_related("category").with_usage_count()
+
+    @admin.display(description=_("Code"), ordering="code")
+    def code_label(self, obj):
+        if obj is None:
+            return ""
+        category = str(obj.category) if obj.category_id else ""
+        return self.format_with_help_text(self.format_label(obj.code), category)
 
     def used_count(self, obj):
         return getattr(obj, "sql_used_count", "—")

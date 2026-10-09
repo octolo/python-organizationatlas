@@ -1,0 +1,19 @@
+category;code;description;country_code;source;characteristics;priority
+organization_type;holding;Parent organization that owns stakes in subsidiaries;;organizationatlas;Controls other entities through equity participation;10
+organization_type;operating_organization;Organization that directly conducts business operations;;organizationatlas;Generates revenue through products or services;9
+organization_type;joint_venture;Entity jointly owned by two or more parties for a shared purpose;;organizationatlas;Common in international or cross-sector projects;8
+organization_type;spv;Entity created for a specific limited purpose or transaction;;organizationatlas;Often used in finance structured deals or real estate;7
+organization_type;public_organization;Organization whose shares are traded on a public stock exchange;;organizationatlas;Subject to listing rules and public disclosure obligations;6
+organization_type;private_organization;Organization whose shares are not publicly traded;;organizationatlas;Ownership is limited to founders investors or employees;5
+organization_type;investment_vehicle;Entity structured to hold or manage financial investments;;organizationatlas;Includes funds SPACs and family holding vehicles;4
+organization_type;shell_organization;Organization with no active business operations or assets;;organizationatlas;Used for restructuring holding purposes or acquisitions;3
+organization_type;association;Non-profit membership organization governed by its members;;organizationatlas;Common in France under loi 1901;20
+organization_type;foundation;Non-profit entity created to serve a public or private charitable purpose;;organizationatlas;Funded by an endowment or ongoing donations;19
+organization_type;non_profit;Organization that does not distribute profits to owners or shareholders;;organizationatlas;Reinvests surplus into its mission;18
+organization_type;government;Public body or governmental authority;;organizationatlas;Includes ministries agencies and state-owned entities;30
+organization_type;public_agency;Agency operating under public authority mandates;;organizationatlas;Can be semi-autonomous or fully state-controlled;29
+organization_type;cooperative;Organization owned and democratically controlled by its members;;organizationatlas;Common in agriculture banking and retail;15
+organization_type;partnership;Business entity formed by two or more persons sharing ownership;;organizationatlas;Can be general or limited partnership;14
+organization_type;trust;Legal arrangement where assets are held by one party for the benefit of another;;organizationatlas;Common in Anglo-Saxon jurisdictions and estate planning;13
+organization_type;family_office;Private entity managing wealth and investments for a family;;organizationatlas;Can be single-family or multi-family office;12
+organization_type;other;Organization type not covered by other categories;;organizationatlas;;0

@@ -2,7 +2,7 @@
 
 from typing import Any
 
-from organizationatlas import ORGANIZATIONATLAS_SEARCH_COMPANY_FIELDS
+from organizationatlas.providers import get_search_organization_fields
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 from django_providerkit.models.define import define_fields_from_config
@@ -11,7 +11,7 @@ from virtualqueryset.models import VirtualModel
 from django_organizationatlas.helpers import create_organization
 from django_organizationatlas.managers.virtuals.organization import OrganizationAtlasVirtualOrganizationManager
 
-FIELDS_ORGANIZATIONATLAS = ORGANIZATIONATLAS_SEARCH_COMPANY_FIELDS
+FIELDS_ORGANIZATIONATLAS = get_search_organization_fields()
 
 organizationatlas_id_config: dict[str, Any] = FIELDS_ORGANIZATIONATLAS['organizationatlas_id']
 
