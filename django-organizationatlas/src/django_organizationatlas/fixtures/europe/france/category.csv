@@ -1,0 +1,5 @@
+category;code;description;country_code;source;characteristics
+category;MIC;Microentreprise;FR;INSEE;Fewer than 10 employees, and annual turnover or balance sheet total not exceeding 2 million euros.
+category;PME;Petite et moyenne entreprise;FR;INSEE;Fewer than 250 employees, with annual turnover below 50 million euros or a balance sheet total below 43 million euros (excluding microenterprises).
+category;ETI;Entreprise de taille intermédiaire;FR;INSEE;Fewer than 5,000 employees, with annual turnover not exceeding 1.5 billion euros or a balance sheet total below 2 billion euros.
+category;GE;Grande entreprise;FR;INSEE;Anything above the intermediate-sized enterprise thresholds (5,000 employees or more, turnover above 1.5 billion euros, or balance sheet total of 2 billion euros or more).

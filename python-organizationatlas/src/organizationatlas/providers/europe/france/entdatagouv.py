@@ -29,6 +29,7 @@ class EntdatagouvProvider(OrganizationAtlasFranceProvider):
         "rna": ["complements.identifiant_association", "id_association"],
         "ape": ["siege.activite_principale", "activite_principale"],
         "legalform": "nature_juridique",
+        "category": "categorie_entreprise",
         "slice_effective": "siege.tranche_effectif_salarie",
         "since": ["date_creation", "date_creation_entreprise"],
         "address": (

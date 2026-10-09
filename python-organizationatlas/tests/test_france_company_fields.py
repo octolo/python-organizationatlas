@@ -15,6 +15,7 @@ def test_insee_company_fields():
             "activitePrincipaleUniteLegale": "62.01Z",
             "nomenclatureActivitePrincipaleUniteLegale": "NAFRev2",
             "categorieJuridiqueUniteLegale": "5710",
+            "categorieEntreprise": "PME",
             "dateCreationUniteLegale": "2022-07-01",
             "trancheEffectifsUniteLegale": "03",
         },
@@ -22,6 +23,7 @@ def test_insee_company_fields():
     assert normalized["ape"] == "62.01Z"
     assert normalized["ape_noun"] == "NAFRev2"
     assert normalized["legalform"] == "5710"
+    assert normalized["category"] == "PME"
     assert normalized["slice_effective"] == "03"
     assert normalized["since"] == "2022-07-01"
     assert normalized["registry_type"] is None
@@ -33,6 +35,7 @@ def test_entdatagouv_uses_siren_not_siret_as_reference():
         "nom_complet": "OCTOLO",
         "nom_raison_sociale": "OCTOLO",
         "nature_juridique": "5710",
+        "categorie_entreprise": "PME",
         "activite_principale": "62.01Z",
         "date_creation": "2022-07-01",
         "siege": {
@@ -55,6 +58,7 @@ def test_entdatagouv_uses_siren_not_siret_as_reference():
     assert normalized["denomination"] == "OCTOLO"
     assert normalized["ape"] == "62.01Z"
     assert normalized["legalform"] == "5710"
+    assert normalized["category"] == "PME"
     assert normalized["slice_effective"] == "03"
     assert normalized["since"] == "2022-07-01"
     assert normalized["address"] == "295 BOULEVARD SAINT-DENIS, 92400, COURBEVOIE"
@@ -64,12 +68,14 @@ def test_entdatagouv_company_fields():
     normalized = _normalize(EntdatagouvProvider(), {
         "siren": "917432254",
         "nature_juridique": "5710",
+        "categorie_entreprise": "ETI",
         "date_creation": "2022-07-01",
         "siege": {"activite_principale": "62.01Z", "tranche_effectif_salarie": "03"},
     })
     assert normalized["ape"] == "62.01Z"
     assert normalized["ape_noun"] is None
     assert normalized["legalform"] == "5710"
+    assert normalized["category"] == "ETI"
     assert normalized["slice_effective"] == "03"
     assert normalized["since"] == "2022-07-01"
     assert normalized["registry_type"] is None
@@ -81,12 +87,14 @@ def test_huwise_company_fields():
         "activiteprincipaleunitelegale": "6201Z",
         "nomenclatureactiviteprincipaleunitelegale": "NAFRev2",
         "categoriejuridiqueunitelegale": "5710",
+        "categorieentreprise": "GE",
         "trancheeffectifsunitelegale": "03",
         "datecreationunitelegale": "2022-07-01",
     })
     assert normalized["ape"] == "6201Z"
     assert normalized["ape_noun"] == "NAFRev2"
     assert normalized["legalform"] == "5710"
+    assert normalized["category"] == "GE"
     assert normalized["slice_effective"] == "03"
     assert normalized["since"] == "2022-07-01"
     assert normalized["registry_type"] is None

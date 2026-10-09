@@ -11,6 +11,10 @@ FRANCE_SEARCH_FIELDS = {
     "ape": _f("Core business", description="APE code (French activity code, NAF)"),
     "ape_noun": _f("Ape noun", description="APE nomenclature (e.g., NAFRev2)"),
     "legalform": _f("Legal form", description="Legal form code or description"),
+    "category": _f(
+        "Company category",
+        description="Company size category (PME, ETI, GE, MIC)",
+    ),
     "slice_effective": _f(
         "Headcount bracket",
         description="Employee headcount bracket code (INSEE tranche d'effectifs)",
@@ -182,6 +186,12 @@ class OrganizationAtlasFranceProvider(OrganizationAtlasEuropeProvider):
 
     def get_normalize_legalform(self, data: dict[str, Any]) -> str | None:
         value = self._fr_value(data, "legalform")
+        if value is None:
+            return None
+        return str(value).strip() or None
+
+    def get_normalize_category(self, data: dict[str, Any]) -> str | None:
+        value = self._fr_value(data, "category")
         if value is None:
             return None
         return str(value).strip() or None

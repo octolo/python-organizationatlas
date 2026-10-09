@@ -6,6 +6,7 @@ from django_boosted import AdminBoostModel, admin_boost_view
 
 from .history import with_history
 
+from ..fields import RichTextField
 from ..forms.organization import (
     OrganizationRefreshForm,
     organization_provider_choices,
@@ -47,6 +48,11 @@ class OrganizationAtlasOrganizationAdmin(with_history(AdminBoostModel)):
     def get_search_results(self, request, queryset, search_term):
         queryset, use_distinct = super().get_search_results(request, queryset, search_term)
         return queryset.distinct(), use_distinct
+
+    def formfield_for_dbfield(self, db_field, request, **kwargs):
+        if isinstance(db_field, RichTextField):
+            kwargs.setdefault("required", False)
+        return super().formfield_for_dbfield(db_field, request, **kwargs)
 
     def change_fieldsets(self):
         self.add_to_fieldset(None, ORGANIZATIONATLAS_FIELDS_COMPANY)

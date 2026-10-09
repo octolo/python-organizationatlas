@@ -1,0 +1,12 @@
+category;code;description;country_code;source
+profil_capitalisation;actions_standard;Actions — règles générales de SA/SAS;FR;organizationatlas
+profil_capitalisation;parts_sociales;Parts sociales — SARL ou société civile;FR;organizationatlas
+profil_capitalisation;cooperative;Coopérative — capital et sociétariat spécifiques;FR;organizationatlas
+profil_capitalisation;hlm;HLM — contrôle réglementaire spécialisé;FR;organizationatlas
+profil_capitalisation;participation_publique;Participation publique — contrôle des actionnaires publics;FR;organizationatlas
+profil_capitalisation;profession_reglementee;Profession réglementée — détention spécifique;FR;organizationatlas
+profil_capitalisation;cotee;Émetteur coté — transparence et franchissements de seuils;FR;organizationatlas
+profil_capitalisation;variable;Capital variable — entrées et sorties de capital;FR;organizationatlas
+profil_capitalisation;financier;Établissement financier ou assureur — règles sectorielles;FR;organizationatlas
+profil_capitalisation;sans_capital;Aucun capital social — membres, adhérents ou financeurs;FR;organizationatlas
+profil_capitalisation;sur_mesure;Règles spécifiques à définir;FR;organizationatlas

@@ -93,3 +93,22 @@ STATIC_URL = "static/"
 
 # Default primary key field type
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+try:
+    import djrichtextfield
+    INSTALLED_APPS += [
+        "djrichtextfield",
+    ]
+    ORGANIZATIONATLAS_RICHTEXT_WIDGET = "djrichtextfield.widgets.RichTextWidget"
+    DJRICHTEXTFIELD_CONFIG = {
+        'js': [f'//cdn.tiny.cloud/1/{os.getenv("TINYMCE_API_KEY")}/tinymce/5/tinymce.min.js'],
+        'init_template': 'djrichtextfield/init/tinymce.js',
+        'settings': {
+            'menubar': False,
+            'plugins': 'link image',
+            'toolbar': 'bold italic | link image | removeformat',
+            'width': 700
+        }
+    }
+except ImportError:
+    pass

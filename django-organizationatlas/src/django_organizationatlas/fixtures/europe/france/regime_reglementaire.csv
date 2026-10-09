@@ -1,0 +1,19 @@
+category;code;description;country_code;source
+regime_reglementaire;droit_commun;Droit commun — société commerciale;FR;organizationatlas
+regime_reglementaire;sa_hlm;SA d’HLM — entreprise sociale pour l’habitat;FR;organizationatlas
+regime_reglementaire;cooperative_hlm;Coopérative HLM;FR;organizationatlas
+regime_reglementaire;scic;SCIC — société coopérative d’intérêt collectif;FR;organizationatlas
+regime_reglementaire;scop;SCOP — société coopérative de production;FR;organizationatlas
+regime_reglementaire;cooperative_agricole;Coopérative agricole ou union;FR;organizationatlas
+regime_reglementaire;sem;SEM — société d’économie mixte;FR;organizationatlas
+regime_reglementaire;spl;SPL — société publique locale;FR;organizationatlas
+regime_reglementaire;semop;SEMOP — société d’économie mixte à opération unique;FR;organizationatlas
+regime_reglementaire;sel;SEL — société d’exercice libéral;FR;organizationatlas
+regime_reglementaire;finance;Secteur bancaire ou financier réglementé;FR;organizationatlas
+regime_reglementaire;assurance;Secteur de l’assurance ou de la mutualité;FR;organizationatlas
+regime_reglementaire;cotee;Société dont les titres sont admis sur un marché réglementé;FR;organizationatlas
+regime_reglementaire;se;Société européenne (SE);FR;organizationatlas
+regime_reglementaire;capital_variable;Société à capital variable;FR;organizationatlas
+regime_reglementaire;autre_special;Autre régime sectoriel ou spécial;FR;organizationatlas
+regime_reglementaire;aucun_identifie;Aucun régime spécial identifié;FR;organizationatlas
+regime_reglementaire;sans_capital;Association ou fondation — pas de capital social classique;FR;organizationatlas

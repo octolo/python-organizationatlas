@@ -29,6 +29,7 @@ class HuwiseProvider(OrganizationAtlasFranceProvider):
         "ape": "activiteprincipaleunitelegale",
         "ape_noun": "nomenclatureactiviteprincipaleunitelegale",
         "legalform": "categoriejuridiqueunitelegale",
+        "category": "categorieentreprise",
         "slice_effective": "trancheeffectifsunitelegale",
         "since": "datecreationunitelegale",
         "address": (

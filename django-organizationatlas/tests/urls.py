@@ -14,6 +14,14 @@ urlpatterns = [
     path("geoaddress/", include("django_geoaddress.urls")),
 ]
 
+try:
+    import djrichtextfield
+    urlpatterns += [
+        path("djrichtextfield/", include("djrichtextfield.urls")),
+    ]
+except ImportError:
+    pass
+
 _version = f"(Django {django.get_version()}, organizationatlas {organizationatlas.__version__}/{django_organizationatlas.__version__})"
 admin.site.site_header = f"Django OrganizationAtlas - Administration {_version}"
 admin.site.site_title = f"Django OrganizationAtlas Admin {_version}"

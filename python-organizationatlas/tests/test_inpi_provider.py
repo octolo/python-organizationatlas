@@ -159,6 +159,7 @@ class TestInpiProviderApiPaths:
         assert normalized["ape"] == "6201Z"
         assert normalized["ape_noun"] is None
         assert normalized["legalform"] == "5710"
+        assert normalized["category"] is None
         assert normalized["slice_effective"] is None
         assert normalized["registry_type"] is None
         assert normalized["registry_authority"] == "Paris"
