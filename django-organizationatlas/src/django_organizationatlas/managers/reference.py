@@ -1,5 +1,5 @@
 from django.db import models
-from django.db.models import Count, IntegerField, OuterRef, Subquery
+from django.db.models import Count, Exists, IntegerField, OuterRef, Subquery
 
 
 class OrganizationAtlasReferenceCategoryQuerySet(models.QuerySet):
@@ -32,6 +32,15 @@ class OrganizationAtlasReferenceQuerySet(models.QuerySet):
             .values("pk")
         )
         return self.annotate(sql_used_count=_CountSubquery(usage))
+
+    def with_has_data_type(self):
+        """Annotate has_data_type when the category name matches a data type."""
+        from ..models.data import OrganizationAtlasDataType
+
+        match = OrganizationAtlasDataType.objects.filter(
+            data_type=OuterRef("category__name"),
+        )
+        return self.annotate(has_data_type=Exists(match))
 
 
 OrganizationAtlasReferenceManager = models.Manager.from_queryset(OrganizationAtlasReferenceQuerySet)
