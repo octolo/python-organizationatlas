@@ -1,5 +1,7 @@
 """Tests for organizationatlas helpers and providers."""
 
+from unittest.mock import MagicMock
+
 import pytest
 
 from organizationatlas import (
@@ -10,8 +12,9 @@ from organizationatlas import (
     ORGANIZATIONATLAS_GET_REFERENTIEL_FIELDS,
     ORGANIZATIONATLAS_SEARCH_COMPANY_FIELDS,
 )
-from organizationatlas.providers import OrganizationAtlasProvider, get_search_organization_fields
+from organizationatlas.providers import get_search_organization_fields
 from organizationatlas.providers.europe.france import OrganizationAtlasFranceProvider
+from organizationatlas.providers.europe.france.entdatagouv import EntdatagouvProvider
 
 
 class TestFieldSchemas:
@@ -61,21 +64,50 @@ class TestFranceProviderValidation:
         assert not provider.is_siret("")
 
     def test_is_rna(self, provider):
-        assert provider.is_rna("W12345678")
-        assert provider.is_rna("w12345678")
+        assert provider.is_rna("W123456789")
+        assert provider.is_rna("w123456789")
+        assert not provider.is_rna("W")
+        assert not provider.is_rna("W123")
+        assert not provider.is_rna("W12345678")
+        assert not provider.is_rna("W1234567890")
         assert not provider.is_rna("123456789")
         assert not provider.is_rna("")
 
     def test_detect_code_type(self, provider):
         assert provider._detect_code_type("123456789") == "siren"
         assert provider._detect_code_type("12345678901234") == "siret"
-        assert provider._detect_code_type("W12345678") == "rna"
+        assert provider._detect_code_type("W123456789") == "rna"
         assert provider._detect_code_type("invalid") is None
 
     def test_format_siren(self, provider):
         assert provider._format_siren("123 456 789") == "123456789"
         assert provider._format_siren("123-456-789") == "123456789"
+        assert provider._format_siren("1234567890") == "1234567890"
 
     def test_validate_siren(self, provider):
         assert provider._validate_siren("123456789")
         assert not provider._validate_siren("12345678")
+
+
+def test_entdatagouv_rna_lookup_uses_search_endpoint():
+    provider = EntdatagouvProvider()
+    provider._call_api = MagicMock(
+        return_value={"results": [{"siren": "917432254"}]}
+    )
+
+    assert provider.search_organization_by_reference("W123456789") == {
+        "siren": "917432254"
+    }
+    provider._call_api.assert_called_once_with(
+        "https://recherche-entreprises.api.gouv.fr/search?q=W123456789"
+    )
+
+
+def test_normalized_id_requires_reference():
+    provider = EntdatagouvProvider()
+
+    assert provider.get_insert_normalized_organizationatlas_id(
+        {},
+        {"reference": None},
+        {},
+    ) is None

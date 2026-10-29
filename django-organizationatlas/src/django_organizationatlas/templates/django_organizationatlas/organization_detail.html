@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>{{ organization.pref_denomination }}</title>
+</head>
+<body>
+    <main>
+        <h1>{{ organization.pref_denomination }}</h1>
+        <dl>
+            <dt>Code</dt>
+            <dd>{{ organization.code }}</dd>
+            <dt>Country</dt>
+            <dd>{{ organization.country_code }}</dd>
+            <dt>Website</dt>
+            <dd>
+                {% if organization.website %}
+                    <a href="{{ organization.website }}">{{ organization.website }}</a>
+                {% else %}
+                    —
+                {% endif %}
+            </dd>
+        </dl>
+        {% if perms.django_organizationatlas.change_organizationatlasorganization %}
+            <a href="{% url 'django_organizationatlas:organization-enrich' organization.pk %}">
+                Enrich organization
+            </a>
+        {% endif %}
+    </main>
+</body>
+</html>

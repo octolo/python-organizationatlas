@@ -11,7 +11,10 @@ class OrganizationAtlasOrganizationQuerySet(models.QuerySet):
         return self.prefetch_related(
             Prefetch(
                 "to_organizationatlasaddress",
-                queryset=OrganizationAtlasAddress.objects.filter(is_headquarters=True),
+                queryset=OrganizationAtlasAddress.objects.filter(
+                    is_headquarters=True,
+                    valid_to__isnull=True,
+                ),
                 to_attr="prefetched_headquarters",
             )
         )

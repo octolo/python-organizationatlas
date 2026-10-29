@@ -1,6 +1,9 @@
 from django.contrib import admin
 from django.contrib.admin.utils import unquote
-from django.shortcuts import redirect
+from django.core.exceptions import PermissionDenied
+from django.db import IntegrityError
+from django.http import Http404
+from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse
 from django.utils.html import format_html
 from django.utils.http import urlencode
@@ -64,14 +67,31 @@ class OrganizationAtlasVirtualOrganizationAdmin(ReadOnlyVirtualAdmin, AdminBoost
         return format_html('<a href="{}">{}</a>', url, obj.backend_name)
     backend_name_display.short_description = _("Backend name")
 
-    def organization_model_exist(self, obj: OrganizationAtlasVirtualOrganization | None) -> bool:
-        from django_organizationatlas.models.organization import OrganizationAtlasOrganization
-        return OrganizationAtlasOrganization.objects.filter(denomination=obj.denomination).exists()
+    def has_create_organization_permission(self, request, obj=None):
+        allowed = request.user.has_perm(
+            "django_organizationatlas.add_organizationatlasorganization"
+        )
+        return allowed and (
+            obj is None or not self._organizations_for_virtual(obj).exists()
+        )
 
     def handle_create_organization(self, request, object_id):
+        if not request.user.has_perm(
+            "django_organizationatlas.add_organizationatlasorganization"
+        ):
+            raise PermissionDenied
         object_id = unquote(object_id)
         obj = self.get_object(request, object_id)
-        organization = obj.create_organization()
+        if obj is None:
+            raise Http404
+        if not self.has_create_organization_permission(request, obj):
+            raise PermissionDenied
+        try:
+            organization = obj.create_organization()
+        except IntegrityError:
+            organization = self._organizations_for_virtual(obj).first()
+            if organization is None:
+                raise
         return redirect("admin:django_organizationatlas_organizationatlasorganization_change", organization.id)
 
     def handle_show_organizations(self, request, object_id):
@@ -84,11 +104,22 @@ class OrganizationAtlasVirtualOrganizationAdmin(ReadOnlyVirtualAdmin, AdminBoost
     def handle_show_organization(self, request, object_id):
         object_id = unquote(object_id)
         obj = self.get_object(request, object_id)
-        return redirect("admin:django_organizationatlas_organizationatlasorganization_change", obj.id)
+        organization = get_object_or_404(self._organizations_for_virtual(obj))
+        return redirect(
+            "admin:django_organizationatlas_organizationatlasorganization_change",
+            organization.pk,
+        )
 
-    def organization_count_exists(self, obj: OrganizationAtlasVirtualOrganization | None) -> bool:
+    def organization_count_exists(self, obj: OrganizationAtlasVirtualOrganization | None) -> int:
+        if obj is None:
+            return 0
+        return self._organizations_for_virtual(obj).count()
+
+    @staticmethod
+    def _organizations_for_virtual(obj: OrganizationAtlasVirtualOrganization):
         from django_organizationatlas.models.organization import OrganizationAtlasOrganization
+
         return OrganizationAtlasOrganization.objects.filter(
             to_organizationatlasdata__data_type__data_type=obj.source_field,
             to_organizationatlasdata__value=obj.reference,
-        ).count()
+        ).distinct()

@@ -2,6 +2,9 @@
 
 from unittest.mock import MagicMock, patch
 
+import pytest
+from requests import HTTPError
+
 from organizationatlas.providers.europe.france.inpi import InpiProvider
 
 
@@ -27,10 +30,11 @@ class TestInpiProviderApiPaths:
                     },
                 },
             },
-        ):
+        ) as detail:
             results = provider.search_organization("octolo")
 
-        assert len(results) == 1
+        assert results == [{"siren": "917432254"}]
+        detail.assert_not_called()
         mock_get.assert_called_once()
         url = mock_get.call_args[0][0]
         params = mock_get.call_args[1]["params"]
@@ -161,7 +165,7 @@ class TestInpiProviderApiPaths:
         assert normalized["legalform"] == "5710"
         assert normalized["category"] is None
         assert normalized["slice_effective"] is None
-        assert normalized["registry_type"] is None
+        assert normalized["registry_type"] == "RNCS"
         assert normalized["registry_authority"] == "Paris"
         assert normalized["since"] == "2022-07-12"
 
@@ -184,3 +188,60 @@ class TestInpiProviderApiPaths:
         }
         normalized = provider.normalize(data, config=provider.services_cfg["search_organization"])
         assert normalized["address_json"]["address_line1"] == "10 RUE DE RIVOLI"
+
+    @patch("organizationatlas.providers.europe.france.inpi.requests.post")
+    @patch("organizationatlas.providers.europe.france.inpi.requests.get")
+    def test_expired_token_is_refreshed_once(self, mock_get, mock_post):
+        unauthorized = MagicMock(status_code=401)
+        success = MagicMock(status_code=200)
+        success.json.return_value = {"siren": "917432254"}
+        mock_get.side_effect = [unauthorized, success]
+
+        login = MagicMock(status_code=200)
+        login.json.return_value = {"token": "fresh-token"}
+        mock_post.return_value = login
+
+        provider = InpiProvider()
+        provider._token = "expired-token"
+        provider._get_config_or_env = MagicMock(
+            side_effect=lambda key: {
+                "API_USERNAME": "user",
+                "API_PASSWORD": "password",
+                "SSO_URL": "https://example.test/login",
+            }[key]
+        )
+
+        assert provider._call_api("https://example.test/company") == {
+            "siren": "917432254"
+        }
+        assert mock_get.call_count == 2
+        assert mock_get.call_args_list[0].kwargs["headers"]["Authorization"] == "Bearer expired-token"
+        assert mock_get.call_args_list[1].kwargs["headers"]["Authorization"] == "Bearer fresh-token"
+        mock_post.assert_called_once()
+
+    @patch("organizationatlas.providers.europe.france.inpi.requests.post")
+    def test_authentication_errors_are_propagated(self, mock_post):
+        mock_post.return_value.raise_for_status.side_effect = HTTPError("invalid credentials")
+        provider = InpiProvider()
+        provider._get_config_or_env = MagicMock(
+            side_effect=lambda key: {
+                "API_USERNAME": "user",
+                "API_PASSWORD": "bad-password",
+                "SSO_URL": "https://example.test/login",
+            }[key]
+        )
+
+        with pytest.raises(HTTPError, match="invalid credentials"):
+            provider._get_token()
+
+    @patch.object(InpiProvider, "_get_token", side_effect=["expired", "fresh"])
+    @patch("organizationatlas.providers.europe.france.inpi.requests.get")
+    def test_second_unauthorized_response_is_propagated(self, mock_get, _mock_token):
+        unauthorized = MagicMock(status_code=401)
+        unauthorized.raise_for_status.side_effect = HTTPError("unauthorized")
+        mock_get.return_value = unauthorized
+
+        with pytest.raises(HTTPError, match="unauthorized"):
+            InpiProvider()._call_api("https://example.test/company")
+
+        assert mock_get.call_count == 2

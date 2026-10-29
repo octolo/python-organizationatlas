@@ -1,6 +1,7 @@
 """Django settings for tests."""
 
 import os
+from importlib.util import find_spec
 from pathlib import Path
 
 # Build paths
@@ -94,8 +95,7 @@ STATIC_URL = "static/"
 # Default primary key field type
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
-try:
-    import djrichtextfield
+if find_spec("djrichtextfield") is not None:
     INSTALLED_APPS += [
         "djrichtextfield",
     ]
@@ -110,5 +110,3 @@ try:
             'width': 700
         }
     }
-except ImportError:
-    pass

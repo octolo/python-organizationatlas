@@ -89,10 +89,8 @@ class EntdatagouvProvider(OrganizationAtlasFranceProvider):
         if not code_type:
             return None
         code_clean = re.sub(r"[\s-]", "", code)
-        if code_type in ("siren", "siret"):
+        if code_type in ("siren", "siret", "rna"):
             return f"{self._get_config_or_env('BASE_URL')}/search?q={code_clean}"
-        if code_type == "rna":
-            return f"{self._get_config_or_env('BASE_URL')}/api/rna/v1/id/{code_clean}"
         return None
 
     def search_organization_by_reference(self, code: str, raw: bool = False, **kwargs: Any) -> dict[str, Any] | None:

@@ -7,6 +7,8 @@ from django.core.exceptions import ValidationError
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
+ORGANIZATIONATLAS_FIELDS_TEMPORAL = ["valid_from", "valid_to"]
+
 
 class TemporalValidityMixin(models.Model):
     """Adds a real-world validity period (depuis / jusqu'au) to a record.

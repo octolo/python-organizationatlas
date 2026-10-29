@@ -1,5 +1,7 @@
 """URL configuration for tests."""
 
+from importlib.util import find_spec
+
 import django
 import organizationatlas
 import django_organizationatlas
@@ -14,13 +16,10 @@ urlpatterns = [
     path("geoaddress/", include("django_geoaddress.urls")),
 ]
 
-try:
-    import djrichtextfield
+if find_spec("djrichtextfield") is not None:
     urlpatterns += [
         path("djrichtextfield/", include("djrichtextfield.urls")),
     ]
-except ImportError:
-    pass
 
 _version = f"(Django {django.get_version()}, organizationatlas {organizationatlas.__version__}/{django_organizationatlas.__version__})"
 admin.site.site_header = f"Django OrganizationAtlas - Administration {_version}"

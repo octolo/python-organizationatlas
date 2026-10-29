@@ -1,5 +1,8 @@
+import logging
+from datetime import date
+
 from django.contrib import admin, messages
-from django.core.exceptions import ValidationError
+from django.core.exceptions import PermissionDenied, ValidationError
 from django.db import IntegrityError
 from django.db.models import Q
 from django.shortcuts import redirect
@@ -12,11 +15,20 @@ from .history import with_history
 
 from ..fields import RichTextField
 from ..forms.organization import (
+    OrganizationHistoryForm,
     OrganizationRefreshForm,
+    history_provider_choices,
     organization_provider_choices,
     organization_provider_initial,
 )
-from ..helpers import fetch_organization_for_refresh, refresh_organization
+from ..helpers import (
+    _API_HISTORY_TRACE,
+    _API_TRACE,
+    _TIMELINE_EXCLUDED_DATA_TYPES,
+    fetch_organization_for_refresh,
+    load_organization_history,
+    refresh_organization,
+)
 from ..models.data import OrganizationAtlasData, OrganizationAtlasDataType
 from ..models.organization import ORGANIZATIONATLAS_FIELDS_COMPANY, OrganizationAtlasOrganization
 from ..models.reference import OrganizationAtlasReference
@@ -27,8 +39,60 @@ from ..models.source import (
 )
 from .address import OrganizationAtlasAddressInline
 from .data import OrganizationAtlasDataInline
+from .person import OrganizationAtlasPersonInline
 from .related_object import OrganizationAtlasRelatedObjectInline
 from .relation import OrganizationAtlasOrganizationRelationInline
+
+logger = logging.getLogger(__name__)
+
+
+class _TimelineAddress:
+    """Address row shaped like organization data so the timeline can mix both."""
+
+    def __init__(self, address):
+        self.valid_from = address.valid_from
+        self.valid_to = address.valid_to
+        self.data_type = "headquarters" if address.is_headquarters else "address"
+        self.value = str(address.address or "")
+        self.data_reference = ""
+        self._source_label = address.source_label()
+
+    def source_label(self):
+        return self._source_label
+
+
+def _timeline_entries(organization):
+    data = (
+        organization.to_organizationatlasdata.select_related("data_type")
+        .with_data_reference()
+        .exclude(data_type__data_type__in=_TIMELINE_EXCLUDED_DATA_TYPES)
+    )
+    entries = list(data)
+    for address in organization.to_organizationatlasaddress.all():
+        if not str(address.address or "").strip():
+            continue
+        entries.append(_TimelineAddress(address))
+    entries.sort(
+        key=lambda row: (
+            row.valid_from is None,
+            row.valid_from or date.min,
+            str(row.data_type),
+        )
+    )
+    return entries
+
+
+def _timeline_groups(rows):
+    groups = []
+    current_start = object()
+    current = None
+    for row in rows:
+        if row.valid_from != current_start:
+            current_start = row.valid_from
+            current = {"valid_from": row.valid_from, "rows": []}
+            groups.append(current)
+        current["rows"].append(row)
+    return groups
 
 
 @admin.register(OrganizationAtlasOrganization)
@@ -41,17 +105,13 @@ class OrganizationAtlasOrganizationAdmin(with_history(AdminBoostModel)):
     inlines = [
         OrganizationAtlasDataInline,
         OrganizationAtlasAddressInline,
+        OrganizationAtlasPersonInline,
         OrganizationAtlasOrganizationRelationInline,
         OrganizationAtlasRelatedObjectInline,
     ]
-    changeform_actions = {
-        "refresh_person": _("Refresh Persons"),
-        "refresh_address": _("Refresh Addresses"),
-        "refresh_data": _("Refresh Data"),
-        "refresh_event": _("Refresh Events"),
-        "refresh_document": _("Refresh Documents"),
-        "full_refresh": _("Full Refresh"),
-    }
+
+    def has_change_permission(self, request, obj=None):
+        return admin.ModelAdmin.has_change_permission(self, request, obj)
 
     def get_queryset(self, request):
         return super().get_queryset(request).with_headquarters()
@@ -76,17 +136,20 @@ class OrganizationAtlasOrganizationAdmin(with_history(AdminBoostModel)):
         return "-"
     headquarters_address_display.short_description = _("Headquarters Address")
 
-    def handle_refresh_person(self, request, object_id):
-        print("ok")
-
     @admin_boost_view("adminform", _("Refresh"))
     def refresh(self, request, obj, form=None):
+        if not self.has_change_permission(request, obj):
+            raise PermissionDenied
         if request.method == "POST" and form is not None and form.is_valid():
             provider_name = form.cleaned_data["provider"]
             try:
                 virtual = fetch_organization_for_refresh(obj.code, provider_name)
-            except Exception as exc:
-                messages.error(request, _("Refresh failed: %(error)s") % {"error": exc})
+            except Exception:
+                logger.exception(
+                    "Organization refresh failed",
+                    extra={"organization_id": obj.pk, "provider": provider_name},
+                )
+                messages.error(request, _("Organization refresh failed."))
                 return {"form": form}
             has_result = getattr(virtual, "denomination", None) or getattr(virtual, "reference", None)
             if virtual is None or not has_result:
@@ -105,6 +168,80 @@ class OrganizationAtlasOrganizationAdmin(with_history(AdminBoostModel)):
         choices = organization_provider_choices()
         initial = organization_provider_initial(obj.source, choices)
         return {"form": OrganizationRefreshForm(initial={"provider": initial})}
+
+    @admin_boost_view("adminform", _("Load history"), permission="change")
+    def load_history(self, request, obj, form=None):
+        if not self.has_change_permission(request, obj):
+            raise PermissionDenied
+        choices = history_provider_choices()
+        if request.method == "POST" and form is not None and form.is_valid():
+            provider_name = form.cleaned_data["provider"]
+            try:
+                count = load_organization_history(obj, provider_name)
+            except Exception:
+                logger.exception(
+                    "Organization history load failed",
+                    extra={"organization_id": obj.pk, "provider": provider_name},
+                )
+                messages.error(request, _("Organization history load failed."))
+                return {"form": form}
+            if not count:
+                messages.error(
+                    request,
+                    _("This provider returned no history for %(code)s.") % {"code": obj.code},
+                )
+                return {"form": form}
+            messages.success(
+                request,
+                _("Loaded %(count)s history values.") % {"count": count},
+            )
+            url = reverse(
+                "admin:django_organizationatlas_organizationatlasorganization_change",
+                args=[obj.pk],
+            )
+            return {"redirect_url": url}
+        if not choices:
+            messages.error(request, _("No provider exposes organization history."))
+            return redirect(self._organization_admin_url("change", obj.pk))
+        initial = organization_provider_initial(obj.source, choices)
+        if not initial and len(choices) == 1:
+            initial = choices[0][0]
+        return {"form": OrganizationHistoryForm(initial={"provider": initial})}
+
+    @admin_boost_view(
+        "message",
+        _("Timeline"),
+        template_name="django_organizationatlas/timeline.html",
+    )
+    def timeline(self, request, obj):
+        return {"groups": _timeline_groups(_timeline_entries(obj))}
+
+    @admin_boost_view("redirect", _("List data"))
+    def list_data(self, request, obj):
+        url = reverse("admin:django_organizationatlas_organizationatlasdata_changelist")
+        return f"{url}?organization_id={obj.pk}"
+
+    def _data_list_url(self, organization, data_type):
+        url = reverse("admin:django_organizationatlas_organizationatlasdata_changelist")
+        return f"{url}?organization_id={organization.pk}&data_type__data_type={data_type}"
+
+    @admin_boost_view("redirect", _("API trace"))
+    def list_api_trace(self, request, obj):
+        return self._data_list_url(obj, _API_TRACE)
+
+    @admin_boost_view("redirect", _("API history"))
+    def list_api_history(self, request, obj):
+        return self._data_list_url(obj, _API_HISTORY_TRACE)
+
+    @admin_boost_view("redirect", _("List address"))
+    def list_address(self, request, obj):
+        url = reverse("admin:django_organizationatlas_organizationatlasaddress_changelist")
+        return f"{url}?organization_id={obj.pk}"
+
+    @admin_boost_view("redirect", _("List relations"))
+    def list_relations(self, request, obj):
+        url = reverse("admin:django_organizationatlas_organizationatlasorganizationrelation_changelist")
+        return f"{url}?from_organization_id={obj.pk}"
 
     @admin_boost_view("message", _("Search Organization"))
     def search_organization(self, request):
@@ -157,7 +294,7 @@ class OrganizationAtlasOrganizationAdmin(with_history(AdminBoostModel)):
 
     @admin_boost_view(
         "list",
-        _("Add data from references"),
+        _("Add data"),
         requires_object=True,
         permission="change",
     )
@@ -213,13 +350,13 @@ class OrganizationAtlasOrganizationAdmin(with_history(AdminBoostModel)):
         }
 
     @admin_boost_view(
-        "redirect",
+        "confirm",
         _("Add"),
         requires_object=True,
         permission="change",
         hidden=True,
     )
-    def add_reference_data(self, request, obj):
+    def add_reference_data(self, request, obj, confirmed=False):
         denied = self._deny_data_change(request, obj)
         if denied is not None:
             return denied
@@ -238,7 +375,14 @@ class OrganizationAtlasOrganizationAdmin(with_history(AdminBoostModel)):
         list_url = self._organization_admin_url("add_data_references", obj.pk)
         if reference is None:
             messages.error(request, _("Unknown reference."))
-            return list_url
+            return redirect(list_url)
+        if not confirmed:
+            return {
+                "confirm": _(
+                    "Add reference %(reference)s to %(organization)s?"
+                )
+                % {"reference": reference, "organization": obj},
+            }
         saved_url = self._save_added_data(
             request,
             obj,
@@ -246,4 +390,4 @@ class OrganizationAtlasOrganizationAdmin(with_history(AdminBoostModel)):
             value=reference.code,
             reference=reference,
         )
-        return saved_url or list_url
+        return redirect(saved_url or list_url)

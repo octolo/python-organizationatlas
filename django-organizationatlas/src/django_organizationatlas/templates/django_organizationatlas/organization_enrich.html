@@ -1,0 +1,18 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Enrich {{ organization.pref_denomination }}</title>
+</head>
+<body>
+    <main>
+        <h1>Enrich {{ organization.pref_denomination }}</h1>
+        <p>The current organization data will be refreshed from {{ organization.source }}.</p>
+        <form method="post">
+            {% csrf_token %}
+            <button type="submit">Enrich organization</button>
+        </form>
+        <a href="{% url 'django_organizationatlas:organization-detail' organization.pk %}">Cancel</a>
+    </main>
+</body>
+</html>

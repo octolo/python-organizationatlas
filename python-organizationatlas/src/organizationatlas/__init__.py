@@ -47,6 +47,21 @@ ORGANIZATIONATLAS_GET_REFERENTIEL_FIELDS = {
     "priority": _f("Priority", "int"),
 }
 
+ORGANIZATIONATLAS_GET_ORGANIZATION_HISTORY_FIELDS = {
+    "field": _f("Field", description="Historized variable, such as denomination, legalform or ape"),
+    "value": _f("Value"),
+    "valid_from": _f("Valid from", "date"),
+    "valid_to": _f("Valid to", "date", "Empty when the value is still current"),
+    "scope": _f("Scope", description="legal_unit or establishment"),
+    "reference": _f("Reference"),
+    "siren": _f("SIREN"),
+    "siret": _f("SIRET"),
+    "country_code": _f("Country code"),
+    "organizationatlas_id": _ID_FIELD,
+    "backend": _f("Backend display name"),
+    "backend_name": _f("Simple backend name (e.g., insee)"),
+}
+
 __all__ = [
     "ORGANIZATIONATLAS_SEARCH_COMPANY_FIELDS",
     "ORGANIZATIONATLAS_GET_COMPANY_DOCUMENTS_FIELDS",
@@ -54,4 +69,5 @@ __all__ = [
     "ORGANIZATIONATLAS_GET_COMPANY_OFFICERS_FIELDS",
     "ORGANIZATIONATLAS_GET_ULTIMATE_BENEFICIAL_OWNERS_FIELDS",
     "ORGANIZATIONATLAS_GET_REFERENTIEL_FIELDS",
+    "ORGANIZATIONATLAS_GET_ORGANIZATION_HISTORY_FIELDS",
 ]

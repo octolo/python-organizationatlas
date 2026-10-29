@@ -49,3 +49,4 @@ get_organization_documents = _make_provider_call("get_organization_documents", "
 get_organization_events = _make_provider_call("get_organization_events", "code")
 get_organization_officers = _make_provider_call("get_organization_officers", "code")
 get_ultimate_beneficial_owners = _make_provider_call("get_ultimate_beneficial_owners", "code")
+get_organization_history = _make_provider_call("get_organization_history", "code")

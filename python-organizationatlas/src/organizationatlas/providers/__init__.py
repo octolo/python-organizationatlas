@@ -11,12 +11,14 @@ from .. import (
     ORGANIZATIONATLAS_GET_COMPANY_EVENTS_FIELDS,
     ORGANIZATIONATLAS_GET_COMPANY_OFFICERS_FIELDS,
     ORGANIZATIONATLAS_GET_ULTIMATE_BENEFICIAL_OWNERS_FIELDS,
+    ORGANIZATIONATLAS_GET_ORGANIZATION_HISTORY_FIELDS,
     ORGANIZATIONATLAS_GET_REFERENTIEL_FIELDS,
     ORGANIZATIONATLAS_SEARCH_COMPANY_FIELDS,
 )
 
 
 class OrganizationAtlasProvider(ProviderBase):
+    services_cfg: dict[str, dict[str, Any]]
     geo_zone = "world"
     geo_country = "world"
     geo_code = "ww"
@@ -64,7 +66,13 @@ class OrganizationAtlasProvider(ProviderBase):
             "description": "Get referentiel data (governance sources, legal frameworks, etc.)",
             "format": "list",
             "fields": ORGANIZATIONATLAS_GET_REFERENTIEL_FIELDS,
-        }
+        },
+        "get_organization_history": {
+            "label": "Get organization history",
+            "description": "Historized values exposed by the provider (denomination, legal form, activity, and the other period fields)",
+            "format": "list",
+            "fields": ORGANIZATIONATLAS_GET_ORGANIZATION_HISTORY_FIELDS,
+        },
     }
 
     @property
@@ -80,8 +88,10 @@ class OrganizationAtlasProvider(ProviderBase):
     def get_normalize_data_source(self, data: dict[str, Any]) -> str:
         return json.dumps(data, ensure_ascii=False, default=str)
 
-    def get_insert_normalized_organizationatlas_id(self, data: Any, normalized: dict[str, Any], _config: dict[str, Any]) -> float | None:
+    def get_insert_normalized_organizationatlas_id(self, data: Any, normalized: dict[str, Any], _config: dict[str, Any]) -> str | None:
         reference = normalized.get("reference")
+        if reference in (None, ""):
+            return None
         return f"{self.name}_{reference}"
 
     def response(self, *args: Any, **kwargs: Any) -> str:

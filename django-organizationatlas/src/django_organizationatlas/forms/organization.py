@@ -29,3 +29,23 @@ class OrganizationRefreshForm(forms.Form):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields["provider"].choices = organization_provider_choices()
+
+
+def history_provider_choices():
+    choices = []
+    for provider in OrganizationAtlasProviderModel.objects.all():
+        if getattr(provider, "abstract", False):
+            continue
+        if not getattr(provider, "has_get_organization_history", False):
+            continue
+        label = getattr(provider, "display_name", None) or provider.name
+        choices.append((provider.name, label))
+    return choices
+
+
+class OrganizationHistoryForm(forms.Form):
+    provider = forms.ChoiceField(label=_("Provider"))
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields["provider"].choices = history_provider_choices()

@@ -1,6 +1,10 @@
 """Organization data models."""
 
+import json
+from datetime import date
+from typing import Any
 
+from django.core.exceptions import ValidationError
 from django.db import models
 from django.db.models import Q
 from django.utils.translation import gettext_lazy as _
@@ -49,10 +53,15 @@ class OrganizationAtlasDataType(models.Model):
     @classmethod
     def for_key(cls, data_type: str, value_type: str = "str"):
         """Return the shared type, creating it with value_type only the first time."""
-        obj, _created = cls.objects.get_or_create(
+        obj, created = cls.objects.get_or_create(
             data_type=data_type,
             defaults={"value_type": value_type},
         )
+        if not created and obj.value_type != value_type:
+            raise ValueError(
+                f"data type {data_type!r} already uses value type "
+                f"{obj.value_type!r}, not {value_type!r}"
+            )
         return obj
 
 
@@ -104,6 +113,39 @@ class OrganizationAtlasData(TemporalValidityMixin, OrganizationAtlasSourceBase):
         ordering = ["data_type__data_type", "-created_at"]
 
     objects = OrganizationAtlasDataManager()
+
+    @property
+    def typed_value(self) -> Any:
+        value_type = self.data_type.value_type
+        if value_type == "str":
+            return self.value
+        if value_type == "int":
+            return int(self.value)
+        if value_type == "float":
+            return float(self.value)
+        if value_type == "bool":
+            normalized = self.value.strip().lower()
+            if normalized in {"true", "1", "yes", "on"}:
+                return True
+            if normalized in {"false", "0", "no", "off"}:
+                return False
+            raise ValueError("expected a boolean value")
+        if value_type == "date":
+            return date.fromisoformat(self.value)
+        if value_type == "json":
+            return json.loads(self.value)
+        raise ValueError(f"unsupported value type: {value_type}")
+
+    def clean(self):
+        super().clean()
+        if not self.data_type_id:
+            return
+        try:
+            self.typed_value
+        except (TypeError, ValueError, json.JSONDecodeError) as exc:
+            raise ValidationError(
+                {"value": _("Value does not match the declared data type.")}
+            ) from exc
 
     def __str__(self):
         return (

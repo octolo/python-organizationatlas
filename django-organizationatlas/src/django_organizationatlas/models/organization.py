@@ -1,5 +1,6 @@
 """Organization models with international and country-specific data."""
 
+from django.contrib.contenttypes.fields import GenericRelation
 from django.core.exceptions import ValidationError
 from django.db import models
 from django.utils.translation import gettext_lazy as _
@@ -66,8 +67,12 @@ class OrganizationAtlasOrganization(OrganizationAtlasSourceBase):
         verbose_name=_("Resume"),
         help_text=_("Organization resume"),
     )
+    stakeholder_relations_as_holder = GenericRelation(
+        "django_organizationatlas.OrganizationAtlasStakeholderRelation",
+        related_query_name="holder_organization",
+    )
 
-    objects = OrganizationAtlasOrganizationManager()
+    objects: OrganizationAtlasOrganizationManager = OrganizationAtlasOrganizationManager()
 
     class Meta:
         verbose_name = _("Organization")
@@ -75,6 +80,13 @@ class OrganizationAtlasOrganization(OrganizationAtlasSourceBase):
         ordering = ["-created_at"]
         indexes = [
             models.Index(fields=["-created_at"]),
+        ]
+        constraints = [
+            models.UniqueConstraint(
+                fields=["country_code", "code"],
+                nulls_distinct=False,
+                name="unique_organization_country_code",
+            ),
         ]
 
     def __str__(self):
@@ -86,7 +98,10 @@ class OrganizationAtlasOrganization(OrganizationAtlasSourceBase):
 
     @property
     def headquarters_address(self):
-        return self.to_organizationatlasaddress.filter(is_headquarters=True).first()
+        return self.to_organizationatlasaddress.filter(
+            is_headquarters=True,
+            valid_to__isnull=True,
+        ).first()
 
     def clean(self):
         if self.organization_type_id and self.organization_type.category.name != "organization_type":
@@ -94,5 +109,18 @@ class OrganizationAtlasOrganization(OrganizationAtlasSourceBase):
                 {"organization_type": _("Reference must belong to the 'organization_type' category.")}
             )
 
-    def enrich(self, force: bool = False) -> bool:
-        return False
+    def enrich(self) -> bool:
+        from ..helpers import fetch_organization_for_refresh, refresh_organization
+
+        if not self.code or not self.source:
+            return False
+        virtual = fetch_organization_for_refresh(self.code, self.source)
+        has_result = getattr(virtual, "denomination", None) or getattr(
+            virtual,
+            "reference",
+            None,
+        )
+        if virtual is None or not has_result:
+            return False
+        refresh_organization(self, virtual)
+        return True

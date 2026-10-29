@@ -1,0 +1,211 @@
+{% extends "admin/base_site.html" %}
+{% load i18n %}
+
+{% block extrastyle %}
+{{ block.super }}
+<style>
+  .oa-timeline {
+    position: relative;
+    list-style: none;
+    margin: 1.75rem 0 0;
+    padding: 0 0 1rem;
+  }
+  .oa-timeline::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 50%;
+    width: 4px;
+    margin-left: -2px;
+    background: var(--secondary);
+    border-radius: 2px;
+  }
+  .oa-timeline__item {
+    position: relative;
+    width: 50%;
+    box-sizing: border-box;
+    padding: 0 2.75rem 2rem 0;
+  }
+  .oa-timeline__item:nth-child(even) {
+    margin-left: 50%;
+    padding: 0 0 2rem 2.75rem;
+  }
+  .oa-timeline__dot {
+    position: absolute;
+    top: 12px;
+    width: 0;
+    height: 0;
+    border-style: solid;
+    z-index: 1;
+  }
+  .oa-timeline__item:nth-child(odd) .oa-timeline__dot {
+    right: 0;
+    border-width: 10px 18px 10px 0;
+    border-color: transparent var(--secondary) transparent transparent;
+  }
+  .oa-timeline__item:nth-child(even) .oa-timeline__dot {
+    left: 0;
+    border-width: 10px 0 10px 18px;
+    border-color: transparent transparent transparent var(--secondary);
+  }
+  .oa-timeline__card {
+    position: relative;
+    background: var(--darkened-bg);
+    border-radius: 6px;
+    padding: 14px 16px 8px;
+  }
+  .oa-timeline__card::after {
+    content: "";
+    position: absolute;
+    top: 14px;
+    border: 8px solid transparent;
+  }
+  .oa-timeline__item:nth-child(odd) .oa-timeline__card::after {
+    right: -8px;
+    border-left-color: var(--darkened-bg);
+    border-right: 0;
+  }
+  .oa-timeline__item:nth-child(even) .oa-timeline__card::after {
+    left: -8px;
+    border-right-color: var(--darkened-bg);
+    border-left: 0;
+  }
+  .oa-timeline__date {
+    position: absolute;
+    top: 13px;
+    margin: 0;
+    font-size: 15px;
+    font-weight: 600;
+    line-height: 1.2;
+    color: var(--link-fg);
+    white-space: nowrap;
+  }
+  .oa-timeline__item:nth-child(odd) .oa-timeline__date {
+    left: calc(100% + 1rem);
+  }
+  .oa-timeline__item:nth-child(even) .oa-timeline__date {
+    right: calc(100% + 1rem);
+    text-align: right;
+  }
+  .oa-timeline__entry {
+    display: grid;
+    grid-template-columns: 8.5rem minmax(0, 1fr);
+    column-gap: 0.75rem;
+    row-gap: 0.1rem;
+    padding: 0.45rem 0;
+    border-top: 1px solid var(--hairline-color);
+  }
+  .oa-timeline__entry:first-child {
+    border-top: 0;
+    padding-top: 0;
+  }
+  .oa-timeline__type {
+    font-weight: 600;
+    color: var(--body-fg);
+  }
+  .oa-timeline__value {
+    min-width: 0;
+    overflow-wrap: anywhere;
+    color: var(--body-loud-color);
+    font-weight: 600;
+  }
+  .oa-timeline__reference {
+    display: block;
+    margin-top: 0.15rem;
+    font-weight: 400;
+    color: var(--body-fg);
+  }
+  .oa-timeline__meta {
+    grid-column: 2;
+    color: var(--body-medium-color);
+    font-size: 12px;
+  }
+  @media (max-width: 960px) {
+    .oa-timeline::before {
+      left: 8px;
+      margin-left: 0;
+    }
+    .oa-timeline__item,
+    .oa-timeline__item:nth-child(even) {
+      width: 100%;
+      margin-left: 0;
+      padding: 0 0 1.5rem 2.5rem;
+    }
+    .oa-timeline__item:nth-child(odd) .oa-timeline__dot,
+    .oa-timeline__item:nth-child(even) .oa-timeline__dot {
+      left: 10px;
+      right: auto;
+      border-width: 10px 0 10px 18px;
+      border-color: transparent transparent transparent var(--secondary);
+    }
+    .oa-timeline__date,
+    .oa-timeline__item:nth-child(odd) .oa-timeline__date,
+    .oa-timeline__item:nth-child(even) .oa-timeline__date {
+      position: static;
+      margin: 0 0 0.35rem;
+      text-align: left;
+      white-space: normal;
+    }
+    .oa-timeline__item:nth-child(odd) .oa-timeline__card::after,
+    .oa-timeline__item:nth-child(even) .oa-timeline__card::after {
+      left: -8px;
+      right: auto;
+      border-right-color: var(--darkened-bg);
+      border-left: 0;
+      border-left-color: transparent;
+    }
+  }
+</style>
+{% endblock %}
+
+{% block breadcrumbs %}
+<div class="breadcrumbs">
+<a href="{% url 'admin:index' %}">{% trans 'Home' %}</a>
+&rsaquo; <a href="{{ changelist_url }}">{{ opts.verbose_name_plural|capfirst }}</a>
+&rsaquo; <a href="{{ original_url }}">{{ original }}</a>
+&rsaquo; {{ title }}
+</div>
+{% endblock %}
+
+{% block content %}
+{% if groups %}
+  <ol class="oa-timeline">
+    {% for group in groups %}
+      <li class="oa-timeline__item">
+        <span class="oa-timeline__dot" aria-hidden="true"></span>
+        <h2 class="oa-timeline__date">
+          {% if group.valid_from %}
+            {{ group.valid_from|date:"Y-m-d" }}
+          {% else %}
+            {% trans "No start date" %}
+          {% endif %}
+        </h2>
+        <article class="oa-timeline__card">
+          {% for row in group.rows %}
+            <div class="oa-timeline__entry">
+              <div class="oa-timeline__type">{{ row.data_type }}</div>
+              <div class="oa-timeline__value">
+                {{ row.value }}
+                {% if row.data_reference %}
+                  <span class="oa-timeline__reference">{{ row.data_reference }}</span>
+                {% endif %}
+              </div>
+              <div class="oa-timeline__meta">
+                {% if row.valid_to %}
+                  {% blocktrans with end=row.valid_to|date:"Y-m-d" %}until {{ end }}{% endblocktrans %}
+                {% else %}
+                  {% trans "Current" %}
+                {% endif %}
+                · {{ row.source_label }}
+              </div>
+            </div>
+          {% endfor %}
+        </article>
+      </li>
+    {% endfor %}
+  </ol>
+{% else %}
+  <p>{% trans "No data for this organization." %}</p>
+{% endif %}
+{% endblock %}

@@ -1,6 +1,7 @@
 """Organization address models."""
 
 from django.db import models
+from django.db.models import Q
 from django.utils.translation import gettext_lazy as _
 from django_geoaddress.fields import GeoaddressField
 
@@ -35,6 +36,13 @@ class OrganizationAtlasAddress(TemporalValidityMixin, OrganizationAtlasSourceBas
         indexes = [
             models.Index(fields=["organization", "address"]),
             models.Index(fields=["organization", "is_headquarters"]),
+        ]
+        constraints = [
+            models.UniqueConstraint(
+                fields=["organization"],
+                condition=Q(is_headquarters=True, valid_to__isnull=True),
+                name="unique_open_headquarters_address",
+            ),
         ]
         ordering = ["-is_headquarters", "-created_at"]
 

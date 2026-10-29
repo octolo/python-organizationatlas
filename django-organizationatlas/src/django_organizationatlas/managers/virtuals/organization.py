@@ -18,9 +18,9 @@ class OrganizationAtlasVirtualOrganizationManager(BaseServiceProviderManager):
         return self.get_queryset_command('search_organization', query=query, first=first, **kwargs)
 
     def search_organization_by_reference(self, code: str, **kwargs: Any) -> Any:
-        code = code.split("_")
-        reference = code[-1]
-        backend = "_".join(code[:-1])
+        code_parts = code.split("_")
+        reference = code_parts[-1]
+        backend = "_".join(code_parts[:-1])
         return self.get_queryset_command(
             'search_organization_by_reference',
             code=reference,

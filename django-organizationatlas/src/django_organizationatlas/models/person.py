@@ -1,3 +1,4 @@
+from django.contrib.contenttypes.fields import GenericRelation
 from django.core.exceptions import ValidationError
 from django.db import models
 from django.db.models import Q
@@ -59,6 +60,10 @@ class OrganizationAtlasPerson(OrganizationAtlasSourceBase):
         limit_choices_to=Q(category__name__in=GENDER_CATEGORIES),
         verbose_name=_("Gender"),
         help_text=_("Gender or holding status of the person"),
+    )
+    stakeholder_relations = GenericRelation(
+        "django_organizationatlas.OrganizationAtlasStakeholderRelation",
+        related_query_name="person",
     )
 
     class Meta:

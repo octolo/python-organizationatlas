@@ -54,8 +54,13 @@ class OrganizationAtlasOrganizationRelation(TemporalValidityMixin, OrganizationA
         constraints = [
             models.UniqueConstraint(
                 fields=["from_organization", "to_organization", "relation_type"],
-                condition=Q(valid_to__isnull=True),
+                condition=Q(valid_to__isnull=True, relation_type__isnull=False),
                 name="unique_open_organization_relation",
+            ),
+            models.UniqueConstraint(
+                fields=["from_organization", "to_organization"],
+                condition=Q(valid_to__isnull=True, relation_type__isnull=True),
+                name="unique_open_untyped_organization_relation",
             ),
         ]
 

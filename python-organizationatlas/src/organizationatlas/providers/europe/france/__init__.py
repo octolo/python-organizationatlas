@@ -7,7 +7,7 @@ from .. import OrganizationAtlasEuropeProvider
 FRANCE_SEARCH_FIELDS = {
     "siren": _f("SIREN", description="SIREN number (9 digits, French organization identifier)"),
     "siret": _f("SIRET", description="SIRET number (14 digits, French establishment identifier)"),
-    "rna": _f("RNA", description="RNA number (W + 8 digits, French association identifier)"),
+    "rna": _f("RNA", description="RNA number (W + 9 digits, French association identifier)"),
     "ape": _f("Core business", description="APE code (French activity code, NAF)"),
     "ape_noun": _f("Ape noun", description="APE nomenclature (e.g., NAFRev2)"),
     "legalform": _f("Legal form", description="Legal form code or description"),
@@ -28,7 +28,7 @@ FRANCE_SEARCH_FIELDS = {
 _CODE_PATTERNS: dict[str, tuple[str, int, bool]] = {
     "siret": (r"^\d{14}$", 14, False),
     "siren": (r"^\d{9}$", 9, False),
-    "rna":   (r"^W|w\d{8}$", 9, True),
+    "rna": (r"^[Ww]\d{9}$", 10, True),
 }
 
 
@@ -57,9 +57,8 @@ class OrganizationAtlasFranceProvider(OrganizationAtlasEuropeProvider):
         return bool(re.match(pattern, self._clean_code(code, upper)))
 
     def _format_code(self, code: str, kind: str) -> str:
-        _, length, upper = _CODE_PATTERNS[kind]
-        cleaned = self._clean_code(code, upper)
-        return cleaned[:length] if len(cleaned) >= length else cleaned
+        _, _, upper = _CODE_PATTERNS[kind]
+        return self._clean_code(code, upper)
 
     def is_siret(self, query: str) -> bool:
         return bool(query) and self._matches_pattern(query, "siret")

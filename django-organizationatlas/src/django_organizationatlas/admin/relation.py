@@ -6,14 +6,22 @@ from .history import with_history
 
 from ..models.relation import OrganizationAtlasOrganizationRelation
 from ..models.source import ORGANIZATIONATLAS_FIELDS_AUDIT, ORGANIZATIONATLAS_FIELDS_SOURCE
+from ..models.temporal import ORGANIZATIONATLAS_FIELDS_TEMPORAL
 
 
 class OrganizationAtlasOrganizationRelationInline(admin.TabularInline):
     model = OrganizationAtlasOrganizationRelation
     fk_name = "from_organization"
     extra = 1
-    fields = ["to_organization", "relation_type", "other", "source_label"]
-    readonly_fields = ["source_label"]
+    fields = [
+        "to_organization",
+        "relation_type",
+        "other",
+        "valid_from",
+        "valid_to",
+        "source_label",
+    ]
+    readonly_fields = ["valid_from", "source_label"]
     raw_id_fields = ["to_organization"]
 
 
@@ -34,12 +42,12 @@ class OrganizationAtlasOrganizationRelationAdmin(with_history(AdminBoostModel)):
         "to_organization__code",
         "other",
     ]
-    readonly_fields = [*ORGANIZATIONATLAS_FIELDS_AUDIT, "source_label"]
+    readonly_fields = [*ORGANIZATIONATLAS_FIELDS_AUDIT, *ORGANIZATIONATLAS_FIELDS_TEMPORAL, "source_label"]
     raw_id_fields = ["from_organization", "to_organization"]
 
     def change_fieldsets(self):
         self.add_to_fieldset(
             None,
-            ["from_organization", "to_organization", "relation_type", "other", "valid_from", "valid_to"],
+            ["from_organization", "to_organization", "relation_type", "other", *ORGANIZATIONATLAS_FIELDS_TEMPORAL],
         )
         self.add_to_fieldset(_("Source"), ORGANIZATIONATLAS_FIELDS_SOURCE)

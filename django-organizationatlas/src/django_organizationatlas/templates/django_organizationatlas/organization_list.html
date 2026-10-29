@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Organizations</title>
+</head>
+<body>
+    <main>
+        <h1>Organizations</h1>
+        <ul>
+            {% for organization in organizations %}
+                <li>
+                    <a href="{% url 'django_organizationatlas:organization-detail' organization.pk %}">
+                        {{ organization.pref_denomination }}
+                    </a>
+                </li>
+            {% empty %}
+                <li>No organization available.</li>
+            {% endfor %}
+        </ul>
+        <nav aria-label="Pagination">
+            {% if organizations.has_previous %}
+                <a href="?page={{ organizations.previous_page_number }}">Previous</a>
+            {% endif %}
+            <span>Page {{ organizations.number }} of {{ organizations.paginator.num_pages }}</span>
+            {% if organizations.has_next %}
+                <a href="?page={{ organizations.next_page_number }}">Next</a>
+            {% endif %}
+        </nav>
+    </main>
+</body>
+</html>

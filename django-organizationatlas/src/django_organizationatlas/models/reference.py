@@ -82,7 +82,7 @@ class OrganizationAtlasReference(OrganizationAtlasSourceBase):
         default=0,
     )
 
-    objects = OrganizationAtlasReferenceManager()
+    objects: OrganizationAtlasReferenceManager = OrganizationAtlasReferenceManager()
 
     class Meta:
         verbose_name = _("Reference")

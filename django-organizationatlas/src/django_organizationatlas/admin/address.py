@@ -6,13 +6,14 @@ from .history import with_history
 
 from ..models.address import OrganizationAtlasAddress
 from ..models.source import ORGANIZATIONATLAS_FIELDS_AUDIT, ORGANIZATIONATLAS_FIELDS_SOURCE
+from ..models.temporal import ORGANIZATIONATLAS_FIELDS_TEMPORAL
 
 
 class OrganizationAtlasAddressInline(admin.TabularInline):
     model = OrganizationAtlasAddress
     extra = 1
-    fields = ["address", "is_headquarters", "source_label"]
-    readonly_fields = ["source_label"]
+    fields = ["address", "is_headquarters", "valid_from", "valid_to", "source_label"]
+    readonly_fields = ["valid_from", "source_label"]
 
 
 @admin.register(OrganizationAtlasAddress)
@@ -26,11 +27,13 @@ class OrganizationAtlasAddressAdmin(with_history(AdminBoostModel)):
     ]
     list_filter = ["source", "country_code", "is_headquarters", "created_at"]
     search_fields = ["organization__denomination", "organization__to_organizationatlasdata__value"]
-    readonly_fields = [*ORGANIZATIONATLAS_FIELDS_AUDIT, "source_label"]
+    readonly_fields = [*ORGANIZATIONATLAS_FIELDS_AUDIT, *ORGANIZATIONATLAS_FIELDS_TEMPORAL, "source_label"]
     raw_id_fields = ["organization"]
 
     def change_fieldsets(self):
-        self.add_to_fieldset(None, ("organization", "address", "is_headquarters"))
+        self.add_to_fieldset(
+            None, ("organization", "address", "is_headquarters", *ORGANIZATIONATLAS_FIELDS_TEMPORAL)
+        )
         self.add_to_fieldset(_("source"), ORGANIZATIONATLAS_FIELDS_SOURCE)
 
     def address_display(self, obj: OrganizationAtlasAddress) -> str:

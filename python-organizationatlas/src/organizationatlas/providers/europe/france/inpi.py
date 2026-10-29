@@ -103,33 +103,39 @@ class InpiProvider(OrganizationAtlasFranceProvider):
         super().__init__(**kwargs)
         self._token: str | None = None
 
-    def _get_token(self) -> str | None:
+    def _get_token(self) -> str:
         if self._token:
             return self._token
         username = self._get_config_or_env("API_USERNAME")
         password = self._get_config_or_env("API_PASSWORD")
         if not username or not password:
-            return None
-        try:
-            response = requests.post(
-                self._get_config_or_env("SSO_URL"),
-                json={"username": username, "password": password},
-                headers={"Content-Type": "application/json"},
-                timeout=10,
-            )
-            response.raise_for_status()
-            data = response.json()
-            self._token = data.get("token") or data.get("access_token")
-            return self._token
-        except Exception:
-            return None
+            raise ValueError("INPI API_USERNAME and API_PASSWORD are required")
+        response = requests.post(
+            self._get_config_or_env("SSO_URL"),
+            json={"username": username, "password": password},
+            headers={"Content-Type": "application/json"},
+            timeout=10,
+        )
+        response.raise_for_status()
+        data = response.json()
+        token = data.get("token") or data.get("access_token")
+        if not token:
+            raise ValueError("INPI authentication response does not contain a token")
+        self._token = str(token)
+        return self._token
 
     def _call_api(self, url: str, params: dict[str, Any] | None = None) -> dict[str, Any] | list[dict[str, Any]] | None:
         token = self._get_token()
-        if not token:
-            return None
         headers = {"Authorization": f"Bearer {token}", "Accept": "application/json"}
         response = requests.get(url, headers=headers, params=params, timeout=10)
+        if response.status_code == 401:
+            self._token = None
+            token = self._get_token()
+            headers = {
+                "Authorization": f"Bearer {token}",
+                "Accept": "application/json",
+            }
+            response = requests.get(url, headers=headers, params=params, timeout=10)
         response.raise_for_status()
         return cast("dict[str, Any] | list[dict[str, Any]]", response.json())
 
@@ -139,6 +145,28 @@ class InpiProvider(OrganizationAtlasFranceProvider):
             return content
         return self._get_nested_value(data, "formality.content")
 
+    @staticmethod
+    def _principal_from_establishments(establishments: Any) -> dict[str, Any] | None:
+        if not isinstance(establishments, list):
+            return None
+        for establishment in establishments:
+            if not isinstance(establishment, dict):
+                continue
+            description = establishment.get("descriptionEtablissement") or {}
+            if description.get("indicateurEtablissementPrincipal"):
+                return establishment
+        return establishments[0] if establishments and isinstance(establishments[0], dict) else None
+
+    def _principal_from_person(self, person: dict[str, Any]) -> dict[str, Any] | None:
+        principal = person.get("etablissementPrincipal")
+        if isinstance(principal, dict):
+            return principal
+        for key in ("autresEtablissements", "etablissements"):
+            principal = self._principal_from_establishments(person.get(key))
+            if principal:
+                return principal
+        return None
+
     def _principal_establishment(self, data: dict[str, Any]) -> dict[str, Any] | None:
         content = self._content_root(data)
         if not content:
@@ -147,21 +175,9 @@ class InpiProvider(OrganizationAtlasFranceProvider):
             person = content.get(person_key)
             if not isinstance(person, dict):
                 continue
-            principal = person.get("etablissementPrincipal")
-            if isinstance(principal, dict):
+            principal = self._principal_from_person(person)
+            if principal:
                 return principal
-            for key in ("autresEtablissements", "etablissements"):
-                establishments = person.get(key)
-                if not isinstance(establishments, list):
-                    continue
-                for establishment in establishments:
-                    if not isinstance(establishment, dict):
-                        continue
-                    description = establishment.get("descriptionEtablissement") or {}
-                    if description.get("indicateurEtablissementPrincipal"):
-                        return establishment
-                if establishments and isinstance(establishments[0], dict):
-                    return establishments[0]
         return None
 
     def _person_name_from_description(self, description: dict[str, Any] | None) -> str | None:
@@ -193,26 +209,28 @@ class InpiProvider(OrganizationAtlasFranceProvider):
                     return name
         return None
 
+    @staticmethod
+    def _trade_name(establishment: dict[str, Any] | None) -> str | None:
+        if not establishment:
+            return None
+        description = establishment.get("descriptionEtablissement") or {}
+        for key in ("nomCommercial", "enseigne", "nomExploitation"):
+            value = description.get(key)
+            if value:
+                return str(value)
+        return None
+
     def get_normalize_denomination(self, data: dict[str, Any]) -> str | None:
         denomination = self._get_nested_value(data, self.fields_associations["denomination"])
         if denomination:
             return str(denomination)
 
         establishment = self._principal_establishment(data)
-        if establishment:
-            description = establishment.get("descriptionEtablissement") or {}
-            for key in ("nomCommercial", "enseigne", "nomExploitation"):
-                value = description.get(key)
-                if value:
-                    return str(value)
+        trade_name = self._trade_name(establishment)
+        if trade_name:
+            return trade_name
 
-        person_name = self._denomination_from_entrepreneur(data)
-        if person_name and establishment:
-            description = establishment.get("descriptionEtablissement") or {}
-            trade_name = description.get("nomCommercial") or description.get("enseigne")
-            if trade_name and trade_name.upper() not in person_name.upper():
-                return f"{person_name} ({trade_name})"
-        return person_name
+        return self._denomination_from_entrepreneur(data)
 
     def _usable_address(self, addr: Any) -> dict[str, Any] | None:
         if not isinstance(addr, dict):
@@ -242,10 +260,14 @@ class InpiProvider(OrganizationAtlasFranceProvider):
         numero = str(addr.get("numVoie") or "").strip()
         type_voie = str(addr.get("typeVoie") or "").strip()
         voie = str(addr.get("voie") or "").strip()
-        if voie and numero and (voie == numero or voie.startswith(f"{numero} ")):
+        if self._street_has_number(voie, numero):
             return voie
         parts = [part for part in (numero, type_voie, voie) if part]
         return " ".join(parts) or None
+
+    @staticmethod
+    def _street_has_number(voie: str, numero: str) -> bool:
+        return bool(voie and numero and (voie == numero or voie.startswith(f"{numero} ")))
 
     def _country_code(self, code: Any) -> str:
         value = str(code or "").strip().upper()
@@ -253,10 +275,7 @@ class InpiProvider(OrganizationAtlasFranceProvider):
             return self.geo_code
         return value[:2]
 
-    def get_normalize_address_json(self, data: dict[str, Any]) -> dict[str, Any] | None:
-        addr = self._address_record(data)
-        if not addr:
-            return None
+    def _address_payload(self, addr: dict[str, Any]) -> dict[str, Any]:
         payload = {
             "address_line1": self._street_line(addr),
             "address_line2": str(addr.get("complementLocalisation") or "").strip() or None,
@@ -265,7 +284,13 @@ class InpiProvider(OrganizationAtlasFranceProvider):
             "country": addr.get("pays") or self.geo_country,
             "country_code": self._country_code(addr.get("codePays")),
         }
-        payload = {key: value for key, value in payload.items() if value not in (None, "")}
+        return {key: value for key, value in payload.items() if value not in (None, "")}
+
+    def get_normalize_address_json(self, data: dict[str, Any]) -> dict[str, Any] | None:
+        addr = self._address_record(data)
+        if not addr:
+            return None
+        payload = self._address_payload(addr)
         if not any(payload.get(key) for key in ("address_line1", "postal_code", "city")):
             return None
         return payload
@@ -280,8 +305,8 @@ class InpiProvider(OrganizationAtlasFranceProvider):
             payload.get("postal_code"),
             payload.get("city"),
         ]
-        parts = [str(part) for part in parts if part]
-        return ", ".join(parts) if parts else None
+        text_parts = [str(part) for part in parts if part]
+        return ", ".join(text_parts) if text_parts else None
 
     def get_normalize_description(self, data: dict[str, Any]) -> str | None:
         activite = (
@@ -299,30 +324,16 @@ class InpiProvider(OrganizationAtlasFranceProvider):
         parts = [p for p in [activite, nature] if p]
         return " - ".join(parts) if parts else None
 
-    def _has_denomination(self, data: dict[str, Any]) -> bool:
-        return bool(self.get_normalize_denomination(data))
-
-    def _hydrate_company(self, item: dict[str, Any] | str) -> dict[str, Any] | None:
-        if isinstance(item, str):
-            return self.search_organization_by_reference(item)
-        if not isinstance(item, dict):
-            return None
-        if self._has_denomination(item):
-            return item
-        siren = item.get("siren")
-        if not siren:
-            siren = self._get_nested_value(
-                item,
-                (
-                    "content.personneMorale.identite.entreprise.siren",
-                    "formality.content.personneMorale.identite.entreprise.siren",
-                ),
-            )
-        if siren:
-            detail = self.search_organization_by_reference(str(siren))
-            if detail:
-                return detail
-        return item
+    def get_normalize_registry_type(self, data: dict[str, Any]) -> str | None:
+        present = self._get_nested_value(
+            data,
+            self.fields_associations["registry_type"],
+        )
+        if present is True or (
+            isinstance(present, str) and present.strip().lower() == "true"
+        ):
+            return "RNCS"
+        return None
 
     def _companies_api_url(self) -> str:
         return f"{self._get_config_or_env('BASE_URL')}/api/companies"
@@ -349,13 +360,7 @@ class InpiProvider(OrganizationAtlasFranceProvider):
             self._companies_api_url(),
             params={"companyName": query, "page": 1, "pageSize": 20},
         )
-        companies = self._extract_companies(result)
-        hydrated: list[dict[str, Any]] = []
-        for item in companies:
-            company = self._hydrate_company(item)
-            if company:
-                hydrated.append(company)
-        return hydrated
+        return self._extract_companies(result)
 
     def search_organization_by_reference(self, code: str, raw: bool = False, **kwargs: Any) -> dict[str, Any] | None:
         if not code:
@@ -363,4 +368,5 @@ class InpiProvider(OrganizationAtlasFranceProvider):
         siren = self._format_siren(code)
         if not self._validate_siren(siren):
             return None
-        return self._call_api(f"{self._companies_api_url()}/{siren}")
+        result = self._call_api(f"{self._companies_api_url()}/{siren}")
+        return result if isinstance(result, dict) else None
