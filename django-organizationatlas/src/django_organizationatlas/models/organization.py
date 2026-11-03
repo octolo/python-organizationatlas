@@ -59,7 +59,8 @@ class OrganizationAtlasOrganization(OrganizationAtlasSourceBase):
         help_text=_("Organization code"),
     )
     named_id = NamedIDField(
-        source_fields=["pref_denomination", "code"],
+        source_fields=["truncate_denomination", "code"],
+        max_length=40,
         verbose_name=_("Named ID"),
         help_text=_("Named ID"),
     )
@@ -113,6 +114,16 @@ class OrganizationAtlasOrganization(OrganizationAtlasSourceBase):
     @property
     def pref_denomination(self):
         return self.short_denomination or self.denomination
+
+    @property
+    def truncate_denomination(self):
+        """Short name when set, otherwise the denomination, cut to fit in named_id."""
+        name = self.short_denomination or self.denomination or ""
+        code = self.code or ""
+        field = self._meta.get_field("named_id")
+        reserved = len(code) + (len(field.separator) if code else 0)
+        limit = max(field.max_length - reserved, 0)
+        return name[:limit]
 
     @property
     def headquarters_address(self):
