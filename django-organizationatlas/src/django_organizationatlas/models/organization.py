@@ -10,6 +10,24 @@ from ..fields import RichTextField
 from ..managers.organization import OrganizationAtlasOrganizationManager
 from .source import OrganizationAtlasSourceBase
 
+def _rule_reference_filters(category: str, code: str) -> dict:
+    """Split ``fr/DECISIONS`` into a country and a category name."""
+    raw = (category or "").strip()
+    country_code, separator, name = raw.partition("/")
+    if not separator:
+        name = raw
+        country_code = ""
+    filters = {
+        "code": (code or "").strip(),
+        "category__name": name.strip(),
+    }
+    if country_code.strip():
+        filters["category__country_code__iexact"] = country_code.strip()
+    else:
+        filters["category__country_code"] = ""
+    return filters
+
+
 ORGANIZATIONATLAS_FIELDS_COMPANY = [
     "denomination",
     "short_denomination",
@@ -102,6 +120,26 @@ class OrganizationAtlasOrganization(OrganizationAtlasSourceBase):
             is_headquarters=True,
             valid_to__isnull=True,
         ).first()
+
+    def rule_value(self, category: str, code: str) -> str:
+        """Current value of a company rule, or the reference default when none is set."""
+        from .reference import OrganizationAtlasReference
+
+        reference = OrganizationAtlasReference.objects.filter(
+            **_rule_reference_filters(category, code),
+        ).order_by("-priority").first()
+        if reference is None:
+            return ""
+        current = (
+            self.to_organizationatlasdata.filter(reference=reference, valid_to__isnull=True)
+            .order_by("-created_at", "-pk")
+            .values_list("value", flat=True)
+            .first()
+        )
+        value = (current or "").strip()
+        if value:
+            return value
+        return reference.default_value
 
     def clean(self):
         if self.organization_type_id and self.organization_type.category.name != "organization_type":

@@ -13,17 +13,19 @@ from ..forms.reference import ReferenceImportForm
 from ..models.reference import OrganizationAtlasReference, OrganizationAtlasReferenceCategory
 from ..models.source import ORGANIZATIONATLAS_FIELDS_AUDIT, ORGANIZATIONATLAS_FIELDS_SOURCE
 from ..services.reference import (
+    import_csv_file,
     import_reference_rows,
     list_fixtures,
-    read_csv,
     read_csv_file,
     resolve_fixture,
 )
 
 base_fields = [
     "category",
+    "source_category",
     "code",
     "description",
+    "default_value",
     "characteristics",
     "priority",
     "used_count",
@@ -32,9 +34,9 @@ base_fields = [
 
 @admin.register(OrganizationAtlasReferenceCategory)
 class OrganizationAtlasReferenceCategoryAdmin(with_history(AdminBoostModel)):
-    list_display = ["name", "country_code", "reference_count"]
+    list_display = ["name", "description", "country_code", "reference_count"]
     list_filter = ["country_code"]
-    search_fields = ["name", "country_code"]
+    search_fields = ["name", "description", "country_code"]
     readonly_fields = ["reference_count"]
 
     def get_queryset(self, request):
@@ -45,7 +47,7 @@ class OrganizationAtlasReferenceCategoryAdmin(with_history(AdminBoostModel)):
         return getattr(obj, "sql_reference_count", "—")
 
     def change_fieldsets(self):
-        self.add_to_fieldset(None, ["name", "country_code", "reference_count"])
+        self.add_to_fieldset(None, ["name", "description", "country_code", "reference_count"])
 
 
 @admin.register(OrganizationAtlasReference)
@@ -60,10 +62,15 @@ class OrganizationAtlasReferenceAdmin(with_history(AdminBoostModel)):
         "characteristics",
     ]
     readonly_fields = [*ORGANIZATIONATLAS_FIELDS_AUDIT, "source_label", "used_count"]
-    raw_id_fields = ["category"]
+    raw_id_fields = ["category", "source_category"]
 
     def get_queryset(self, request):
-        return super().get_queryset(request).select_related("category").with_usage_count()
+        return (
+            super()
+            .get_queryset(request)
+            .select_related("category", "source_category")
+            .with_usage_count()
+        )
 
     @admin.display(description=_("Code"), ordering="code")
     def code_label(self, obj):
@@ -155,7 +162,7 @@ class OrganizationAtlasReferenceAdmin(with_history(AdminBoostModel)):
             return redirect(self._changelist_url())
         if confirmed:
             try:
-                created_count, updated_count = import_reference_rows(read_csv(csv_path))
+                created_count, updated_count = import_csv_file(csv_path)
             except (CommandError, UnicodeDecodeError) as error:
                 messages.error(request, str(error))
                 return redirect(self._changelist_url())

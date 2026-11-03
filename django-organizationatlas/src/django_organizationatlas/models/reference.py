@@ -21,6 +21,12 @@ class OrganizationAtlasReferenceCategory(models.Model):
         verbose_name=_("Country code"),
         help_text=_("ISO country code this category belongs to"),
     )
+    description = models.TextField(
+        blank=True,
+        default="",
+        verbose_name=_("Description"),
+        help_text=_("Category label"),
+    )
 
     objects = OrganizationAtlasReferenceCategoryManager()
 
@@ -59,6 +65,15 @@ class OrganizationAtlasReference(OrganizationAtlasSourceBase):
         verbose_name=_("Category"),
         help_text=_("Category this code belongs to"),
     )
+    source_category = models.ForeignKey(
+        OrganizationAtlasReferenceCategory,
+        on_delete=models.SET_NULL,
+        related_name="source_references",
+        null=True,
+        blank=True,
+        verbose_name=_("Source category"),
+        help_text=_("Optional source category, for example law, articles or a shareholders' agreement"),
+    )
     code = models.CharField(
         max_length=255,
         verbose_name=_("Code"),
@@ -80,6 +95,13 @@ class OrganizationAtlasReference(OrganizationAtlasSourceBase):
         verbose_name=_("Priority"),
         help_text=_("Reference priority"),
         default=0,
+    )
+    default_value = models.CharField(
+        max_length=255,
+        blank=True,
+        default="",
+        verbose_name=_("Default value"),
+        help_text=_("Optional default value. Empty when the reference has none, for example 50% for a majority."),
     )
 
     objects: OrganizationAtlasReferenceManager = OrganizationAtlasReferenceManager()

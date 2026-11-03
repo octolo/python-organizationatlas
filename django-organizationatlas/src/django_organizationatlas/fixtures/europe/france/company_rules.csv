@@ -1,0 +1,24 @@
+category;code;description;country_code;source;default_value;source_category;priority
+DECISIONS;ORDINARY_MAJORITY;Majorité des décisions ordinaires;FR;organizationatlas;50%;;23
+DECISIONS;EXTRAORDINARY_MAJORITY;Majorité des décisions extraordinaires;FR;organizationatlas;50%;;22
+DECISIONS;QUORUM;Quorum;FR;organizationatlas;;;21
+DECISIONS;VOTE_METHOD;Modalités de vote;FR;organizationatlas;;;20
+DECISIONS;REMOTE_MEETING;Participation à distance;FR;organizationatlas;;;19
+STATUTES;VOTING_RIGHTS;Droits de vote;FR;organizationatlas;;;18
+STATUTES;SHARE_TYPES;Catégories de titres;FR;organizationatlas;;;17
+STATUTES;SHARE_TRANSFER;Règles de cession de titres;FR;organizationatlas;;;16
+STATUTES;APPROVAL;Clause d'agrément;FR;organizationatlas;;;15
+STATUTES;PREEMPTION;Droit de préemption;FR;organizationatlas;;;14
+STATUTES;LOCK_UP;Clause d'inaliénabilité;FR;organizationatlas;;;13
+GOVERNANCE;PRESIDENT;Président ou dirigeant principal;FR;organizationatlas;;;12
+GOVERNANCE;MANAGER;Gérant;FR;organizationatlas;;;11
+GOVERNANCE;DIRECTOR_TERM;Durée du mandat;FR;organizationatlas;;;10
+GOVERNANCE;POWERS;Pouvoirs du dirigeant;FR;organizationatlas;;;9
+GOVERNANCE;DELEGATION;Délégation de pouvoirs ou de signature;FR;organizationatlas;;;8
+STATUTES;RESULT_ALLOCATION;Affectation du résultat;FR;organizationatlas;;;7
+CONTRACTS;SHAREHOLDERS_AGREEMENT;Pacte d'associés existant;FR;organizationatlas;;;6
+CONTRACTS;CONTRACTUAL_APPROVAL;Agrément prévu par un accord;FR;organizationatlas;;;5
+CONTRACTS;CONTRACTUAL_PREEMPTION;Préemption contractuelle;FR;organizationatlas;;;4
+CONTRACTS;CONFIDENTIALITY;Engagement de confidentialité;FR;organizationatlas;;;3
+LEGAL;LEGAL_DEFAULT_RULE;Règle légale applicable par défaut;FR;organizationatlas;;;2
+LEGAL;OTHER_RULE;Autre règle;FR;organizationatlas;;;1

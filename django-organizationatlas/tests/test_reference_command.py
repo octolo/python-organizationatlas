@@ -9,7 +9,7 @@ from django_organizationatlas.models import (
     OrganizationAtlasReference,
     OrganizationAtlasReferenceCategory,
 )
-from django_organizationatlas.services.reference import read_csv
+from django_organizationatlas.services.reference import fixtures_root, read_csv
 
 
 def test_read_csv_supports_mixed_columns(tmp_path):
@@ -199,6 +199,39 @@ def test_library_confirm_loads_and_reloads_fixture(client):
     assert reloaded.status_code == 302
     assert OrganizationAtlasReference.objects.filter(category__name="legalform").count() == 309
     assert OrganizationAtlasReferenceCategory.objects.filter(name="legalform", country_code="FR").count() == 1
+
+
+@pytest.mark.django_db
+def test_company_rule_fixtures_load_and_reload():
+    base = fixtures_root() / "europe" / "france"
+    call_command("reference", "--import", str(base / "company_rule_categories.csv"))
+    call_command("reference", "--import", str(base / "company_rules.csv"))
+
+    decisions = OrganizationAtlasReferenceCategory.objects.get(name="DECISIONS", country_code="FR")
+    assert decisions.description == "Règle de décision"
+    law = OrganizationAtlasReferenceCategory.objects.get(name="LAW", country_code="FR")
+    assert law.description == "Loi ou règlement"
+    ordinary = OrganizationAtlasReference.objects.get(category=decisions, code="ORDINARY_MAJORITY")
+    assert ordinary.default_value == "50%"
+    assert ordinary.source_category_id is None
+    extraordinary = OrganizationAtlasReference.objects.get(
+        category=decisions,
+        code="EXTRAORDINARY_MAJORITY",
+    )
+    assert extraordinary.default_value == "50%"
+    quorum = OrganizationAtlasReference.objects.get(category=decisions, code="QUORUM")
+    assert quorum.default_value == ""
+    assert quorum.description == "Quorum"
+    assert OrganizationAtlasReference.objects.get(code="VOTING_RIGHTS").category.name == "STATUTES"
+    assert OrganizationAtlasReference.objects.filter(
+        category__name__in=["LEGAL", "STATUTES", "GOVERNANCE", "DECISIONS", "CONTRACTS"],
+    ).count() == 23
+
+    call_command("reference", "--import", str(base / "company_rule_categories.csv"))
+    call_command("reference", "--import", str(base / "company_rules.csv"))
+
+    assert OrganizationAtlasReference.objects.filter(code="ORDINARY_MAJORITY").count() == 1
+    assert OrganizationAtlasReferenceCategory.objects.filter(name="LAW", country_code="FR").count() == 1
 
 
 @pytest.mark.django_db

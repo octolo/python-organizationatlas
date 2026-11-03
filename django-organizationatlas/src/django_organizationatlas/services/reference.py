@@ -10,6 +10,7 @@ from django_organizationatlas.models import (
 
 REFERENCE_COLUMNS = ("category", "code", "description", "country_code", "source")
 REQUIRED_COLUMNS = set(REFERENCE_COLUMNS)
+CATEGORY_COLUMNS = {"name", "country_code"}
 DEFAULT_DUMP_FILENAME = "dump.csv"
 
 
@@ -87,6 +88,11 @@ def read_csv(path):
         return read_csv_file(csv_file)
 
 
+def _csv_fieldnames(path):
+    with Path(path).open(encoding="utf-8", newline="") as csv_file:
+        return set(csv.DictReader(csv_file, delimiter=";").fieldnames or [])
+
+
 def read_csv_file(csv_file):
     rows = []
     reader = csv.DictReader(csv_file, delimiter=";")
@@ -114,8 +120,40 @@ def read_csv_file(csv_file):
         priority = (row.get("priority") or "").strip()
         if priority:
             item["priority"] = int(priority)
+        if "default_value" in fieldnames:
+            item["default_value"] = (row.get("default_value") or "").strip()
+        if "source_category" in fieldnames:
+            item["source_category"] = (row.get("source_category") or "").strip()
         rows.append(item)
 
+    return rows
+
+
+def read_category_csv(path):
+    with Path(path).open(encoding="utf-8", newline="") as csv_file:
+        return read_category_csv_file(csv_file)
+
+
+def read_category_csv_file(csv_file):
+    rows = []
+    reader = csv.DictReader(csv_file, delimiter=";")
+    fieldnames = set(reader.fieldnames or [])
+    missing_columns = CATEGORY_COLUMNS - fieldnames
+    if missing_columns:
+        missing = ", ".join(sorted(missing_columns))
+        raise CommandError(f"Missing required CSV columns: {missing}")
+
+    for row in reader:
+        name = (row.get("name") or "").strip()
+        if not name:
+            continue
+        rows.append(
+            {
+                "name": name,
+                "country_code": (row.get("country_code") or "").strip(),
+                "description": (row.get("description") or "").strip(),
+            }
+        )
     return rows
 
 
@@ -137,6 +175,15 @@ def import_reference_rows(rows):
             defaults["characteristics"] = row["characteristics"]
         if "priority" in row:
             defaults["priority"] = row["priority"]
+        if "default_value" in row:
+            defaults["default_value"] = row["default_value"]
+        if "source_category" in row:
+            source_name = row["source_category"]
+            defaults["source_category"] = (
+                OrganizationAtlasReferenceCategory.for_name(source_name, row["country_code"])
+                if source_name
+                else None
+            )
         _, created = OrganizationAtlasReference.objects.update_or_create(
             category=category,
             code=row["code"],
@@ -151,11 +198,35 @@ def import_reference_rows(rows):
     return created_count, updated_count
 
 
+def import_category_rows(rows):
+    created_count = 0
+    updated_count = 0
+    for row in rows:
+        _, created = OrganizationAtlasReferenceCategory.objects.update_or_create(
+            name=row["name"],
+            country_code=row["country_code"],
+            defaults={"description": row["description"]},
+        )
+        if created:
+            created_count += 1
+        else:
+            updated_count += 1
+    return created_count, updated_count
+
+
 def has_reference_columns(path) -> bool:
-    csv_path = Path(path)
-    with csv_path.open(encoding="utf-8", newline="") as csv_file:
-        fieldnames = set(csv.DictReader(csv_file, delimiter=";").fieldnames or [])
-    return REQUIRED_COLUMNS <= fieldnames
+    return REQUIRED_COLUMNS <= _csv_fieldnames(path)
+
+
+def is_category_csv(path) -> bool:
+    fieldnames = _csv_fieldnames(path)
+    return CATEGORY_COLUMNS <= fieldnames and "code" not in fieldnames
+
+
+def import_csv_file(path):
+    if is_category_csv(path):
+        return import_category_rows(read_category_csv(path))
+    return import_reference_rows(read_csv(path))
 
 
 def import_reference_from_path(path):
@@ -169,9 +240,14 @@ def import_reference_from_path(path):
 
     imported_files = 0
     for csv_path in csv_paths:
-        if importing_tree and not has_reference_columns(csv_path):
+        if is_category_csv(csv_path):
+            created_count, updated_count = import_category_rows(read_category_csv(csv_path))
+        elif has_reference_columns(csv_path):
+            created_count, updated_count = import_reference_rows(read_csv(csv_path))
+        elif importing_tree:
             continue
-        created_count, updated_count = import_reference_rows(read_csv(csv_path))
+        else:
+            created_count, updated_count = import_reference_rows(read_csv(csv_path))
         total_created += created_count
         total_updated += updated_count
         imported_files += 1

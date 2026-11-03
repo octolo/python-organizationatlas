@@ -1,0 +1,14 @@
+name;description;country_code
+LEGAL;Règle légale;FR
+STATUTES;Disposition statutaire;FR
+GOVERNANCE;Gouvernance;FR
+DECISIONS;Règle de décision;FR
+CONTRACTS;Accord contractuel;FR
+LAW;Loi ou règlement;FR
+ARTICLES;Statuts;FR
+SHAREHOLDERS_AGREEMENT;Pacte d'associés;FR
+CONTRACT;Autre contrat;FR
+CORPORATE_DECISION;Procès-verbal ou décision sociale;FR
+INTERNAL_POLICY;Règle interne;FR
+OTHER;Autre;FR
+UNKNOWN;Source à vérifier;FR

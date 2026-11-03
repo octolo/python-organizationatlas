@@ -28,6 +28,21 @@ def _load_env_file() -> None:
                         os.environ[key] = val.strip().strip('"').strip("'")
 
 
+def create_superuser():
+    """Creates default superuser if none exists."""
+    from django.contrib.auth import get_user_model
+
+    User = get_user_model()
+    if not User.objects.filter(is_superuser=True).exists():
+        print("📦 Creating superuser: admin/admin")
+        User.objects.create_superuser("admin", "admin@example.com", "admin")
+        print("✅ Superuser created successfully!")
+        print("   Username: admin")
+        print("   Password: admin")
+    else:
+        print("✅ Superuser already exists")
+
+
 def main():
     """Runs administrative tasks."""
     _load_env_file()
@@ -41,6 +56,11 @@ def main():
             "available on your PYTHONPATH environment variable? Did you "
             "forget to activate a virtual environment?"
         ) from exc
+
+    if len(sys.argv) > 1 and sys.argv[1] == "migrate":
+        execute_from_command_line(sys.argv)
+        create_superuser()
+        return
 
     execute_from_command_line(sys.argv)
 
