@@ -1,8 +1,22 @@
+import logging
+from http import HTTPStatus
 from typing import Any, cast
 
 import requests
 
 from . import OrganizationAtlasFranceProvider
+from .inpi_records import (
+    address_payload,
+    address_text,
+    denomination_from_entrepreneur,
+    description_text,
+    filled_address,
+    principal_from_person,
+    trade_name,
+    usable_address,
+)
+
+logger = logging.getLogger(__name__)
 
 
 class InpiProvider(OrganizationAtlasFranceProvider):
@@ -116,6 +130,7 @@ class InpiProvider(OrganizationAtlasFranceProvider):
             headers={"Content-Type": "application/json"},
             timeout=10,
         )
+        self._warn_if_rate_limited(response)
         response.raise_for_status()
         data = response.json()
         token = data.get("token") or data.get("access_token")
@@ -128,7 +143,7 @@ class InpiProvider(OrganizationAtlasFranceProvider):
         token = self._get_token()
         headers = {"Authorization": f"Bearer {token}", "Accept": "application/json"}
         response = requests.get(url, headers=headers, params=params, timeout=10)
-        if response.status_code == 401:
+        if response.status_code == HTTPStatus.UNAUTHORIZED:
             self._token = None
             token = self._get_token()
             headers = {
@@ -136,6 +151,9 @@ class InpiProvider(OrganizationAtlasFranceProvider):
                 "Accept": "application/json",
             }
             response = requests.get(url, headers=headers, params=params, timeout=10)
+        if response.status_code == HTTPStatus.NOT_FOUND:
+            return None
+        self._warn_if_rate_limited(response)
         response.raise_for_status()
         return cast("dict[str, Any] | list[dict[str, Any]]", response.json())
 
@@ -145,28 +163,6 @@ class InpiProvider(OrganizationAtlasFranceProvider):
             return content
         return self._get_nested_value(data, "formality.content")
 
-    @staticmethod
-    def _principal_from_establishments(establishments: Any) -> dict[str, Any] | None:
-        if not isinstance(establishments, list):
-            return None
-        for establishment in establishments:
-            if not isinstance(establishment, dict):
-                continue
-            description = establishment.get("descriptionEtablissement") or {}
-            if description.get("indicateurEtablissementPrincipal"):
-                return establishment
-        return establishments[0] if establishments and isinstance(establishments[0], dict) else None
-
-    def _principal_from_person(self, person: dict[str, Any]) -> dict[str, Any] | None:
-        principal = person.get("etablissementPrincipal")
-        if isinstance(principal, dict):
-            return principal
-        for key in ("autresEtablissements", "etablissements"):
-            principal = self._principal_from_establishments(person.get(key))
-            if principal:
-                return principal
-        return None
-
     def _principal_establishment(self, data: dict[str, Any]) -> dict[str, Any] | None:
         content = self._content_root(data)
         if not content:
@@ -175,49 +171,9 @@ class InpiProvider(OrganizationAtlasFranceProvider):
             person = content.get(person_key)
             if not isinstance(person, dict):
                 continue
-            principal = self._principal_from_person(person)
+            principal = principal_from_person(person)
             if principal:
                 return principal
-        return None
-
-    def _person_name_from_description(self, description: dict[str, Any] | None) -> str | None:
-        if not isinstance(description, dict):
-            return None
-        prenoms = description.get("prenoms") or []
-        if isinstance(prenoms, str):
-            prenoms = [prenoms]
-        first = " ".join(str(p) for p in prenoms if p)
-        last = description.get("nomUsage") or description.get("nom")
-        parts = [p for p in [first, last] if p]
-        return " ".join(parts) if parts else None
-
-    def _denomination_from_entrepreneur(self, data: dict[str, Any]) -> str | None:
-        for prefix in (
-            "content.personnePhysique.identite.entrepreneur",
-            "formality.content.personnePhysique.identite.entrepreneur",
-        ):
-            entrepreneur = self._get_nested_value(data, prefix)
-            if not isinstance(entrepreneur, dict):
-                continue
-            name = self._person_name_from_description(entrepreneur.get("descriptionPersonne"))
-            if name:
-                return name
-            conjoint = entrepreneur.get("conjoint")
-            if isinstance(conjoint, dict):
-                name = self._person_name_from_description(conjoint.get("descriptionPersonne"))
-                if name:
-                    return name
-        return None
-
-    @staticmethod
-    def _trade_name(establishment: dict[str, Any] | None) -> str | None:
-        if not establishment:
-            return None
-        description = establishment.get("descriptionEtablissement") or {}
-        for key in ("nomCommercial", "enseigne", "nomExploitation"):
-            value = description.get(key)
-            if value:
-                return str(value)
         return None
 
     def get_normalize_denomination(self, data: dict[str, Any]) -> str | None:
@@ -226,103 +182,35 @@ class InpiProvider(OrganizationAtlasFranceProvider):
             return str(denomination)
 
         establishment = self._principal_establishment(data)
-        trade_name = self._trade_name(establishment)
-        if trade_name:
-            return trade_name
+        commercial_name = trade_name(establishment)
+        if commercial_name:
+            return commercial_name
 
-        return self._denomination_from_entrepreneur(data)
-
-    def _usable_address(self, addr: Any) -> dict[str, Any] | None:
-        if not isinstance(addr, dict):
-            return None
-        if any(addr.get(key) for key in ("voie", "numVoie", "codePostal", "commune", "complementLocalisation")):
-            return addr
-        return None
+        return denomination_from_entrepreneur(data, self._get_nested_value)
 
     def _address_record(self, data: dict[str, Any]) -> dict[str, Any] | None:
         establishment = self._principal_establishment(data)
         if establishment:
-            addr = self._usable_address(establishment.get("adresse"))
+            addr = usable_address(establishment.get("adresse"))
             if addr:
                 return addr
         for prefix in self._address_prefixes:
-            addr = self._usable_address(self._get_nested_value(data, prefix))
+            addr = usable_address(self._get_nested_value(data, prefix))
             if addr:
                 return addr
         return None
-
-    def _street_line(self, addr: dict[str, Any]) -> str | None:
-        """Build the street line without repeating a number already present in ``voie``.
-
-        INPI sometimes returns ``voie`` as the full line (``295 Boulevard Saint-Denis``)
-        while ``numVoie`` and ``typeVoie`` are also set.
-        """
-        numero = str(addr.get("numVoie") or "").strip()
-        type_voie = str(addr.get("typeVoie") or "").strip()
-        voie = str(addr.get("voie") or "").strip()
-        if self._street_has_number(voie, numero):
-            return voie
-        parts = [part for part in (numero, type_voie, voie) if part]
-        return " ".join(parts) or None
-
-    @staticmethod
-    def _street_has_number(voie: str, numero: str) -> bool:
-        return bool(voie and numero and (voie == numero or voie.startswith(f"{numero} ")))
-
-    def _country_code(self, code: Any) -> str:
-        value = str(code or "").strip().upper()
-        if value in {"FRA", "FRANCE", ""}:
-            return self.geo_code
-        return value[:2]
-
-    def _address_payload(self, addr: dict[str, Any]) -> dict[str, Any]:
-        payload = {
-            "address_line1": self._street_line(addr),
-            "address_line2": str(addr.get("complementLocalisation") or "").strip() or None,
-            "postal_code": addr.get("codePostal") or None,
-            "city": addr.get("commune") or None,
-            "country": addr.get("pays") or self.geo_country,
-            "country_code": self._country_code(addr.get("codePays")),
-        }
-        return {key: value for key, value in payload.items() if value not in (None, "")}
 
     def get_normalize_address_json(self, data: dict[str, Any]) -> dict[str, Any] | None:
         addr = self._address_record(data)
         if not addr:
             return None
-        payload = self._address_payload(addr)
-        if not any(payload.get(key) for key in ("address_line1", "postal_code", "city")):
-            return None
-        return payload
+        return filled_address(address_payload(addr, self.geo_code, self.geo_country))
 
     def get_normalize_address(self, data: dict[str, Any]) -> str | None:
-        payload = self.get_normalize_address_json(data)
-        if not payload:
-            return None
-        parts = [
-            payload.get("address_line1"),
-            payload.get("address_line2"),
-            payload.get("postal_code"),
-            payload.get("city"),
-        ]
-        text_parts = [str(part) for part in parts if part]
-        return ", ".join(text_parts) if text_parts else None
+        return address_text(self.get_normalize_address_json(data))
 
     def get_normalize_description(self, data: dict[str, Any]) -> str | None:
-        activite = (
-            self._get_nested_value(data, "content.personneMorale.identite.entreprise.activitePrincipale")
-            or self._get_nested_value(data, "content.personnePhysique.identite.entreprise.activitePrincipale")
-            or self._get_nested_value(data, "formality.content.personneMorale.identite.entreprise.activitePrincipale")
-            or self._get_nested_value(data, "formality.content.personnePhysique.identite.entreprise.activitePrincipale")
-        )
-        nature = (
-            self._get_nested_value(data, "content.personneMorale.identite.entreprise.natureJuridique")
-            or self._get_nested_value(data, "content.personnePhysique.identite.entreprise.natureJuridique")
-            or self._get_nested_value(data, "formality.content.personneMorale.identite.entreprise.natureJuridique")
-            or self._get_nested_value(data, "formality.content.personnePhysique.identite.entreprise.natureJuridique")
-        )
-        parts = [p for p in [activite, nature] if p]
-        return " - ".join(parts) if parts else None
+        return description_text(data, self._get_nested_value)
 
     def get_normalize_registry_type(self, data: dict[str, Any]) -> str | None:
         present = self._get_nested_value(
@@ -335,19 +223,36 @@ class InpiProvider(OrganizationAtlasFranceProvider):
             return "RNCS"
         return None
 
+    @staticmethod
+    def _warn_if_rate_limited(response: requests.Response) -> None:
+        if response.status_code != HTTPStatus.TOO_MANY_REQUESTS:
+            return
+        logger.warning(
+            "INPI rate limit reached (HTTP 429). This address is temporarily blocked."
+        )
+
     def _companies_api_url(self) -> str:
         return f"{self._get_config_or_env('BASE_URL')}/api/companies"
+
+    def _siren_from_code(self, code: str) -> str | None:
+        if self.is_siren(code):
+            return self._format_siren(code)
+        if self.is_siret(code):
+            return self._format_siret(code)[:9]
+        return None
 
     def _extract_companies(self, result: dict[str, Any] | list[dict[str, Any]] | None) -> list[dict[str, Any]]:
         if not result:
             return []
         if isinstance(result, list):
-            return result
+            return [item for item in result if isinstance(item, dict)]
         if isinstance(result, dict):
             for key in ("companies", "organizations", "data"):
                 items = result.get(key)
                 if isinstance(items, list):
-                    return items
+                    return [item for item in items if isinstance(item, dict)]
+            if any(result.get(key) for key in ("siren", "formality", "content", "companyName")):
+                return [result]
         return []
 
     def search_organization(self, query: str, raw: bool = False, **kwargs: Any) -> list[dict[str, Any]]:
@@ -363,10 +268,16 @@ class InpiProvider(OrganizationAtlasFranceProvider):
         return self._extract_companies(result)
 
     def search_organization_by_reference(self, code: str, raw: bool = False, **kwargs: Any) -> dict[str, Any] | None:
-        if not code:
+        siren = self._siren_from_code(code)
+        if not siren:
             return None
-        siren = self._format_siren(code)
-        if not self._validate_siren(siren):
-            return None
-        result = self._call_api(f"{self._companies_api_url()}/{siren}")
-        return result if isinstance(result, dict) else None
+        companies = self._extract_companies(
+            self._call_api(
+                self._companies_api_url(),
+                params={"page": 1, "pageSize": 1, "siren[]": siren},
+            )
+        )
+        if companies:
+            return companies[0]
+        companies = self._extract_companies(self._call_api(f"{self._companies_api_url()}/{siren}"))
+        return companies[0] if companies else None

@@ -8,6 +8,7 @@ from .event import OrganizationAtlasEvent
 from .person import OrganizationAtlasPerson
 from .reference import OrganizationAtlasReference, OrganizationAtlasReferenceCategory
 from .related_object import OrganizationAtlasRelatedObject
+from .feature import OrganizationAtlasFeatureManager
 from .relation import OrganizationAtlasOrganizationRelation
 from .stakeholder import OrganizationAtlasStakeholderRelation
 from .virtuals import (
@@ -28,6 +29,7 @@ __all__ = [
     "OrganizationAtlasReference",
     "OrganizationAtlasReferenceCategory",
     "OrganizationAtlasRelatedObject",
+    "OrganizationAtlasFeatureManager",
     "OrganizationAtlasOrganizationRelation",
     "OrganizationAtlasStakeholderRelation",
     "OrganizationAtlasProviderModel",

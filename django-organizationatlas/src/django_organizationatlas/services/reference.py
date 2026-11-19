@@ -1,16 +1,23 @@
 import csv
 from pathlib import Path
 
+from django.conf import settings
 from django.core.management.base import CommandError
 
+from django_organizationatlas.managers.reference import FEATURE_CATEGORY
 from django_organizationatlas.models import (
     OrganizationAtlasReference,
     OrganizationAtlasReferenceCategory,
 )
 
-REFERENCE_COLUMNS = ("category", "code", "description", "country_code", "source")
-REQUIRED_COLUMNS = set(REFERENCE_COLUMNS)
-CATEGORY_COLUMNS = {"name", "country_code"}
+from .reference_csv import (
+    REFERENCE_COLUMNS,
+    has_reference_columns,
+    is_category_csv,
+    read_category_csv,
+    read_csv,
+)
+
 DEFAULT_DUMP_FILENAME = "dump.csv"
 
 
@@ -78,85 +85,6 @@ def get_dump_path(path):
     return dump_path / DEFAULT_DUMP_FILENAME
 
 
-def read_csv(path):
-    csv_path = Path(path)
-
-    if not csv_path.exists():
-        raise CommandError(f"CSV file not found: {csv_path}")
-
-    with csv_path.open(encoding="utf-8", newline="") as csv_file:
-        return read_csv_file(csv_file)
-
-
-def _csv_fieldnames(path):
-    with Path(path).open(encoding="utf-8", newline="") as csv_file:
-        return set(csv.DictReader(csv_file, delimiter=";").fieldnames or [])
-
-
-def read_csv_file(csv_file):
-    rows = []
-    reader = csv.DictReader(csv_file, delimiter=";")
-    fieldnames = set(reader.fieldnames or [])
-    missing_columns = REQUIRED_COLUMNS - fieldnames
-
-    if missing_columns:
-        missing = ", ".join(sorted(missing_columns))
-        raise CommandError(f"Missing required CSV columns: {missing}")
-
-    for row in reader:
-        if not row.get("code"):
-            continue
-
-        item = {
-            "category": row["category"].strip(),
-            "code": row["code"].strip(),
-            "description": row["description"].strip(),
-            "country_code": row["country_code"].strip(),
-            "source": row["source"].strip(),
-        }
-        characteristics = (row.get("characteristics") or "").strip()
-        if characteristics:
-            item["characteristics"] = characteristics
-        priority = (row.get("priority") or "").strip()
-        if priority:
-            item["priority"] = int(priority)
-        if "default_value" in fieldnames:
-            item["default_value"] = (row.get("default_value") or "").strip()
-        if "source_category" in fieldnames:
-            item["source_category"] = (row.get("source_category") or "").strip()
-        rows.append(item)
-
-    return rows
-
-
-def read_category_csv(path):
-    with Path(path).open(encoding="utf-8", newline="") as csv_file:
-        return read_category_csv_file(csv_file)
-
-
-def read_category_csv_file(csv_file):
-    rows = []
-    reader = csv.DictReader(csv_file, delimiter=";")
-    fieldnames = set(reader.fieldnames or [])
-    missing_columns = CATEGORY_COLUMNS - fieldnames
-    if missing_columns:
-        missing = ", ".join(sorted(missing_columns))
-        raise CommandError(f"Missing required CSV columns: {missing}")
-
-    for row in reader:
-        name = (row.get("name") or "").strip()
-        if not name:
-            continue
-        rows.append(
-            {
-                "name": name,
-                "country_code": (row.get("country_code") or "").strip(),
-                "description": (row.get("description") or "").strip(),
-            }
-        )
-    return rows
-
-
 def import_reference_rows(rows):
     created_count = 0
     updated_count = 0
@@ -198,6 +126,58 @@ def import_reference_rows(rows):
     return created_count, updated_count
 
 
+def _feature_from_setting(index, item):
+    label = f"ORGANIZATIONATLAS_FEATURES[{index}]"
+    if isinstance(item, str):
+        feature = {"code": item.strip(), "country_code": ""}
+    elif isinstance(item, dict):
+        feature = {
+            "code": str(item.get("code") or "").strip(),
+            "country_code": str(item.get("country_code") or "").strip(),
+        }
+        if item.get("description") is not None:
+            feature["description"] = str(item["description"]).strip()
+    else:
+        raise CommandError(f"{label} must be a code or a mapping with a code.")
+    if not feature["code"]:
+        raise CommandError(f"{label} needs a code.")
+    return feature
+
+
+def configured_features():
+    """Features declared in the ORGANIZATIONATLAS_FEATURES setting."""
+    raw = getattr(settings, "ORGANIZATIONATLAS_FEATURES", None) or []
+    if isinstance(raw, str) or not isinstance(raw, (list, tuple)):
+        raise CommandError("ORGANIZATIONATLAS_FEATURES must be a list.")
+    return [_feature_from_setting(index, item) for index, item in enumerate(raw)]
+
+
+def load_configured_features(features=None):
+    """Create or update feature references from ORGANIZATIONATLAS_FEATURES."""
+    created_count = 0
+    updated_count = 0
+    categories = {}
+    for feature in configured_features() if features is None else features:
+        country_code = feature["country_code"]
+        category = categories.get(country_code)
+        if category is None:
+            category = OrganizationAtlasReferenceCategory.for_name(FEATURE_CATEGORY, country_code)
+            categories[country_code] = category
+        defaults = {"source": "settings", "country_code": country_code}
+        if "description" in feature:
+            defaults["description"] = feature["description"]
+        _reference, created = OrganizationAtlasReference.objects.update_or_create(
+            category=category,
+            code=feature["code"],
+            defaults=defaults,
+        )
+        if created:
+            created_count += 1
+        else:
+            updated_count += 1
+    return created_count, updated_count
+
+
 def import_category_rows(rows):
     created_count = 0
     updated_count = 0
@@ -212,15 +192,6 @@ def import_category_rows(rows):
         else:
             updated_count += 1
     return created_count, updated_count
-
-
-def has_reference_columns(path) -> bool:
-    return REQUIRED_COLUMNS <= _csv_fieldnames(path)
-
-
-def is_category_csv(path) -> bool:
-    fieldnames = _csv_fieldnames(path)
-    return CATEGORY_COLUMNS <= fieldnames and "code" not in fieldnames
 
 
 def import_csv_file(path):

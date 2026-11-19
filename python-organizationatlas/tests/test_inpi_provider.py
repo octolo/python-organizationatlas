@@ -1,5 +1,6 @@
 """INPI provider API path tests."""
 
+import logging
 from unittest.mock import MagicMock, patch
 
 import pytest
@@ -47,16 +48,47 @@ class TestInpiProviderApiPaths:
     def test_search_by_reference_uses_companies_siren(self, mock_get, _mock_token):
         mock_get.return_value = MagicMock(
             status_code=200,
-            json=lambda: {"siren": "917432254"},
+            json=lambda: [{"siren": "917432254", "companyName": "OCTOLO"}],
         )
         mock_get.return_value.raise_for_status = MagicMock()
 
         provider = InpiProvider()
         result = provider.search_organization_by_reference("917432254")
 
-        assert result == {"siren": "917432254"}
+        assert result == {"siren": "917432254", "companyName": "OCTOLO"}
         mock_get.assert_called_once()
-        assert mock_get.call_args[0][0].endswith("/api/companies/917432254")
+        assert mock_get.call_args[0][0].endswith("/api/companies")
+        assert mock_get.call_args[1]["params"]["siren[]"] == "917432254"
+
+    @patch.object(InpiProvider, "_get_token", return_value="token")
+    @patch("organizationatlas.providers.europe.france.inpi.requests.get")
+    def test_search_by_reference_reduces_a_siret_to_its_siren(self, mock_get, _mock_token):
+        mock_get.return_value = MagicMock(
+            status_code=200,
+            json=lambda: [{"siren": "917432254"}],
+        )
+        mock_get.return_value.raise_for_status = MagicMock()
+
+        provider = InpiProvider()
+        result = provider.search_organization_by_reference("91743225400012")
+
+        assert result == {"siren": "917432254"}
+        assert mock_get.call_args[1]["params"]["siren[]"] == "917432254"
+
+    @patch.object(InpiProvider, "_get_token", return_value="token")
+    @patch("organizationatlas.providers.europe.france.inpi.requests.get")
+    def test_search_by_reference_reads_the_company_detail_when_the_filter_is_empty(self, mock_get, _mock_token):
+        empty = MagicMock(status_code=200, json=lambda: [])
+        empty.raise_for_status = MagicMock()
+        detail = MagicMock(status_code=200, json=lambda: {"siren": "917432254"})
+        detail.raise_for_status = MagicMock()
+        mock_get.side_effect = [empty, detail]
+
+        provider = InpiProvider()
+        result = provider.search_organization_by_reference("917432254")
+
+        assert result == {"siren": "917432254"}
+        assert mock_get.call_args_list[1][0][0].endswith("/api/companies/917432254")
 
     def test_normalize_denomination_from_content(self):
         provider = InpiProvider()
@@ -218,6 +250,20 @@ class TestInpiProviderApiPaths:
         assert mock_get.call_args_list[0].kwargs["headers"]["Authorization"] == "Bearer expired-token"
         assert mock_get.call_args_list[1].kwargs["headers"]["Authorization"] == "Bearer fresh-token"
         mock_post.assert_called_once()
+
+    @patch.object(InpiProvider, "_get_token", return_value="token")
+    @patch("organizationatlas.providers.europe.france.inpi.requests.get")
+    def test_rate_limit_is_written_to_the_log(self, mock_get, _mock_token, caplog):
+        limited = MagicMock(status_code=429)
+        limited.raise_for_status.side_effect = HTTPError("429 too many requests")
+        mock_get.return_value = limited
+
+        provider = InpiProvider()
+        with caplog.at_level(logging.WARNING):
+            with pytest.raises(HTTPError):
+                provider._call_api("https://example.test/api/companies")
+
+        assert "INPI rate limit reached (HTTP 429)" in caplog.text
 
     @patch("organizationatlas.providers.europe.france.inpi.requests.post")
     def test_authentication_errors_are_propagated(self, mock_post):

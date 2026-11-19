@@ -91,7 +91,7 @@ def _create_open_data(**fields):
                 valid_to__isnull=True,
             )
         except OrganizationAtlasData.DoesNotExist:
-            raise exc
+            raise exc from None
         return current, False
 
 

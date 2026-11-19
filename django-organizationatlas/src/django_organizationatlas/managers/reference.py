@@ -1,6 +1,8 @@
 from django.db import models
 from django.db.models import Count, Exists, IntegerField, OuterRef, Subquery
 
+FEATURE_CATEGORY = "feature"
+
 
 class OrganizationAtlasReferenceCategoryQuerySet(models.QuerySet):
     def with_reference_count(self):
@@ -41,6 +43,10 @@ class OrganizationAtlasReferenceQuerySet(models.QuerySet):
             data_type=OuterRef("category__name"),
         )
         return self.annotate(has_data_type=Exists(match))
+
+    def features(self):
+        """References tagged as features."""
+        return self.filter(category__name=FEATURE_CATEGORY)
 
 
 OrganizationAtlasReferenceManager = models.Manager.from_queryset(OrganizationAtlasReferenceQuerySet)

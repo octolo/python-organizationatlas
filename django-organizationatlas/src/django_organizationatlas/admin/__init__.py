@@ -6,6 +6,7 @@ from .event import OrganizationEventAdmin
 from .person import OrganizationAtlasPersonAdmin
 from .reference import OrganizationAtlasReferenceAdmin, OrganizationAtlasReferenceCategoryAdmin
 from .related_object import OrganizationAtlasRelatedObjectAdmin
+from .feature import OrganizationAtlasFeatureManagerAdmin
 from .relation import OrganizationAtlasOrganizationRelationAdmin
 from .virtuals.organization import OrganizationAtlasVirtualOrganizationAdmin
 from .virtuals.document import OrganizationAtlasVirtualDocumentAdmin
@@ -23,6 +24,7 @@ __all__ = [
     "OrganizationAtlasReferenceAdmin",
     "OrganizationAtlasReferenceCategoryAdmin",
     "OrganizationAtlasRelatedObjectAdmin",
+    "OrganizationAtlasFeatureManagerAdmin",
     "OrganizationAtlasOrganizationRelationAdmin",
     "OrganizationAtlasProviderModel",
     "OrganizationAtlasVirtualOrganizationAdmin",

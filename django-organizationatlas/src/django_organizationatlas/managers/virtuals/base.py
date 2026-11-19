@@ -13,8 +13,8 @@ class OrganizationAtlasVirtualCommandManager(VirtualManager):
         super().__init__()
         self.code = code
         self.first = kwargs.get("first", False)
-        self.backend = kwargs.get("backend", None)
-        self.attribute_search = kwargs.get("attribute_search", None)
+        self.backend = kwargs.get("backend")
+        self.attribute_search = kwargs.get("attribute_search")
         self._cached_providers: dict = {}
         setattr(self, f"_cached_data_{self._command}", {})
 

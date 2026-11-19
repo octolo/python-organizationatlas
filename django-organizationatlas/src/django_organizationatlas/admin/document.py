@@ -6,13 +6,6 @@ from .history import with_history
 from ..models.source import ORGANIZATIONATLAS_FIELDS_AUDIT
 
 
-class OrganizationDocumentInline(admin.TabularInline):
-    model = OrganizationAtlasDocument
-    extra = 1
-    fields = ["source_label", "document_type", "title", "date", "url"]
-    readonly_fields = ["source_label"]
-
-
 @admin.register(OrganizationAtlasDocument)
 class OrganizationDocumentAdmin(with_history(admin.ModelAdmin)):
     list_display = [

@@ -1,4 +1,5 @@
 import re
+from http import HTTPStatus
 from typing import Any, cast
 from urllib.parse import quote, urlencode
 
@@ -272,7 +273,7 @@ class InseeProvider(OrganizationAtlasFranceProvider):
             headers={"Accept": "application/json", "X-INSEE-Api-Key-Integration": api_key},
             timeout=10,
         )
-        if response.status_code == 404:
+        if response.status_code == HTTPStatus.NOT_FOUND:
             return None
         response.raise_for_status()
         payload = response.json()

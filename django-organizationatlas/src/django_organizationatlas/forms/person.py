@@ -25,4 +25,12 @@ class OrganizationAtlasPersonForm(forms.ModelForm):
 
     class Meta:
         model = OrganizationAtlasPerson
-        fields = '__all__'
+        fields = [
+            "organization",
+            "officer_or_owner",
+            "first_name",
+            "last_name",
+            "birth_date",
+            "gender",
+            "metadata",
+        ]

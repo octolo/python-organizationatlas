@@ -3,9 +3,6 @@ from django.db.models import Prefetch
 
 
 class OrganizationAtlasOrganizationQuerySet(models.QuerySet):
-    def with_related(self):
-        return self.prefetch_related("to_organizationatlasdata", "to_organizationatlasaddress")
-
     def with_headquarters(self):
         from ..models.address import OrganizationAtlasAddress
         return self.prefetch_related(

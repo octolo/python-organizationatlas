@@ -5,7 +5,7 @@ from django.db import models
 from django.db.models import Q
 from django.utils.translation import gettext_lazy as _
 
-from ..managers.stakeholder import STAKEHOLDER_KINDS, OrganizationAtlasStakeholderRelationManager
+from ..managers.stakeholder import STAKEHOLDER_KINDS
 from .source import OrganizationAtlasSourceBase
 from .temporal import TemporalValidityMixin
 
@@ -56,7 +56,7 @@ class OrganizationAtlasStakeholderRelation(TemporalValidityMixin, OrganizationAt
         help_text=_("Free description when relation type is 'Other'"),
     )
 
-    objects = OrganizationAtlasStakeholderRelationManager()
+    objects = models.Manager()
 
     class Meta:
         verbose_name = _("Stakeholder Relation")

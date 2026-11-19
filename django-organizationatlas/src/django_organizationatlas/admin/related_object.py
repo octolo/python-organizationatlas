@@ -1,7 +1,7 @@
 """Admin for organization related objects."""
 
 from django.contrib import admin
-from django.urls import reverse
+from django.urls import NoReverseMatch, reverse
 from django.utils.html import format_html
 from django.utils.translation import gettext_lazy as _
 from django_boosted import AdminBoostModel
@@ -24,7 +24,7 @@ class OrganizationAtlasRelatedObjectAdminMixin:
                 f"admin:{obj.content_type.app_label}_{obj.content_type.model}_change",
                 args=[obj.object_id],
             )
-        except Exception:
+        except NoReverseMatch:
             return label
         return format_html('<a href="{}">{}</a>', url, label)
 

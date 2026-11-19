@@ -95,6 +95,12 @@ STATIC_URL = "static/"
 # Default primary key field type
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
+ORGANIZATIONATLAS_FEATURES = [
+    {"code": "meetings", "description": "Meetings"},
+    {"code": "capitalisation", "description": "Capitalisation"},
+    {"code": "documents", "description": "Documents"},
+]
+
 if find_spec("djrichtextfield") is not None:
     INSTALLED_APPS += [
         "djrichtextfield",

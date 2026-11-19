@@ -69,14 +69,8 @@ class OrganizationAtlasFranceProvider(OrganizationAtlasEuropeProvider):
     def is_rna(self, query: str) -> bool:
         return bool(query) and self._matches_pattern(query, "rna")
 
-    def _validate_siret(self, siret: str) -> bool:
-        return self._matches_pattern(siret, "siret")
-
     def _validate_siren(self, siren: str) -> bool:
         return self._matches_pattern(siren, "siren")
-
-    def _validate_rna(self, rna: str) -> bool:
-        return self._matches_pattern(rna, "rna")
 
     def _format_siret(self, siret: str) -> str:
         return self._format_code(siret, "siret")

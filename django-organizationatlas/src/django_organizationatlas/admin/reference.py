@@ -13,12 +13,14 @@ from ..forms.reference import ReferenceImportForm
 from ..models.reference import OrganizationAtlasReference, OrganizationAtlasReferenceCategory
 from ..models.source import ORGANIZATIONATLAS_FIELDS_AUDIT, ORGANIZATIONATLAS_FIELDS_SOURCE
 from ..services.reference import (
+    configured_features,
     import_csv_file,
     import_reference_rows,
     list_fixtures,
-    read_csv_file,
+    load_configured_features,
     resolve_fixture,
 )
+from ..services.reference_csv import read_csv_file
 
 base_fields = [
     "category",
@@ -168,3 +170,34 @@ class OrganizationAtlasReferenceAdmin(with_history(AdminBoostModel)):
                 return redirect(self._changelist_url())
             return redirect(self._import_success(request, created_count, updated_count))
         return {"confirm": _("Load or reload %(path)s?") % {"path": relative}}
+
+    @admin_boost_view(
+        "confirm",
+        _("Load features"),
+        requires_object=False,
+        permission="change",
+    )
+    def load_features(self, request, confirmed=False):
+        try:
+            features = configured_features()
+        except CommandError as error:
+            messages.error(request, str(error))
+            return redirect(self._changelist_url())
+        if not features:
+            messages.warning(
+                request,
+                _("No features are configured in ORGANIZATIONATLAS_FEATURES."),
+            )
+            return redirect(self._changelist_url())
+        if confirmed:
+            created_count, updated_count = load_configured_features(features)
+            messages.success(
+                request,
+                _("Loaded %(created)s created and %(updated)s updated features.")
+                % {"created": created_count, "updated": updated_count},
+            )
+            return redirect(self._changelist_url())
+        codes = ", ".join(feature["code"] for feature in features)
+        return {
+            "confirm": _("Load or update features from settings: %(codes)s?") % {"codes": codes},
+        }

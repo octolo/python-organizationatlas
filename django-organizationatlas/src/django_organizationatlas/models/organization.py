@@ -49,7 +49,7 @@ class OrganizationAtlasOrganization(OrganizationAtlasSourceBase):
     short_denomination = models.CharField(
         max_length=255,
         blank=True,
-        null=True,
+        default="",
         verbose_name=_("Short denomination"),
         help_text=_("Short organization denomination"),
     )
@@ -76,7 +76,7 @@ class OrganizationAtlasOrganization(OrganizationAtlasSourceBase):
     )
     website = models.URLField(
         blank=True,
-        null=True,
+        default="",
         verbose_name=_("Website"),
         help_text=_("Organization website"),
     )

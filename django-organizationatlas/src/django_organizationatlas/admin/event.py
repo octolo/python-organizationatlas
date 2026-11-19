@@ -6,13 +6,6 @@ from .history import with_history
 from ..models.source import ORGANIZATIONATLAS_FIELDS_AUDIT
 
 
-class OrganizationEventInline(admin.TabularInline):
-    model = OrganizationAtlasEvent
-    extra = 1
-    fields = ["source_label", "event_type", "title", "date"]
-    readonly_fields = ["source_label"]
-
-
 @admin.register(OrganizationAtlasEvent)
 class OrganizationEventAdmin(with_history(admin.ModelAdmin)):
     list_display = [

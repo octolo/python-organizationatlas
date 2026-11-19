@@ -113,7 +113,7 @@ class OrganizationAtlasProvider(ProviderBase):
 
 def get_search_organization_fields() -> dict[str, dict[str, Any]]:
     """World search fields merged with the fields of every geographic level."""
-    from .europe import france  # noqa: F401  geo levels must be imported to be discovered
+    from .europe import france  # geo levels must be imported to be discovered
 
     fields: dict[str, dict[str, Any]] = {}
     pending: list[type[OrganizationAtlasProvider]] = [OrganizationAtlasProvider]

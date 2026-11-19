@@ -27,7 +27,7 @@ class OrganizationAtlasSourceBase(AuditMixin):
         verbose_name=_("Source"),
         help_text=_("Backend name, or the user id when the record is entered manually."),
         blank=True,
-        null=True,
+        default="",
         editable=False,
     )
     country_code = models.CharField(
@@ -35,7 +35,7 @@ class OrganizationAtlasSourceBase(AuditMixin):
         verbose_name=_("Country Code"),
         help_text=_("ISO country code. XX means the record was entered by a user."),
         blank=True,
-        null=True,
+        default="",
         editable=False,
     )
     metadata = models.JSONField(
