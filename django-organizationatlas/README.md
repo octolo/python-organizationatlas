@@ -10,4 +10,4 @@ pip install django-organizationatlas
 
 ## Requirements
 
-Python 3.10+ and Django 5.0+ (CI covers Django 5.0, 5.1 and 5.2).
+Python 3.11+ and Django 5.0+ (CI covers Django 5.0, 5.1 and 5.2).

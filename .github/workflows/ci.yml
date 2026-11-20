@@ -50,6 +50,9 @@ jobs:
             django_version: "5.2.*"
           - package_name: django-organizationatlas
             django_version: ""
+          # django-boosted>=1.1.0 requires Python >=3.11.
+          - package_name: django-organizationatlas
+            python_version: "3.10"
         include:
           - package_name: organizationatlas
             working_directory: python-organizationatlas

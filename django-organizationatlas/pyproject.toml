@@ -1,5 +1,5 @@
 [build-system]
-requires = ["setuptools>=61.0", "wheel"]
+requires = ["setuptools>=77.0.3", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
@@ -10,8 +10,9 @@ readme = "README.md"
 authors = [
   { name = "Octolo", email = "dev@octolo.tech" }
 ]
-license = { text = "MIT" }
-requires-python = ">=3.10"
+license = "MIT"
+license-files = ["LICENSE"]
+requires-python = ">=3.11"
 keywords = ["django", "organization", "enrichment", "lookup"]
 classifiers = [
   "Development Status :: 3 - Alpha",
@@ -21,11 +22,9 @@ classifiers = [
   "Framework :: Django :: 5.1",
   "Framework :: Django :: 5.2",
   "Intended Audience :: Developers",
-  "License :: OSI Approved :: MIT License",
   "Operating System :: OS Independent",
   "Programming Language :: Python",
   "Programming Language :: Python :: 3",
-  "Programming Language :: Python :: 3.10",
   "Programming Language :: Python :: 3.11",
   "Programming Language :: Python :: 3.12",
 ]
@@ -56,9 +55,6 @@ Repository = "https://github.com/hicinformatic/python-organizationatlas"
 Documentation = "https://github.com/hicinformatic/python-organizationatlas/tree/main/django-organizationatlas#readme"
 Issues = "https://github.com/hicinformatic/python-organizationatlas/issues"
 
-[tool.setuptools]
-license-files = ["LICENSE"]
-
 [tool.setuptools.packages.find]
 where = ["src"]
 include = ["django_organizationatlas*"]
@@ -73,7 +69,7 @@ testpaths = ["tests"]
 pythonpath = ["src"]
 
 [tool.mypy]
-python_version = "3.10"
+python_version = "3.11"
 mypy_path = ["src"]
 plugins = ["mypy_django_plugin.main"]
 ignore_missing_imports = true
