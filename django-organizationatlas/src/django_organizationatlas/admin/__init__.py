@@ -1,34 +1,35 @@
 from .address import OrganizationAtlasAddressAdmin
-from .organization import OrganizationAtlasOrganizationAdmin
 from .data import OrganizationAtlasDataAdmin, OrganizationAtlasDataTypeAdmin
 from .document import OrganizationDocumentAdmin
 from .event import OrganizationEventAdmin
+from .feature import OrganizationAtlasFeatureManagerAdmin
+from .organization import OrganizationAtlasOrganizationAdmin
 from .person import OrganizationAtlasPersonAdmin
 from .reference import OrganizationAtlasReferenceAdmin, OrganizationAtlasReferenceCategoryAdmin
 from .related_object import OrganizationAtlasRelatedObjectAdmin
-from .feature import OrganizationAtlasFeatureManagerAdmin
 from .relation import OrganizationAtlasOrganizationRelationAdmin
-from .virtuals.organization import OrganizationAtlasVirtualOrganizationAdmin
 from .virtuals.document import OrganizationAtlasVirtualDocumentAdmin
 from .virtuals.event import OrganizationAtlasVirtualEventAdmin
+from .virtuals.organization import OrganizationAtlasVirtualOrganizationAdmin
 from .virtuals.provider import OrganizationAtlasProviderModel
+from .virtuals.reference import OrganizationAtlasReferenceFixtureAdmin
 
 __all__ = [
-    "OrganizationAtlasOrganizationAdmin",
+    "OrganizationAtlasAddressAdmin",
     "OrganizationAtlasDataAdmin",
     "OrganizationAtlasDataTypeAdmin",
-    "OrganizationAtlasAddressAdmin",
-    "OrganizationDocumentAdmin",
-    "OrganizationEventAdmin",
+    "OrganizationAtlasFeatureManagerAdmin",
+    "OrganizationAtlasOrganizationAdmin",
+    "OrganizationAtlasOrganizationRelationAdmin",
     "OrganizationAtlasPersonAdmin",
+    "OrganizationAtlasProviderModel",
     "OrganizationAtlasReferenceAdmin",
     "OrganizationAtlasReferenceCategoryAdmin",
+    "OrganizationAtlasReferenceFixtureAdmin",
     "OrganizationAtlasRelatedObjectAdmin",
-    "OrganizationAtlasFeatureManagerAdmin",
-    "OrganizationAtlasOrganizationRelationAdmin",
-    "OrganizationAtlasProviderModel",
-    "OrganizationAtlasVirtualOrganizationAdmin",
     "OrganizationAtlasVirtualDocumentAdmin",
     "OrganizationAtlasVirtualEventAdmin",
+    "OrganizationAtlasVirtualOrganizationAdmin",
+    "OrganizationDocumentAdmin",
+    "OrganizationEventAdmin",
 ]
-

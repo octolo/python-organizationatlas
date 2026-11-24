@@ -35,6 +35,7 @@ class OrganizationAtlasRelatedObjectInline(
     """Related objects edited from the organization page."""
 
     model = OrganizationAtlasRelatedObject
+    show_change_link = True
     extra = 0
     fields = ["content_type", "object_id", "comment", "object_url_link_display"]
     readonly_fields = ["object_url_link_display"]

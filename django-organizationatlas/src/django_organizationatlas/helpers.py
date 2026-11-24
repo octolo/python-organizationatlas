@@ -4,16 +4,23 @@ import json
 from datetime import date, datetime, timedelta
 
 from django.db import IntegrityError, transaction
+from django.db.models import Q
 from organizationatlas import ORGANIZATIONATLAS_SEARCH_COMPANY_FIELDS
 from organizationatlas.helpers import get_organization_history
 from organizationatlas.providers import get_search_organization_fields
 
+from .category_names import category_name
+from .country_codes import GLOBAL_COUNTRY_CODE
 from .models import (
     OrganizationAtlasAddress,
     OrganizationAtlasData,
     OrganizationAtlasDataType,
     OrganizationAtlasOrganization,
 )
+from .models.data import reference_for_value, reference_value
+from .models.reference import OrganizationAtlasReference
+from .models.source import USER_COUNTRY_CODE
+from .reference_codes import normalize_reference_code
 
 _SEARCH_FIELDS = get_search_organization_fields()
 
@@ -34,7 +41,10 @@ _BASE_FIELDS = (
 )
 
 _API_TRACE = "apitrace"
+_API_TRACE_SOURCE = "source"
+_API_TRACE_HISTORY = "history"
 _API_HISTORY_TRACE = "apihistorytrace"
+_TRACE_METADATA = "trace"
 _TIMELINE_EXCLUDED_DATA_TYPES = (_API_TRACE, _API_HISTORY_TRACE)
 
 
@@ -44,10 +54,16 @@ def _text(value) -> str:
     return str(value)
 
 
-def _data_type(key: str, value_type: str | None = None) -> OrganizationAtlasDataType:
+def _data_type(
+    key: str, value_type: str | None = None, *, country: str | None = None,
+) -> OrganizationAtlasDataType:
     """Shared data type for this key, created the first time it is used."""
     if value_type is None:
         value_type = _SEARCH_FIELDS.get(key, {}).get("format", "str")
+    if country is not None:
+        return OrganizationAtlasDataType.objects.for_provider(
+            key, value_type, country,
+        )
     return OrganizationAtlasDataType.for_key(key, value_type)
 
 
@@ -95,6 +111,37 @@ def _create_open_data(**fields):
         return current, False
 
 
+def _sync_provider_reference(data, previous_value=None):
+    if data.data_type.value_type != 'str':
+        return
+    country = data.country_code
+    if not country or country == USER_COUNTRY_CODE:
+        country = data.organization.country_code or ''
+    lookup = {
+        'data_type': data.data_type.data_type,
+        'country': country,
+        'category_id': data.data_type.category_id,
+    }
+    if previous_value is not None and previous_value != data.value:
+        categories = (
+            Q(category_id=data.data_type.category_id)
+            if data.data_type.category_id
+            else Q(
+                category__name=category_name(data.data_type.data_type),
+                category__country_code__in=[country, GLOBAL_COUNTRY_CODE],
+            )
+        )
+        previous = data.reference.filter(
+            categories,
+            code=normalize_reference_code(previous_value),
+            default_value='',
+        )
+        data.reference.remove(*previous)
+    reference = reference_for_value(value=data.value, **lookup)
+    if reference is not None:
+        data.reference.add(reference)
+
+
 def _address_items(value) -> dict:
     if not value:
         return {}
@@ -125,15 +172,24 @@ def _apply_base_fields(organization, obj) -> None:
 def _upsert_data(organization, obj) -> None:
     source = getattr(obj, "backend", None) or ""
     country = getattr(obj, "country_code", None) or ""
+    lookup_country = country
+    if not country or country == USER_COUNTRY_CODE:
+        lookup_country = organization.country_code or ""
     for data_type, value in _incoming_data(obj).items():
-        datatype = _data_type(data_type)
+        raw_value = value
+        datatype = _data_type(data_type, country=lookup_country)
+        if datatype.value_type == "str":
+            value = reference_value(
+                data_type, lookup_country, value,
+                category_id=datatype.category_id,
+            )
         current = (
             organization.to_organizationatlasdata.select_for_update().filter(
                 source=source,
                 country_code=country,
                 data_type=datatype,
-                valid_to__isnull=True,
             )
+            .active()
             .order_by("-created_at")
             .first()
         )
@@ -146,17 +202,47 @@ def _upsert_data(organization, obj) -> None:
                 value=value,
             )
             if created:
+                _sync_provider_reference(current)
                 continue
-        if _text(current.value) == _text(value):
+        current_value = _text(current.value)
+        if datatype.value_type == "str":
+            current_value = reference_value(
+                data_type, lookup_country, current_value,
+                category_id=datatype.category_id,
+            )
+        category_filter = (
+            Q(category_id=datatype.category_id)
+            if datatype.category_id
+            else Q(category__name=category_name(data_type))
+        )
+        if (
+            (raw_value != value or current_value != current.value)
+            and current.reference.filter(
+                ~category_filter
+                | Q(default_value__gt=""),
+            ).exists()
+        ):
+            value = raw_value
+            current_value = _text(current.value)
+        if current_value == _text(value):
+            if current.value != current_value:
+                previous_value = current.value
+                current.value = current_value
+                current.save(update_fields=["value", "updated_at"])
+                _sync_provider_reference(current, previous_value)
+            else:
+                _sync_provider_reference(current)
             continue
         today = date.today()
         if current.valid_from is not None and current.valid_from >= today:
+            previous_value = current.value
             current.value = value
             current.save(update_fields=["value", "updated_at"])
+            _sync_provider_reference(current, previous_value)
             continue
         current.valid_to = today - timedelta(days=1)
         current.save(update_fields=["valid_to", "updated_at"])
-        OrganizationAtlasData.objects.create(
+        current = OrganizationAtlasData.objects.create(
             organization=organization,
             source=source,
             country_code=country,
@@ -164,6 +250,7 @@ def _upsert_data(organization, obj) -> None:
             value=value,
             valid_from=today,
         )
+        _sync_provider_reference(current)
 
 
 def _api_trace_value(obj) -> str | None:
@@ -180,29 +267,62 @@ def _api_trace_value(obj) -> str | None:
     return json.dumps(raw, ensure_ascii=False, default=str)
 
 
-def _save_open_json_data(organization, *, key: str, value: str, source: str, country: str) -> None:
-    """Keep one open JSON row for this data type, replacing it when the payload changes."""
-    datatype = _data_type(key, "json")
+def _api_trace_reference(code: str) -> OrganizationAtlasReference:
+    """Reference that tells an apitrace row apart: source or history."""
+    normalized = normalize_reference_code(code)
+    filters = {
+        "category__name": category_name(_API_TRACE),
+        "category__country_code": GLOBAL_COUNTRY_CODE,
+        "code": normalized,
+    }
+    reference = OrganizationAtlasReference.objects.filter(**filters).first()
+    if reference is None:
+        from .services.reference import load_default_references
+
+        load_default_references()
+        reference = OrganizationAtlasReference.objects.get(**filters)
+    return reference
+
+
+def _save_open_json_data(
+    organization, *, value: str, source: str, country: str, reference: OrganizationAtlasReference,
+) -> None:
+    """Keep one open apitrace row for this reference, replacing it when the payload changes."""
+    datatype = OrganizationAtlasDataType.for_key(
+        _API_TRACE, 'json', category=reference.category,
+    )
     current = (
         organization.to_organizationatlasdata.select_for_update().filter(
             source=source,
             country_code=country,
             data_type=datatype,
-            valid_to__isnull=True,
+            reference=reference,
         )
+        .active()
         .order_by("-created_at")
         .first()
     )
     if current is None:
-        current, created = _create_open_data(
+        current = OrganizationAtlasData(
             organization=organization,
             source=source,
             country_code=country,
             data_type=datatype,
             value=value,
+            metadata={_TRACE_METADATA: reference.display_code},
         )
-        if created:
-            return
+        try:
+            with transaction.atomic():
+                current.save()
+        except IntegrityError:
+            current = organization.to_organizationatlasdata.select_for_update().get(
+                source=source,
+                country_code=country,
+                data_type=datatype,
+                valid_to__isnull=True,
+                metadata__trace=reference.display_code,
+            )
+        current.reference.add(reference)
     if _text(current.value) == value:
         return
     current.value = value
@@ -223,20 +343,20 @@ def _save_api_trace(organization, obj) -> None:
         return
     _save_open_json_data(
         organization,
-        key=_API_TRACE,
         value=value,
         source=getattr(obj, "backend", None) or "",
         country=getattr(obj, "country_code", None) or "",
+        reference=_api_trace_reference(_API_TRACE_SOURCE),
     )
 
 
 def _save_api_history_trace(organization, rows: list[dict], *, source: str) -> None:
     _save_open_json_data(
         organization,
-        key=_API_HISTORY_TRACE,
         value=json.dumps(rows, ensure_ascii=False, default=str),
         source=source,
         country=organization.country_code or "",
+        reference=_api_trace_reference(_API_TRACE_HISTORY),
     )
 
 
@@ -335,9 +455,11 @@ def _transition_open_history_record(existing, *, value: str, valid_from: date | 
     if open_record is None:
         return False
     if open_record.valid_from is None and valid_from is not None:
+        previous_value = open_record.value
         open_record.value = value
         open_record.valid_from = valid_from
         open_record.save(update_fields=["value", "valid_from", "updated_at"])
+        _sync_provider_reference(open_record, previous_value)
         return True
     if valid_from is None or (
         open_record.valid_from is not None
@@ -360,7 +482,7 @@ def _save_history_row(organization, row: dict, *, source: str) -> None:
     country = row.get("country_code") or organization.country_code or ""
     valid_from = _as_date(row.get("valid_from"), field="valid_from")
     valid_to = _as_date(row.get("valid_to"), field="valid_to")
-    datatype = _data_type(str(field))
+    datatype = _data_type(str(field), country=country)
     existing = _history_queryset(
         organization, source=source, country=country, datatype=datatype
     )
@@ -372,7 +494,7 @@ def _save_history_row(organization, row: dict, *, source: str) -> None:
             valid_from=valid_from,
         ):
             return
-        OrganizationAtlasData.objects.create(
+        current = OrganizationAtlasData.objects.create(
             organization=organization,
             source=source,
             country_code=country,
@@ -381,11 +503,27 @@ def _save_history_row(organization, row: dict, *, source: str) -> None:
             valid_from=valid_from,
             valid_to=valid_to,
         )
+        _sync_provider_reference(current)
         return
-    current.value = str(value)
+    history_value = str(value)
+    if datatype.value_type == "str":
+        history_value = reference_value(
+            str(field), country, history_value,
+            category_id=datatype.category_id,
+        )
+    if (
+        current.value == history_value
+        and current.valid_from == valid_from
+        and current.valid_to == valid_to
+    ):
+        _sync_provider_reference(current)
+        return
+    previous_value = current.value
+    current.value = history_value
     current.valid_from = valid_from
     current.valid_to = valid_to
     current.save(update_fields=["value", "valid_from", "valid_to", "updated_at"])
+    _sync_provider_reference(current, previous_value)
 
 
 @transaction.atomic
@@ -423,29 +561,41 @@ def fetch_organization_for_refresh(code: str, provider_name: str):
 
     if not code or not provider_name:
         return None
-    return OrganizationAtlasVirtualOrganization.objects.get_queryset_command(
+    manager = OrganizationAtlasVirtualOrganization.objects
+    results = manager.get_queryset_command(
         "search_organization_by_reference",
         code=code,
         attribute_search={"name": provider_name},
         ignore_cache=True,
-    ).first()
+    )
+    raw_results = manager.get_raw_result("search_organization_by_reference")
+    errors = [
+        str(result["error"])
+        for result in raw_results or []
+        if isinstance(result, dict) and result.get("error")
+    ]
+    if errors:
+        raise RuntimeError("; ".join(errors))
+    return results.first()
 
 
 @transaction.atomic
-def create_organization(obj):
+def create_organization(obj, *, is_duplicate=False):
     organization = OrganizationAtlasOrganization.objects.create(
-        **{model_field: getattr(obj, incoming_field, None) for model_field, incoming_field in _BASE_FIELDS}
+        **{model_field: getattr(obj, incoming_field, None) for model_field, incoming_field in _BASE_FIELDS},
+        is_duplicate=is_duplicate,
     )
     source = obj.backend
     country = obj.country_code or ""
     for data_type, value in _incoming_data(obj).items():
-        OrganizationAtlasData.objects.update_or_create(
+        data, _ = OrganizationAtlasData.objects.update_or_create(
             organization=organization,
             source=source,
             country_code=country,
-            data_type=_data_type(data_type),
+            data_type=_data_type(data_type, country=country),
             defaults={"value": value},
         )
+        _sync_provider_reference(data)
 
     if obj.address_json:
         OrganizationAtlasAddress.objects.create(

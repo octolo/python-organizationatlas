@@ -11,6 +11,7 @@ from ..models.temporal import ORGANIZATIONATLAS_FIELDS_TEMPORAL
 
 class OrganizationAtlasAddressInline(admin.TabularInline):
     model = OrganizationAtlasAddress
+    show_change_link = True
     extra = 1
     fields = ["address", "is_headquarters", "valid_from", "valid_to", "source_label"]
     readonly_fields = ["valid_from", "source_label"]

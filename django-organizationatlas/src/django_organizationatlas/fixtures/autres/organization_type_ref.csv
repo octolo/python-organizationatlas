@@ -1,0 +1,19 @@
+category;code;description;country_code;source;characteristics;priority
+Organization type;holding;Parent organization that owns stakes in subsidiaries;XG;organizationatlas;Controls other entities through equity participation;10
+Organization type;operating_organization;Organization that directly conducts business operations;XG;organizationatlas;Generates revenue through products or services;9
+Organization type;joint_venture;Entity jointly owned by two or more parties for a shared purpose;XG;organizationatlas;Common in international or cross-sector projects;8
+Organization type;spv;Entity created for a specific limited purpose or transaction;XG;organizationatlas;Often used in finance structured deals or real estate;7
+Organization type;public_organization;Organization whose shares are traded on a public stock exchange;XG;organizationatlas;Subject to listing rules and public disclosure obligations;6
+Organization type;private_organization;Organization whose shares are not publicly traded;XG;organizationatlas;Ownership is limited to founders investors or employees;5
+Organization type;investment_vehicle;Entity structured to hold or manage financial investments;XG;organizationatlas;Includes funds SPACs and family holding vehicles;4
+Organization type;shell_organization;Organization with no active business operations or assets;XG;organizationatlas;Used for restructuring holding purposes or acquisitions;3
+Organization type;association;Non-profit membership organization governed by its members;XG;organizationatlas;Common in France under loi 1901;20
+Organization type;foundation;Non-profit entity created to serve a public or private charitable purpose;XG;organizationatlas;Funded by an endowment or ongoing donations;19
+Organization type;non_profit;Organization that does not distribute profits to owners or shareholders;XG;organizationatlas;Reinvests surplus into its mission;18
+Organization type;government;Public body or governmental authority;XG;organizationatlas;Includes ministries agencies and state-owned entities;30
+Organization type;public_agency;Agency operating under public authority mandates;XG;organizationatlas;Can be semi-autonomous or fully state-controlled;29
+Organization type;cooperative;Organization owned and democratically controlled by its members;XG;organizationatlas;Common in agriculture banking and retail;15
+Organization type;partnership;Business entity formed by two or more persons sharing ownership;XG;organizationatlas;Can be general or limited partnership;14
+Organization type;trust;Legal arrangement where assets are held by one party for the benefit of another;XG;organizationatlas;Common in Anglo-Saxon jurisdictions and estate planning;13
+Organization type;family_office;Private entity managing wealth and investments for a family;XG;organizationatlas;Can be single-family or multi-family office;12
+Organization type;other;Organization type not covered by other categories;XG;organizationatlas;;0

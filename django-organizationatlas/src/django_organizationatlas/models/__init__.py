@@ -1,39 +1,41 @@
 """Organization models."""
 
 from .address import OrganizationAtlasAddress
-from .organization import OrganizationAtlasOrganization
 from .data import OrganizationAtlasData, OrganizationAtlasDataType
 from .document import OrganizationAtlasDocument
 from .event import OrganizationAtlasEvent
+from .feature import OrganizationAtlasFeatureManager
+from .organization import OrganizationAtlasOrganization
 from .person import OrganizationAtlasPerson
 from .reference import OrganizationAtlasReference, OrganizationAtlasReferenceCategory
 from .related_object import OrganizationAtlasRelatedObject
-from .feature import OrganizationAtlasFeatureManager
 from .relation import OrganizationAtlasOrganizationRelation
 from .stakeholder import OrganizationAtlasStakeholderRelation
 from .virtuals import (
     OrganizationAtlasProviderModel,
-    OrganizationAtlasVirtualOrganization,
+    OrganizationAtlasReferenceFixture,
     OrganizationAtlasVirtualDocument,
     OrganizationAtlasVirtualEvent,
+    OrganizationAtlasVirtualOrganization,
 )
 
 __all__ = [
-    "OrganizationAtlasOrganization",
+    "OrganizationAtlasAddress",
     "OrganizationAtlasData",
     "OrganizationAtlasDataType",
     "OrganizationAtlasDocument",
     "OrganizationAtlasEvent",
-    "OrganizationAtlasAddress",
+    "OrganizationAtlasFeatureManager",
+    "OrganizationAtlasOrganization",
+    "OrganizationAtlasOrganizationRelation",
     "OrganizationAtlasPerson",
+    "OrganizationAtlasProviderModel",
     "OrganizationAtlasReference",
     "OrganizationAtlasReferenceCategory",
+    "OrganizationAtlasReferenceFixture",
     "OrganizationAtlasRelatedObject",
-    "OrganizationAtlasFeatureManager",
-    "OrganizationAtlasOrganizationRelation",
     "OrganizationAtlasStakeholderRelation",
-    "OrganizationAtlasProviderModel",
-    "OrganizationAtlasVirtualOrganization",
     "OrganizationAtlasVirtualDocument",
     "OrganizationAtlasVirtualEvent",
+    "OrganizationAtlasVirtualOrganization",
 ]

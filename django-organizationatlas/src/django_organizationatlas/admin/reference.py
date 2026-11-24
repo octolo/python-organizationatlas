@@ -12,20 +12,22 @@ from .history import with_history
 from ..forms.reference import ReferenceImportForm
 from ..models.reference import OrganizationAtlasReference, OrganizationAtlasReferenceCategory
 from ..models.source import ORGANIZATIONATLAS_FIELDS_AUDIT, ORGANIZATIONATLAS_FIELDS_SOURCE
+from ..models.virtuals.reference import OrganizationAtlasReferenceFixture
 from ..services.reference import (
-    configured_features,
-    import_csv_file,
+    CATEGORY_FIXTURE_SUFFIX,
+    REFERENCE_FIXTURE_SUFFIX,
+    import_library_fixture,
     import_reference_rows,
-    list_fixtures,
-    load_configured_features,
     resolve_fixture,
 )
 from ..services.reference_csv import read_csv_file
+
 
 base_fields = [
     "category",
     "source_category",
     "code",
+    "display_code",
     "description",
     "default_value",
     "characteristics",
@@ -34,10 +36,74 @@ base_fields = [
 ]
 
 
+class _LibraryImportMixin:
+    def _changelist_url(self):
+        opts = self.model._meta
+        return reverse(
+            f"admin:{opts.app_label}_{opts.model_name}_changelist",
+            current_app=self.admin_site.name,
+        )
+
+    def _import_success(self, request, created_count, updated_count):
+        messages.success(
+            request,
+            _('Imported %(created)s created and %(updated)s updated rows.')
+            % {'created': created_count, 'updated': updated_count},
+        )
+        return self._changelist_url()
+
+    @admin_boost_view(
+        'list',
+        _('Import from library'),
+        requires_object=False,
+        permission='change',
+    )
+    def import_from_library(self, request):
+        request._organizationatlas_library_model = self.model
+        fixture_admin = self.admin_site._registry[OrganizationAtlasReferenceFixture]
+        return fixture_admin.changelist_view(
+            request,
+            extra_context={'title': _('Import from library')},
+        )
+
+    @admin_boost_view(
+        'confirm',
+        _('Import from library'),
+        requires_object=False,
+        permission='change',
+        hidden=True,
+    )
+    def import_library_file(self, request, confirmed=False):
+        if not self.has_change_permission(request):
+            messages.error(request, _('You do not have permission to import data.'))
+            return redirect(self._changelist_url())
+        relative = request.GET.get('fixture', '')
+        try:
+            csv_path = resolve_fixture(relative, self.fixture_suffix)
+        except CommandError:
+            messages.error(request, _('Unknown fixture.'))
+            return redirect(self._changelist_url())
+        if confirmed:
+            try:
+                created, updated = import_library_fixture(
+                    csv_path, self.fixture_suffix,
+                )
+            except (CommandError, UnicodeDecodeError) as error:
+                messages.error(request, str(error))
+                return redirect(self._changelist_url())
+            return redirect(self._import_success(request, created, updated))
+        return {'confirm': _('Load or reload %(path)s?') % {'path': relative}}
+
+
 @admin.register(OrganizationAtlasReferenceCategory)
-class OrganizationAtlasReferenceCategoryAdmin(with_history(AdminBoostModel)):
-    list_display = ["name", "description", "country_code", "reference_count"]
-    list_filter = ["country_code"]
+class OrganizationAtlasReferenceCategoryAdmin(
+    _LibraryImportMixin, with_history(AdminBoostModel),
+):
+    fixture_suffix = CATEGORY_FIXTURE_SUFFIX
+    list_display = [
+        "name", "description", "country_code", 'unique', "reference_count",
+    ]
+    list_filter = ["country_code", 'unique']
     search_fields = ["name", "description", "country_code"]
     readonly_fields = ["reference_count"]
 
@@ -49,17 +115,24 @@ class OrganizationAtlasReferenceCategoryAdmin(with_history(AdminBoostModel)):
         return getattr(obj, "sql_reference_count", "—")
 
     def change_fieldsets(self):
-        self.add_to_fieldset(None, ["name", "description", "country_code", "reference_count"])
+        self.add_to_fieldset(
+            None,
+            ["name", "description", "country_code", 'unique', "reference_count"],
+        )
 
 
 @admin.register(OrganizationAtlasReference)
-class OrganizationAtlasReferenceAdmin(with_history(AdminBoostModel)):
+class OrganizationAtlasReferenceAdmin(
+    _LibraryImportMixin, with_history(AdminBoostModel),
+):
+    fixture_suffix = REFERENCE_FIXTURE_SUFFIX
     list_display = ["code_label", "description", "characteristics", "priority", "used_count"]
     list_filter = ["category__country_code", "category"]
     search_fields = [
         "category__name",
         "category__country_code",
         "code",
+        "display_code",
         "description",
         "characteristics",
     ]
@@ -79,7 +152,9 @@ class OrganizationAtlasReferenceAdmin(with_history(AdminBoostModel)):
         if obj is None:
             return ""
         category = str(obj.category) if obj.category_id else ""
-        return self.format_with_help_text(self.format_label(obj.code), category)
+        return self.format_with_help_text(
+            self.format_label(obj.display_code), category,
+        )
 
     def used_count(self, obj):
         return getattr(obj, "sql_used_count", "—")
@@ -89,21 +164,6 @@ class OrganizationAtlasReferenceAdmin(with_history(AdminBoostModel)):
     def change_fieldsets(self):
         self.add_to_fieldset(None, base_fields)
         self.add_to_fieldset(_("Source"), ORGANIZATIONATLAS_FIELDS_SOURCE)
-
-    def _changelist_url(self):
-        opts = self.model._meta
-        return reverse(
-            f"admin:{opts.app_label}_{opts.model_name}_changelist",
-            current_app=self.admin_site.name,
-        )
-
-    def _import_success(self, request, created_count, updated_count):
-        messages.success(
-            request,
-            _("Imported %(created)s created and %(updated)s updated reference rows.")
-            % {"created": created_count, "updated": updated_count},
-        )
-        return self._changelist_url()
 
     @admin_boost_view(
         "adminform",
@@ -127,77 +187,3 @@ class OrganizationAtlasReferenceAdmin(with_history(AdminBoostModel)):
                 return {"form": form}
             return {"redirect_url": self._import_success(request, created_count, updated_count)}
         return {"form": ReferenceImportForm()}
-
-    @admin_boost_view(
-        "message",
-        _("Import from library"),
-        requires_object=False,
-        permission="change",
-        template_name="django_organizationatlas/reference_library.html",
-    )
-    def import_from_library(self, request):
-        opts = self.model._meta
-        return {
-            "fixtures": list_fixtures(),
-            "confirm_url": reverse(
-                f"admin:{opts.app_label}_{opts.model_name}_import_library_file",
-                current_app=self.admin_site.name,
-            ),
-        }
-
-    @admin_boost_view(
-        "confirm",
-        _("Import from library"),
-        requires_object=False,
-        permission="change",
-        hidden=True,
-    )
-    def import_library_file(self, request, confirmed=False):
-        if not self.has_change_permission(request):
-            messages.error(request, _("You do not have permission to import reference data."))
-            return redirect(self._changelist_url())
-        relative = request.GET.get("fixture", "")
-        try:
-            csv_path = resolve_fixture(relative)
-        except CommandError:
-            messages.error(request, _("Unknown fixture."))
-            return redirect(self._changelist_url())
-        if confirmed:
-            try:
-                created_count, updated_count = import_csv_file(csv_path)
-            except (CommandError, UnicodeDecodeError) as error:
-                messages.error(request, str(error))
-                return redirect(self._changelist_url())
-            return redirect(self._import_success(request, created_count, updated_count))
-        return {"confirm": _("Load or reload %(path)s?") % {"path": relative}}
-
-    @admin_boost_view(
-        "confirm",
-        _("Load features"),
-        requires_object=False,
-        permission="change",
-    )
-    def load_features(self, request, confirmed=False):
-        try:
-            features = configured_features()
-        except CommandError as error:
-            messages.error(request, str(error))
-            return redirect(self._changelist_url())
-        if not features:
-            messages.warning(
-                request,
-                _("No features are configured in ORGANIZATIONATLAS_FEATURES."),
-            )
-            return redirect(self._changelist_url())
-        if confirmed:
-            created_count, updated_count = load_configured_features(features)
-            messages.success(
-                request,
-                _("Loaded %(created)s created and %(updated)s updated features.")
-                % {"created": created_count, "updated": updated_count},
-            )
-            return redirect(self._changelist_url())
-        codes = ", ".join(feature["code"] for feature in features)
-        return {
-            "confirm": _("Load or update features from settings: %(codes)s?") % {"codes": codes},
-        }

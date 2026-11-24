@@ -1,0 +1,24 @@
+category;code;description;country_code;source
+Capitalization profile;actions_standard;Actions — règles générales de SA/SAS;FR;organizationatlas
+Capitalization profile;parts_sociales;Parts sociales — SARL ou société civile;FR;organizationatlas
+Capitalization profile;cooperative;Coopérative — capital et sociétariat spécifiques;FR;organizationatlas
+Capitalization profile;hlm;HLM — contrôle réglementaire spécialisé;FR;organizationatlas
+Capitalization profile;participation_publique;Participation publique — contrôle des actionnaires publics;FR;organizationatlas
+Capitalization profile;profession_reglementee;Profession réglementée — détention spécifique;FR;organizationatlas
+Capitalization profile;cotee;Émetteur coté — transparence et franchissements de seuils;FR;organizationatlas
+Capitalization profile;variable;Capital variable — entrées et sorties de capital;FR;organizationatlas
+Capitalization profile;financier;Établissement financier ou assureur — règles sectorielles;FR;organizationatlas
+Capitalization profile;sans_capital;Aucun capital social — membres, adhérents ou financeurs;FR;organizationatlas
+Capitalization profile;sur_mesure;Règles spécifiques à définir;FR;organizationatlas
+Capitalization profile;actions_preference;Actions de préférence et droits particuliers;FR;organizationatlas
+Capitalization profile;droits_vote_differencies;Droits de vote différents de la détention du capital;FR;organizationatlas
+Capitalization profile;instruments_dilutifs;Instruments donnant accès au capital : BSA, BSPCE, obligations convertibles, etc.;FR;organizationatlas
+Capitalization profile;demembrement_titres;Démembrement des titres : usufruit et nue-propriété;FR;organizationatlas
+Capitalization profile;detention_indirecte;Détention indirecte et chaîne de participations;FR;organizationatlas
+Capitalization profile;controle_groupe;Contrôle et détention à l’échelle d’un groupe;FR;organizationatlas
+Capitalization profile;seuils_reglementaires;Contrôle des seuils réglementaires de détention;FR;organizationatlas
+Capitalization profile;agrement_actionnaires;Vérification des conditions d’agrément des actionnaires;FR;organizationatlas
+Capitalization profile;capital_minimum;Vérification d’un éventuel capital minimum légal;FR;organizationatlas
+Capitalization profile;capital_variable;Capital variable et suivi des entrées et sorties;FR;organizationatlas
+Capitalization profile;historique_capital;Historisation des mouvements et de la répartition du capital;FR;organizationatlas
+Capitalization profile;multi_profils;Combinaison de plusieurs profils de règles;FR;organizationatlas

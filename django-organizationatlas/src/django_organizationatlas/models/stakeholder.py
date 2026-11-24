@@ -44,7 +44,7 @@ class OrganizationAtlasStakeholderRelation(TemporalValidityMixin, OrganizationAt
         blank=True,
         on_delete=models.SET_NULL,
         related_name="stakeholder_relations",
-        limit_choices_to={"category__name": "stakeholder_relation"},
+        limit_choices_to={"category__name": "Stakeholder relation"},
         verbose_name=_("Relation Type"),
         help_text=_("Nature of the stakeholder relationship"),
     )
@@ -88,7 +88,7 @@ class OrganizationAtlasStakeholderRelation(TemporalValidityMixin, OrganizationAt
             raise ValidationError(
                 {"content_type": _("Stakeholder must be a person or an organization.")}
             )
-        if self.relation_type_id and self.relation_type.category.name != "stakeholder_relation":
+        if self.relation_type_id and self.relation_type.category.name != "Stakeholder relation":
             raise ValidationError(
                 {"relation_type": _("Reference must belong to the 'stakeholder_relation' category.")}
             )

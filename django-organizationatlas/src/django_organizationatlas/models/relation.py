@@ -32,7 +32,7 @@ class OrganizationAtlasOrganizationRelation(TemporalValidityMixin, OrganizationA
         blank=True,
         on_delete=models.SET_NULL,
         related_name="organization_relations",
-        limit_choices_to={"category__name": "organization_relation"},
+        limit_choices_to={"category__name": "Organization relation"},
         verbose_name=_("Relation Type"),
         help_text=_("Type of relationship between the two organizations"),
     )
@@ -66,7 +66,7 @@ class OrganizationAtlasOrganizationRelation(TemporalValidityMixin, OrganizationA
 
     def clean(self):
         super().clean()
-        if self.relation_type_id and self.relation_type.category.name != "organization_relation":
+        if self.relation_type_id and self.relation_type.category.name != "Organization relation":
             raise ValidationError(
                 {"relation_type": _("Reference must belong to the 'organization_relation' category.")}
             )

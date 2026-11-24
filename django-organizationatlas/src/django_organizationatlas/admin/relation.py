@@ -12,6 +12,7 @@ from ..models.temporal import ORGANIZATIONATLAS_FIELDS_TEMPORAL
 class OrganizationAtlasOrganizationRelationInline(admin.TabularInline):
     model = OrganizationAtlasOrganizationRelation
     fk_name = "from_organization"
+    show_change_link = True
     extra = 1
     fields = [
         "to_organization",

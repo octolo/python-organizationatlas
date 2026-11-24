@@ -6,7 +6,11 @@ from django.core.management.base import CommandError
 REFERENCE_COLUMNS = ("category", "code", "description", "country_code", "source")
 REQUIRED_COLUMNS = set(REFERENCE_COLUMNS)
 CATEGORY_COLUMNS = {"name", "country_code"}
-_PRESENT_WHEN_COLUMN_EXISTS = ("default_value", "source_category")
+_PRESENT_WHEN_COLUMN_EXISTS = (
+    "default_value",
+    "display_code",
+    "source_category",
+)
 
 
 def _cell(row, name):
@@ -61,11 +65,17 @@ def _category_row(row, _fieldnames):
     name = _cell(row, "name")
     if not name:
         return None
-    return {
+    item = {
         "name": name,
         "country_code": _cell(row, "country_code"),
         "description": _cell(row, "description"),
     }
+    unique = _cell(row, 'unique').lower()
+    if unique:
+        if unique not in {'true', 'false'}:
+            raise CommandError('Category unique must be true or false.')
+        item['unique'] = unique == 'true'
+    return item
 
 
 def read_csv_file(csv_file):

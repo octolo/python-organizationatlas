@@ -7,7 +7,7 @@ from django.utils.translation import gettext_lazy as _
 from .organization import OrganizationAtlasOrganization
 from .source import OrganizationAtlasSourceBase
 
-GENDER_CATEGORIES = ("gender", "gender_response", "gender_structure")
+GENDER_CATEGORIES = ("Gender", "Gender disclosure", "Ownership structure")
 
 
 class OrganizationAtlasPerson(OrganizationAtlasSourceBase):

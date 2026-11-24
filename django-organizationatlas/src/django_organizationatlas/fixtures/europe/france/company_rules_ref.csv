@@ -1,0 +1,24 @@
+category;code;description;country_code;source;default_value;source_category;priority
+Decisions;ORDINARY_MAJORITY;Majorité des décisions ordinaires;FR;organizationatlas;50%;;23
+Decisions;EXTRAORDINARY_MAJORITY;Majorité des décisions extraordinaires;FR;organizationatlas;50%;;22
+Decisions;QUORUM;Quorum;FR;organizationatlas;to complete;;21
+Decisions;VOTE_METHOD;Modalités de vote;FR;organizationatlas;to complete;;20
+Decisions;REMOTE_MEETING;Participation à distance;FR;organizationatlas;to complete;;19
+Statutes;VOTING_RIGHTS;Droits de vote;FR;organizationatlas;to complete;;18
+Statutes;SHARE_TYPES;Catégories de titres;FR;organizationatlas;to complete;;17
+Statutes;SHARE_TRANSFER;Règles de cession de titres;FR;organizationatlas;to complete;;16
+Statutes;APPROVAL;Clause d'agrément;FR;organizationatlas;to complete;;15
+Statutes;PREEMPTION;Droit de préemption;FR;organizationatlas;to complete;;14
+Statutes;LOCK_UP;Clause d'inaliénabilité;FR;organizationatlas;to complete;;13
+Governance;PRESIDENT;Président ou dirigeant principal;FR;organizationatlas;to complete;;12
+Governance;MANAGER;Gérant;FR;organizationatlas;to complete;;11
+Governance;DIRECTOR_TERM;Durée du mandat;FR;organizationatlas;to complete;;10
+Governance;POWERS;Pouvoirs du dirigeant;FR;organizationatlas;to complete;;9
+Governance;DELEGATION;Délégation de pouvoirs ou de signature;FR;organizationatlas;to complete;;8
+Statutes;RESULT_ALLOCATION;Affectation du résultat;FR;organizationatlas;to complete;;7
+Contracts;SHAREHOLDERS_AGREEMENT;Pacte d'associés existant;FR;organizationatlas;to complete;;6
+Contracts;CONTRACTUAL_APPROVAL;Agrément prévu par un accord;FR;organizationatlas;to complete;;5
+Contracts;CONTRACTUAL_PREEMPTION;Préemption contractuelle;FR;organizationatlas;to complete;;4
+Contracts;CONFIDENTIALITY;Engagement de confidentialité;FR;organizationatlas;to complete;;3
+Legal;LEGAL_DEFAULT_RULE;Règle légale applicable par défaut;FR;organizationatlas;to complete;;2
+Legal;OTHER_RULE;Autre règle;FR;organizationatlas;to complete;;1

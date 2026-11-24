@@ -41,5 +41,5 @@ class OrganizationAtlasVirtualOrganization(VirtualModel):
             return str(denomination)
         return f"Organization {organizationatlas_id or 'unknown'}"
 
-    def create_organization(self):
-        return create_organization(self)
+    def create_organization(self, *, is_duplicate=False):
+        return create_organization(self, is_duplicate=is_duplicate)

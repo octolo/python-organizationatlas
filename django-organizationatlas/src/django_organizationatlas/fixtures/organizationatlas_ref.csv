@@ -1,0 +1,8 @@
+category;code;description;country_code;source
+API trace;source;Current response returned by the provider;XG;organizationatlas
+API trace;history;History returned by the provider;XG;organizationatlas
+Visual identity;logo;Logo;XG;organizationatlas
+Visual identity;favicon;Favicon;XG;organizationatlas
+Visual identity;font;Font;XG;organizationatlas
+Visual identity;primary_color;Primary color;XG;organizationatlas
+Visual identity;secondary_color;Secondary color;XG;organizationatlas

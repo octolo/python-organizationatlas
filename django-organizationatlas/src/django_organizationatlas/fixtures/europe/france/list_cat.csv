@@ -1,0 +1,20 @@
+name;description;country_code;unique
+Legal;Rules derived from legislation and regulations.;FR;false
+Statutes;Provisions set out in the company's articles of association.;FR;false
+Governance;Rules relating to company governance.;FR;false
+Decisions;Rules governing company decisions.;FR;false
+Contracts;Rules derived from contractual agreements.;FR;false
+Law;Applicable laws and regulations.;FR;true
+Articles of association;The company's articles of association.;FR;true
+Shareholders agreement;Agreements between shareholders or partners.;FR;true
+Contract;Other contracts entered into by the company.;FR;true
+Corporate decision;Minutes and decisions of the company's governing bodies.;FR;true
+Internal policy;The company's internal rules and policies.;FR;true
+Other;Other sources of rules.;FR;true
+Unknown;Sources of rules to be identified or verified.;FR;true
+APE code;Codes for the main activity under the French classification system.;FR;true
+Company category;Size categories of French companies.;FR;true
+Legal form;Legal forms of French organizations.;FR;true
+Capitalization profile;Capitalization profiles of French companies.;FR;true
+Holder status;Statuses of holders of rights or ownership interests.;FR;true
+Regulatory regime;Regulatory regimes applicable to French companies.;FR;true

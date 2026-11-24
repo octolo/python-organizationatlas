@@ -11,6 +11,7 @@ from ..models.source import ORGANIZATIONATLAS_FIELDS_AUDIT, ORGANIZATIONATLAS_FI
 
 class OrganizationAtlasPersonInline(admin.TabularInline):
     model = OrganizationAtlasPerson
+    show_change_link = True
     extra = 1
     fields = ["officer_or_owner", "gender", "full_name", "created_at"]
     readonly_fields = ["full_name", "created_at"]

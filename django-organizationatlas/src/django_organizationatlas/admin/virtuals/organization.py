@@ -28,6 +28,7 @@ class OrganizationAtlasVirtualOrganizationAdmin(ReadOnlyVirtualAdmin, AdminBoost
     ]
     changeform_actions = {
         "create_organization": _("Create Organization"),
+        'duplicate_organization': _('Duplicate Organization'),
         "show_organization": _("Show Organization"),
         "show_organizations": _("Show Organizations"),
     }
@@ -93,6 +94,32 @@ class OrganizationAtlasVirtualOrganizationAdmin(ReadOnlyVirtualAdmin, AdminBoost
             if organization is None:
                 raise
         return redirect("admin:django_organizationatlas_organizationatlasorganization_change", organization.id)
+
+    def has_duplicate_organization_permission(self, request, obj=None):
+        return (
+            self.has_view_permission(request)
+            and request.user.has_perm(
+                'django_organizationatlas.add_organizationatlasorganization',
+            )
+            and obj is not None
+            and self._organizations_for_virtual(obj).exists()
+        )
+
+    def handle_duplicate_organization(self, request, object_id):
+        if not request.user.has_perm(
+            'django_organizationatlas.add_organizationatlasorganization',
+        ):
+            raise PermissionDenied
+        obj = self.get_object(request, unquote(object_id))
+        if obj is None:
+            raise Http404
+        if not self.has_duplicate_organization_permission(request, obj):
+            raise PermissionDenied
+        organization = obj.create_organization(is_duplicate=True)
+        return redirect(
+            'admin:django_organizationatlas_organizationatlasorganization_change',
+            organization.pk,
+        )
 
     def handle_show_organizations(self, request, object_id):
         object_id = unquote(object_id)

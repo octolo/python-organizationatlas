@@ -1,0 +1,16 @@
+name;description;country_code;unique
+Gender;Gender identities used to describe a person.;XG;true
+Gender disclosure;Responses indicating whether gender information was disclosed.;XG;true
+Ownership structure;Ownership arrangements involving more than one person.;XG;true
+Contractual Sources;Contracts and agreements that give rise to obligations.;XG;false
+Hard Legal Sources;Binding legislation and regulations.;XG;false
+Institutional or External Sources;Requirements issued by institutions or external bodies.;XG;false
+Internal Organization Sources;Internal documents and decisions of an organization.;XG;false
+Judicial Sources;Court decisions and other judicial authorities.;XG;false
+Shareholder-Related Sources;Documents and decisions relating to shareholders.;XG;false
+Soft Law Normative Sources;Non-binding standards and recommendations.;XG;false
+Temporal or Exceptional Sources;Sources applying for a limited time or in exceptional circumstances.;XG;false
+Organization relation;Types of relationships between organizations.;XG;false
+Organization type;Functional classifications of organizations.;XG;true
+Employee headcount bracket;Ranges used to classify organizations by employee count.;XG;true
+Stakeholder relation;Types of relationships between stakeholders and organizations.;XG;false

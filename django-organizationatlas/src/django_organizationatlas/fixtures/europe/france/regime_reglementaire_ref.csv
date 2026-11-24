@@ -1,0 +1,28 @@
+category;code;description;country_code;source
+Regulatory regime;droit_commun;Droit commun — société commerciale;FR;organizationatlas
+Regulatory regime;sa_hlm;SA d’HLM — entreprise sociale pour l’habitat;FR;organizationatlas
+Regulatory regime;cooperative_hlm;Coopérative HLM;FR;organizationatlas
+Regulatory regime;scic;SCIC — société coopérative d’intérêt collectif;FR;organizationatlas
+Regulatory regime;scop;SCOP — société coopérative de production;FR;organizationatlas
+Regulatory regime;cooperative_agricole;Coopérative agricole ou union;FR;organizationatlas
+Regulatory regime;sem;SEM — société d’économie mixte;FR;organizationatlas
+Regulatory regime;spl;SPL — société publique locale;FR;organizationatlas
+Regulatory regime;semop;SEMOP — société d’économie mixte à opération unique;FR;organizationatlas
+Regulatory regime;sel;SEL — société d’exercice libéral;FR;organizationatlas
+Regulatory regime;finance;Secteur bancaire ou financier réglementé;FR;organizationatlas
+Regulatory regime;assurance;Secteur de l’assurance ou de la mutualité;FR;organizationatlas
+Regulatory regime;cotee;Société dont les titres sont admis sur un marché réglementé;FR;organizationatlas
+Regulatory regime;se;Société européenne (SE);FR;organizationatlas
+Regulatory regime;capital_variable;Société à capital variable;FR;organizationatlas
+Regulatory regime;autre_special;Autre régime sectoriel ou spécial;FR;organizationatlas
+Regulatory regime;aucun_identifie;Aucun régime spécial identifié;FR;organizationatlas
+Regulatory regime;sans_capital;Association ou fondation — pas de capital social classique;FR;organizationatlas
+Regulatory regime;organisme_foncier_solidaire;Organisme de foncier solidaire (OFS);FR;organizationatlas
+Regulatory regime;organisme_logement_social_autre;Autre organisme du logement social réglementé;FR;organizationatlas
+Regulatory regime;societe_assurance_mutuelle;Société d’assurance mutuelle;FR;organizationatlas
+Regulatory regime;mutuelle;Mutuelle régie par le Code de la mutualité;FR;organizationatlas
+Regulatory regime;institution_prevoyance;Institution de prévoyance;FR;organizationatlas
+Regulatory regime;societe_financement;Société de financement réglementée;FR;organizationatlas
+Regulatory regime;societe_investissement;Société d’investissement réglementée;FR;organizationatlas
+Regulatory regime;fonciere_solidaire;Foncière solidaire ou organisme foncier à mission spécifique;FR;organizationatlas
+Regulatory regime;aucun_a_confirmer;Régime réglementaire à déterminer;FR;organizationatlas

@@ -61,8 +61,10 @@ def test_load_features_button_creates_and_updates_references_from_settings(clien
         {"code": "meetings", "description": "Meetings"},
         "capitalisation",
     ]
-    url = reverse("admin:django_organizationatlas_organizationatlasreference_load_features")
-    changelist = reverse("admin:django_organizationatlas_organizationatlasreference_changelist")
+    url = reverse("admin:django_organizationatlas_organizationatlasfeaturemanager_load_features")
+    changelist = reverse(
+        "admin:django_organizationatlas_organizationatlasfeaturemanager_changelist"
+    )
 
     listing = client.get(changelist)
     assert listing.status_code == 200
@@ -75,10 +77,21 @@ def test_load_features_button_creates_and_updates_references_from_settings(clien
 
     created = client.post(url, {"action": "confirm"})
     assert created.status_code == 302
-    meetings = OrganizationAtlasReference.objects.get(category__name="feature", code="meetings")
+    reference_changelist = reverse(
+        "admin:django_organizationatlas_organizationatlasreference_changelist"
+    )
+    feature_category = OrganizationAtlasReferenceCategory.objects.get(name="feature")
+    assert created.url == f"{reference_changelist}?category__id__exact={feature_category.pk}"
+    _reference("ape", "62.01Z")
+    filtered = client.get(created.url)
+    assert filtered.status_code == 200
+    filtered_html = filtered.content.decode()
+    assert "Meetings" in filtered_html
+    assert "62.01Z" not in filtered_html
+    meetings = OrganizationAtlasReference.objects.get(category__name="feature", code="MEETINGS")
     assert meetings.description == "Meetings"
     assert meetings.source == "settings"
-    capitalisation = OrganizationAtlasReference.objects.get(category__name="feature", code="capitalisation")
+    capitalisation = OrganizationAtlasReference.objects.get(category__name="feature", code="CAPITALISATION")
     assert capitalisation.description == ""
 
     settings.ORGANIZATIONATLAS_FEATURES = [
@@ -86,6 +99,7 @@ def test_load_features_button_creates_and_updates_references_from_settings(clien
     ]
     updated = client.post(url, {"action": "confirm"})
     assert updated.status_code == 302
+    assert updated.url == f"{reference_changelist}?category__id__exact={feature_category.pk}"
     meetings.refresh_from_db()
     assert meetings.description == "General meetings"
     assert OrganizationAtlasReference.objects.filter(category__name="feature").count() == 2
@@ -96,7 +110,7 @@ def test_load_features_button_warns_when_the_setting_is_empty(client, settings):
     get_user_model().objects.create_superuser("admin", "admin@example.com", "admin")
     client.force_login(get_user_model().objects.get(username="admin"))
     settings.ORGANIZATIONATLAS_FEATURES = []
-    url = reverse("admin:django_organizationatlas_organizationatlasreference_load_features")
+    url = reverse("admin:django_organizationatlas_organizationatlasfeaturemanager_load_features")
 
     response = client.get(url, follow=True)
 

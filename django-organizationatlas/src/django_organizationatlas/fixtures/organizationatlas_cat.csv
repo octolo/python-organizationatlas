@@ -1,0 +1,3 @@
+name;description;country_code;unique
+API trace;Provider responses and their historical snapshots.;XG;false
+Visual identity;Visual assets and colors used to identify an organization.;XG;false

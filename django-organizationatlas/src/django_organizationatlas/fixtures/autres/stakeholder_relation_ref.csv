@@ -1,0 +1,11 @@
+category;code;description;country_code;source;characteristics;priority
+Stakeholder relation;shareholder;Party that holds shares or equity in the organization;XG;organizationatlas;Can be a natural person or a legal entity;10
+Stakeholder relation;investor;Party that has provided capital to the organization;XG;organizationatlas;Includes VC private equity angels and debt investors;9
+Stakeholder relation;director;Person or entity acting as a director of the organization;XG;organizationatlas;Appointed by shareholders and legally accountable;8
+Stakeholder relation;board_member;Member of the board of directors or supervisory board;XG;organizationatlas;May or may not be an executive director;7
+Stakeholder relation;employee;Natural person employed by the organization;XG;organizationatlas;Includes executives and staff;6
+Stakeholder relation;customer;Party that purchases goods or services from the organization;XG;organizationatlas;Can be individual or corporate;5
+Stakeholder relation;supplier;Party that provides goods or services to the organization;XG;organizationatlas;Can be individual or corporate;4
+Stakeholder relation;partner;Party engaged in a formal strategic or commercial partnership;XG;organizationatlas;Distinct from equity partnership;3
+Stakeholder relation;regulator;Authority that regulates or supervises the organization;XG;organizationatlas;Includes sector-specific and financial regulators;2
+Stakeholder relation;other;Stakeholder relationship not covered by other categories;XG;organizationatlas;;0

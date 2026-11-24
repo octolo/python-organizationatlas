@@ -1,13 +1,18 @@
 """Organization models with international and country-specific data."""
 
+import re
+
 from django.contrib.contenttypes.fields import GenericRelation
 from django.core.exceptions import ValidationError
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 from namedid.fields import NamedIDField
 
+from ..category_names import category_name
+from ..country_codes import GLOBAL_COUNTRY_CODE
 from ..fields import RichTextField
 from ..managers.organization import OrganizationAtlasOrganizationManager
+from ..reference_codes import normalize_reference_code
 from .source import OrganizationAtlasSourceBase
 
 def _rule_reference_filters(category: str, code: str) -> dict:
@@ -18,19 +23,28 @@ def _rule_reference_filters(category: str, code: str) -> dict:
         name = raw
         country_code = ""
     filters = {
-        "code": (code or "").strip(),
-        "category__name": name.strip(),
+        "code": normalize_reference_code(code or ""),
+        "category__name": category_name(name.strip()),
     }
     if country_code.strip():
         filters["category__country_code__iexact"] = country_code.strip()
     else:
-        filters["category__country_code"] = ""
+        filters["category__country_code"] = GLOBAL_COUNTRY_CODE
     return filters
+
+
+def organization_abbreviation(denomination: str, *, max_length: int = 32) -> str:
+    """Uppercase first letter of each word of at least two letters, after punctuation is removed."""
+    cleaned = re.sub(r"[^\w\s]", "", denomination or "", flags=re.UNICODE)
+    cleaned = cleaned.replace("_", "")
+    words = [word for word in cleaned.split() if len(word) >= 2]
+    return "".join(word[0] for word in words).upper()[:max_length]
 
 
 ORGANIZATIONATLAS_FIELDS_COMPANY = [
     "denomination",
     "short_denomination",
+    "abbreviation",
     "code",
     "named_id",
     "organization_type",
@@ -53,10 +67,23 @@ class OrganizationAtlasOrganization(OrganizationAtlasSourceBase):
         verbose_name=_("Short denomination"),
         help_text=_("Short organization denomination"),
     )
+    abbreviation = models.CharField(
+        max_length=32,
+        blank=True,
+        default="",
+        verbose_name=_("Abbreviation"),
+        help_text=_("Generated from the denomination when left empty. You can replace it."),
+    )
     code = models.CharField(
         max_length=255,
         verbose_name=_("Code"),
         help_text=_("Organization code"),
+    )
+    is_duplicate = models.BooleanField(
+        default=False,
+        editable=False,
+        verbose_name=_('Duplicate'),
+        help_text=_('Created as a separate copy of an organization.'),
     )
     named_id = NamedIDField(
         source_fields=["truncate_denomination", "code"],
@@ -70,7 +97,7 @@ class OrganizationAtlasOrganization(OrganizationAtlasSourceBase):
         blank=True,
         on_delete=models.SET_NULL,
         related_name="organizations",
-        limit_choices_to={"category__name": "organization_type"},
+        limit_choices_to={"category__name": "Organization type"},
         verbose_name=_("Organization Type"),
         help_text=_("Functional classification of the legal entity"),
     )
@@ -103,7 +130,7 @@ class OrganizationAtlasOrganization(OrganizationAtlasSourceBase):
         constraints = [
             models.UniqueConstraint(
                 fields=["country_code", "code"],
-                nulls_distinct=False,
+                condition=models.Q(is_duplicate=False),
                 name="unique_organization_country_code",
             ),
         ]
@@ -142,7 +169,7 @@ class OrganizationAtlasOrganization(OrganizationAtlasSourceBase):
         if reference is None:
             return ""
         current = (
-            self.to_organizationatlasdata.filter(reference=reference, valid_to__isnull=True)
+            self.to_organizationatlasdata.filter(reference=reference).active()
             .order_by("-created_at", "-pk")
             .values_list("value", flat=True)
             .first()
@@ -152,8 +179,19 @@ class OrganizationAtlasOrganization(OrganizationAtlasSourceBase):
             return value
         return reference.default_value
 
+    def save(self, *args, **kwargs):
+        abbreviation = (self.abbreviation or "").strip().upper()
+        if not abbreviation:
+            abbreviation = organization_abbreviation(self.denomination)
+        if abbreviation != (self.abbreviation or ""):
+            self.abbreviation = abbreviation
+            update_fields = kwargs.get("update_fields")
+            if update_fields is not None:
+                kwargs["update_fields"] = list(dict.fromkeys([*update_fields, "abbreviation"]))
+        super().save(*args, **kwargs)
+
     def clean(self):
-        if self.organization_type_id and self.organization_type.category.name != "organization_type":
+        if self.organization_type_id and self.organization_type.category.name != "Organization type":
             raise ValidationError(
                 {"organization_type": _("Reference must belong to the 'organization_type' category.")}
             )

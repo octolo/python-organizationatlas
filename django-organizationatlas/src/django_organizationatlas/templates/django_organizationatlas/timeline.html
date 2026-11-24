@@ -104,6 +104,9 @@
     font-weight: 600;
     color: var(--body-fg);
   }
+  .oa-timeline__type a {
+    color: var(--link-fg);
+  }
   .oa-timeline__value {
     min-width: 0;
     overflow-wrap: anywhere;
@@ -175,8 +178,8 @@
       <li class="oa-timeline__item">
         <span class="oa-timeline__dot" aria-hidden="true"></span>
         <h2 class="oa-timeline__date">
-          {% if group.valid_from %}
-            {{ group.valid_from|date:"Y-m-d" }}
+          {% if group.start_at %}
+            {{ group.start_at|date:"Y-m-d" }}
           {% else %}
             {% trans "No start date" %}
           {% endif %}
@@ -184,14 +187,27 @@
         <article class="oa-timeline__card">
           {% for row in group.rows %}
             <div class="oa-timeline__entry">
-              <div class="oa-timeline__type">{{ row.data_type }}</div>
+              <div class="oa-timeline__type">
+                {% if row.data_type_url %}
+                  <a href="{{ row.data_type_url }}">{{ row.data_type }}</a>
+                {% else %}
+                  {{ row.data_type }}
+                {% endif %}
+              </div>
               <div class="oa-timeline__value">
-                {{ row.value }}
+                {% if row.file %}
+                  <a href="{{ row.file.url }}">{{ row.file.name }}</a>
+                {% else %}
+                  {{ row.value }}
+                {% endif %}
                 {% if row.data_reference %}
                   <span class="oa-timeline__reference">{{ row.data_reference }}</span>
                 {% endif %}
               </div>
               <div class="oa-timeline__meta">
+                {% if not row.valid_from %}
+                  {% trans "Recorded" %} ·
+                {% endif %}
                 {% if row.valid_to %}
                   {% blocktrans with end=row.valid_to|date:"Y-m-d" %}until {{ end }}{% endblocktrans %}
                 {% else %}

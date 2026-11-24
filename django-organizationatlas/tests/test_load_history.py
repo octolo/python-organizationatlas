@@ -108,13 +108,19 @@ def test_load_history_button_opens_provider_form():
     change = client.get(_url("change", organization))
     assert change.status_code == 200
     change_html = change.content.decode()
-    assert "Load history" in change_html
-    assert _url("load_history", organization) in change_html
+    assert "Actions" in change_html
+    assert "Load history" not in change_html
+
+    actions = client.get(_url("organization_actions", organization))
+    assert actions.status_code == 200
+    assert _url("load_history", organization) in actions.content.decode()
 
     form_page = client.get(_url("load_history", organization))
     assert form_page.status_code == 200
     html = form_page.content.decode()
-    assert "<select" in html
+    assert 'name="providers"' in html
+    assert 'name="enqueue"' in html
+    assert "multiple" in html
     assert 'value="insee"' in html
     assert 'value="huwise"' not in html
     assert 'value="inpi"' not in html
@@ -128,7 +134,7 @@ def test_view_only_user_cannot_load_history(method):
     client = _view_only_client()
 
     with patch(
-        "django_organizationatlas.admin.organization.load_organization_history"
+        "django_organizationatlas.admin.organization.load_history_from_providers"
     ) as load:
         response = getattr(client, method)(
             _url("load_history", organization),
@@ -146,7 +152,7 @@ def test_view_only_user_cannot_refresh_organization(method):
     client = _view_only_client()
 
     with patch(
-        "django_organizationatlas.admin.organization.fetch_organization_for_refresh"
+        "django_organizationatlas.admin.organization.refresh_from_providers"
     ) as fetch:
         response = getattr(client, method)(
             _url("refresh", organization),
@@ -193,7 +199,10 @@ def test_load_organization_history_stores_apihistorytrace():
         assert load_organization_history(organization, "insee") == 3
         assert load_organization_history(organization, "insee") == 3
 
-    traces = organization.to_organizationatlasdata.filter(data_type__data_type="apihistorytrace")
+    traces = organization.to_organizationatlasdata.filter(
+        data_type__data_type="apitrace",
+        reference__display_code="history",
+    )
     assert traces.count() == 1
     trace = traces.get()
     assert trace.data_type.value_type == "json"
@@ -220,7 +229,8 @@ def test_load_organization_history_rolls_back_trace_when_apply_fails():
         load_organization_history(organization, "insee")
 
     assert not organization.to_organizationatlasdata.filter(
-        data_type__data_type="apihistorytrace"
+        data_type__data_type="apitrace",
+        reference__display_code="history",
     ).exists()
 
 
@@ -373,15 +383,30 @@ def test_load_history_form_saves_provider_rows():
     client = _client()
 
     with patch(
-        "django_organizationatlas.admin.organization.load_organization_history",
-        return_value=3,
+        "django_organizationatlas.admin.organization.load_history_from_providers",
+        return_value={"processed": ["insee"], "errors": []},
     ) as load:
-        response = client.post(_url("load_history", organization), {"provider": "insee"})
+        selected = client.post(
+            _url("load_history", organization),
+            {"providers": ["insee"]},
+        )
+        empty = client.post(_url("load_history", organization), {})
 
-    assert response.status_code == 302
-    assert response.url == _url("change", organization)
-    load.assert_called_once()
-    assert load.call_args.args[1] == "insee"
+    assert selected.status_code == 302
+    assert selected.url == _url("change", organization)
+    assert empty.status_code == 302
+    assert [call.args[1] for call in load.call_args_list] == [["insee"], []]
+
+    with patch(
+        "django_organizationatlas.admin.organization.enqueue_load_one_organization_history",
+    ) as enqueue:
+        queued = client.post(
+            _url("load_history", organization),
+            {"providers": ["insee"], "enqueue": "on"},
+        )
+
+    assert queued.status_code == 302
+    enqueue.assert_called_once_with(organization.pk, ["insee"])
 
 
 @pytest.mark.django_db
@@ -390,12 +415,13 @@ def test_load_history_form_hides_provider_error_details():
     client = _client()
 
     with patch(
-        "django_organizationatlas.admin.organization.load_organization_history",
-        side_effect=RuntimeError("secret provider URL"),
+        "django_organizationatlas.admin.organization.load_history_from_providers",
+        return_value={"processed": [], "errors": ["insee: history import failed"]},
     ):
-        response = client.post(_url("load_history", organization), {"provider": "insee"})
+        response = client.post(_url("load_history", organization), {"providers": ["insee"]})
 
     html = response.content.decode()
     assert response.status_code == 200
     assert "Organization history load failed." in html
+    assert "Insee: history import failed" in html
     assert "secret provider URL" not in html
